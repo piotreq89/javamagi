@@ -32,6 +32,7 @@ public class MoveDetection {
     private static Mat thirdScreen = null;
 
     private static Mat fourthScreen = null;
+    private static ArrayList<Rect> old_rect_array = new ArrayList<>();
 
     public static void main(String[] args) {
         StartClass startClass = new StartClass();
@@ -111,18 +112,28 @@ public class MoveDetection {
 //        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(3, 3));
         //BackgroundSubtractor zostaną użyte do wygenerowania masek pierwszego planu.
         // Zapewnia lepszą adaptowalność do zmieniających się scen dzięki zmianom oświetlenia itp.
-        BackgroundSubtractorMOG2 mog2 = Video.createBackgroundSubtractorMOG2();
+        BackgroundSubtractorMOG2 mog2 = Video.createBackgroundSubtractorMOG2(500, 16, true);
         //Oblicza maskę pierwszego planu
         //Następna klatka wideo, Maska pierwszoplanowa wyjściowa jako 8-bitowy obraz binarny.,
         //Każda ramka jest używana zarówno do obliczania nowej warstwy, jak i do uaktualniania tła.
-        System.out.println(
-                " \nmog2.getHistory() " + mog2.getHistory() +
-                        " \nmog2.getBackgroundRatio()  " + mog2.getBackgroundRatio() +
-                        " \nmog2.getDetectShadows() " + mog2.getDetectShadows() +
-                        " \nmog2.getVarThreshold() " + mog2.getVarThreshold() +
-                        "\n-------------------------------------------------"
-        );
+//        System.out.println(
+//                " \nmog2.getHistory() " + mog2.getHistory() +
+//                        " \nmog2.getBackgroundRatio()  " + mog2.getBackgroundRatio() +
+//                        " \nmog2.getDetectShadows() " + mog2.getDetectShadows() +
+//                        " \nmog2.getVarThreshold() " + mog2.getVarThreshold() +
+//                        "\n-------------------------------------------------"
+//        );
         mog2.apply(secondFrame, fgmask);
+
+        Mat erode=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(8,8));
+        Mat dilate=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(8,8));
+        Mat openElem=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(3,3),new Point(1,1));
+        Mat closeElem=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(7,7),new Point(3,3));
+
+//        Imgproc.morphologyEx(fgmask,fgmask,Imgproc.MORPH_OPEN,erode);
+//        Imgproc.morphologyEx(fgmask,fgmask,Imgproc.MORPH_OPEN,dilate);
+        Imgproc.morphologyEx(fgmask,fgmask,Imgproc.MORPH_OPEN,openElem);
+        Imgproc.morphologyEx(fgmask,fgmask,Imgproc.MORPH_CLOSE,closeElem);
 
 //        Imgproc.morphologyEx(fgmask, subtractedFrame, Imgproc.MORPH_OPEN, kernel);
 
@@ -138,27 +149,38 @@ public class MoveDetection {
 //        Imgproc.cvtColor(flow, flow, Imgproc.COLOR_BGR2GRAY);
 //        thirdScreen = flow2.clone();
 
-        thirdScreen = subtractedFrame;
+//        thirdScreen = subtractedFrame;
 
-//        MatOfPoint corners  = new MatOfPoint();
-//        Imgproc.goodFeaturesToTrack(secondFrame,corners,300,0.01,10);
+        MatOfPoint corners  = new MatOfPoint();
+        Imgproc.goodFeaturesToTrack(secondFrame,corners,300,0.01,10);
 //
-//        Mat gray = new Mat(secondFrame.size(),CvType.CV_8UC1);
-//        Imgproc.cvtColor(subtractedFrame,gray, Imgproc.COLOR_BGR2GRAY);
+        Mat gray = subtractedFrame.clone();
+//        new Mat(subtractedFrame.size(),CvType.CV_8UC1);
+        Imgproc.cvtColor(frame,gray, Imgproc.COLOR_BGR2GRAY);
 //
-//        MatOfPoint2f mp2f = new MatOfPoint2f(corners.toArray());
-//        Imgproc.cornerSubPix(subtractedFrame, mp2f, new Size(10, 10), new Size(-1, -1), new TermCriteria());
+        MatOfPoint2f mp2f = new MatOfPoint2f(corners.toArray());
+        Imgproc.cornerSubPix(subtractedFrame, mp2f, new Size(10, 10), new Size(-1, -1), new TermCriteria());
 //
-//        List<Point> lp = mp2f.toList();
-//        MatOfPoint2f[] points = new MatOfPoint2f[4];
-//        points[1].fromList(lp);
-//
-//        MatOfByte status = new MatOfByte();
-//        MatOfFloat err = new MatOfFloat();
-//
-//        Video.calcOpticalFlowPyrLK(subtractedFrame,gray, points[0], points[1],  status, err);
+        List<Point> lp = mp2f.toList();
+        MatOfPoint2f[] points = new MatOfPoint2f[4];
+//        if(points[1] != null){
+        points[1] = new MatOfPoint2f();
+        points[0] = new MatOfPoint2f();
+            points[1].fromList(lp);
 
-//        thirdScreen = gray.clone();
+        MatOfPoint2f list = new MatOfPoint2f(new Point(90, 90));
+//        list.add(new MatOfPoint2f(new Point(90, 90)));
+        List<Point> aaa = list.toList();
+        points[0].fromList(aaa);
+//
+            MatOfByte status = new MatOfByte();
+            MatOfFloat err = new MatOfFloat();
+//
+            Video.calcOpticalFlowPyrLK(subtractedFrame,gray, points[0], points[1],  status, err);
+
+//        }
+
+        thirdScreen = gray.clone();
 //        points[0] = MatOfPoint2f.pointSwap(points[1], points[1] = points[0]);
 
         /**czwarty ekran*/
@@ -196,15 +218,29 @@ public class MoveDetection {
     }
 
     private static void printRectangle(ArrayList<Rect> array, Mat img) {
+        array.stream().forEach(a -> System.out.println(a));
+//        Imgproc.matchShapes()
+        System.out.println("------------------------");
         if (array.size() > 0) {
             Iterator<Rect> it2 = array.iterator();
+//            int i = 0 ;
             while (it2.hasNext()) {
+//                i++;
                 Rect obj = it2.next();
                 obj.height += 20;
                 obj.width +=10;
-                Imgproc.rectangle(firstScreen, obj.br(), obj.tl(), new Scalar(0, 255, 0), 1);
+                Imgproc.rectangle(firstScreen, obj.br(), new Point(obj.br().x - 30, obj.br().y - 50), new Scalar(0, 255, 0), 1);
+//                System.out.println(" .br() " + obj.br() + " .tl() " + obj.tl());
+                Imgproc.putText(firstScreen, "obiekt " , new Point(700, 10), 2, 1, new Scalar(0, 255, 0), 1);
+                if(array.indexOf(obj) -1 > 1){
+//                    Imgproc.line(firstScreen,obj.br(), array.get(array.indexOf(obj) -1).br(),  new Scalar(0, 0, 255), 2);
+                }
             }
         }
+
+//        Imgproc.matchShapes(old_rect_array, array, 1, 1);
+
+        old_rect_array = array;
     }
 
     public static BufferedImage Mat2bufferedImage(Mat frame) {
@@ -230,7 +266,10 @@ public class MoveDetection {
         Mat v = new Mat();
         Mat vv = outmat.clone();
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
-        Imgproc.findContours(vv, contours, v, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_NONE, new Point(0, 0));
+        Imgproc.findContours(vv, contours, v, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0, 0));
+
+        System.out.println(contours);
+//        Imgproc.
 
         double maxArea = 50;
         int maxAreaIdx = -1;
@@ -239,6 +278,7 @@ public class MoveDetection {
 
         for (int idx = 0; idx < contours.size(); idx++) {
             Mat contour = contours.get(idx);
+            System.out.println("contour " + contour);
 
             double contourarea = Imgproc.contourArea(contour);
             if (contourarea > maxArea && contourarea < 2500) {
@@ -256,6 +296,8 @@ public class MoveDetection {
         v.release();
 
         printRectangle(rect_array, outmat);
+
+//     old_rect_array = rect_array;
 
 //        return rect_array;
     }
