@@ -4,7 +4,6 @@ import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.video.BackgroundSubtractor;
 import org.opencv.video.BackgroundSubtractorMOG2;
 import org.opencv.video.Video;
 import org.opencv.videoio.VideoCapture;
@@ -14,9 +13,7 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class MoveDetection {
 
@@ -33,6 +30,12 @@ public class MoveDetection {
 
     private static Mat fourthScreen = null;
     private static ArrayList<Rect> old_rect_array = new ArrayList<>();
+    private static Mat oldFrame ;
+    private static MatOfPoint2f oldMOPf;
+
+    private static Map<Integer, MyPoint> myCustomPoints = new HashMap<>();
+
+
 
     public static void main(String[] args) {
         StartClass startClass = new StartClass();
@@ -75,7 +78,7 @@ public class MoveDetection {
         });
     }
 
-
+private static  int i ;
     private static void showframe(Mat frame, VideoCapture video) {
 
         /**pierwszy ekran*/
@@ -152,33 +155,82 @@ public class MoveDetection {
 //        thirdScreen = subtractedFrame;
 
         MatOfPoint corners  = new MatOfPoint();
-        Imgproc.goodFeaturesToTrack(secondFrame,corners,300,0.01,10);
-//
-        Mat gray = subtractedFrame.clone();
-//        new Mat(subtractedFrame.size(),CvType.CV_8UC1);
-        Imgproc.cvtColor(frame,gray, Imgproc.COLOR_BGR2GRAY);
-//
-        MatOfPoint2f mp2f = new MatOfPoint2f(corners.toArray());
-        Imgproc.cornerSubPix(subtractedFrame, mp2f, new Size(10, 10), new Size(-1, -1), new TermCriteria());
-//
-        List<Point> lp = mp2f.toList();
-        MatOfPoint2f[] points = new MatOfPoint2f[4];
-//        if(points[1] != null){
-        points[1] = new MatOfPoint2f();
-        points[0] = new MatOfPoint2f();
-            points[1].fromList(lp);
+        Imgproc.goodFeaturesToTrack(subtractedFrame, corners, 3000 , 0.5, 10);
+        System.out.println("corners " + corners);
+        List<Point> points1 = corners.toList();
+//        System.out.println("points1 " +points1);
 
-        MatOfPoint2f list = new MatOfPoint2f(new Point(90, 90));
-//        list.add(new MatOfPoint2f(new Point(90, 90)));
-        List<Point> aaa = list.toList();
-        points[0].fromList(aaa);
+        i = 0 ;
+        points1.stream()
+                .forEach(p -> {
+                    System.out.println("p " + i ++ +" " + p );
+//                    Core.poi
+                    Imgproc.rectangle(firstScreen, p, p , new Scalar(0, 0, 255), 2);
+
+//                    List<MyPoint> test = new ArrayList();
+//                    test.add()
+                    MyPoint myPoint = new MyPoint();
+                    myPoint.addToPoints(p);
+
+                    if(myCustomPoints.isEmpty()){
+                        myCustomPoints.put(i, myPoint);
+
+                    }else{
+                        Optional<MyPoint> first = myCustomPoints.values().stream()
+                                .filter(m -> m.getPoints().stream()
+                                        .filter(pcust -> Math.abs(pcust.x) - Math.abs(p.x) <= 2 && Math.abs(pcust.y) - Math.abs(p.y) <= 2)
+                                        .findFirst()
+                                        .isPresent())
+                                .findFirst();
+
+                        if(first.isPresent()){
+                            MyPoint myPoint1 = first.get();
+
+                            myCustomPoints.containsValue(myPoint1);
+                        }
+                    }
+//                            ;
+                });
+
+
 //
+        if(oldFrame == null){
+            oldFrame = new Mat(secondFrame.size(),CvType.CV_8UC1);
+        }
+
+        Mat gray = secondFrame.clone();
+////        new Mat(subtractedFrame.size(),CvType.CV_8UC1);
+//        Imgproc.cvtColor(frame,gray, Imgproc.COLOR_BGR2GRAY);
+////
+        MatOfPoint2f mp2f = new MatOfPoint2f(corners.toArray());
+        if(oldMOPf == null){
+            oldMOPf = mp2f;
+        }
+//        Imgproc.cornerSubPix(subtractedFrame, mp2f, new Size(10, 10), new Size(-1, -1), new TermCriteria());
+////
+//        List<Point> lp = mp2f.toList();
+//        MatOfPoint2f[] points = new MatOfPoint2f[4];
+////        if(points[1] != null){
+//        points[1] = new MatOfPoint2f();
+//        points[0] = new MatOfPoint2f();
+//            points[1].fromList(lp);
+//
+//        MatOfPoint2f list = new MatOfPoint2f(new Point(90, 90));
+////        list.add(new MatOfPoint2f(new Point(90, 90)));
+//        List<Point> aaa = list.toList();
+//        points[0].fromList(aaa);
+////
             MatOfByte status = new MatOfByte();
             MatOfFloat err = new MatOfFloat();
 //
-            Video.calcOpticalFlowPyrLK(subtractedFrame,gray, points[0], points[1],  status, err);
+            Video.calcOpticalFlowPyrLK(oldFrame,gray,oldMOPf , mp2f,  status, err);
 
 //        }
+
+
+//        oldFrame = secondFrame.clone();
+        secondFrame.copyTo(oldFrame);
+        mp2f.copyTo(oldMOPf);
 
         thirdScreen = gray.clone();
 //        points[0] = MatOfPoint2f.pointSwap(points[1], points[1] = points[0]);
@@ -218,7 +270,7 @@ public class MoveDetection {
     }
 
     private static void printRectangle(ArrayList<Rect> array, Mat img) {
-        array.stream().forEach(a -> System.out.println(a));
+//        array.stream().forEach(a -> System.out.println(a));
 //        Imgproc.matchShapes()
         System.out.println("------------------------");
         if (array.size() > 0) {
@@ -268,7 +320,7 @@ public class MoveDetection {
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         Imgproc.findContours(vv, contours, v, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0, 0));
 
-        System.out.println(contours);
+//        System.out.println(contours);
 //        Imgproc.
 
         double maxArea = 50;
@@ -278,7 +330,7 @@ public class MoveDetection {
 
         for (int idx = 0; idx < contours.size(); idx++) {
             Mat contour = contours.get(idx);
-            System.out.println("contour " + contour);
+//            System.out.println("contour " + contour);
 
             double contourarea = Imgproc.contourArea(contour);
             if (contourarea > maxArea && contourarea < 2500) {
