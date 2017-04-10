@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MoveDetection {
 
@@ -34,6 +35,8 @@ public class MoveDetection {
     private static MatOfPoint2f oldMOPf;
 
     private static Map<Integer, MyPoint> myCustomPoints = new HashMap<>();
+
+    private static List<MyPoint> obiects = new ArrayList<>();
 
 
 
@@ -78,7 +81,7 @@ public class MoveDetection {
         });
     }
 
-private static  int i ;
+private static  Integer i ;
     private static void showframe(Mat frame, VideoCapture video) {
 
         /**pierwszy ekran*/
@@ -160,10 +163,15 @@ private static  int i ;
         List<Point> points1 = corners.toList();
 //        System.out.println("points1 " +points1);
 
-        i = 0 ;
+
+
+//        i = 0 ;
+        if(i == null){
+            i = 0 ;
+        }
         points1.stream()
                 .forEach(p -> {
-                    System.out.println("p " + i ++ +" " + p );
+                    System.out.println("p " + i +" " + p );
 //                    Core.poi
                     Imgproc.rectangle(firstScreen, p, p , new Scalar(0, 0, 255), 2);
 
@@ -171,26 +179,66 @@ private static  int i ;
 //                    test.add()
                     MyPoint myPoint = new MyPoint();
                     myPoint.addToPoints(p);
+                    myPoint.setId(i);
 
-                    if(myCustomPoints.isEmpty()){
-                        myCustomPoints.put(i, myPoint);
+//                    if(true){
+                        obiects.add(myPoint);
+//                        myCustomPoints.put(i, myPoint);
 
-                    }else{
-                        Optional<MyPoint> first = myCustomPoints.values().stream()
-                                .filter(m -> m.getPoints().stream()
-                                        .filter(pcust -> Math.abs(pcust.x) - Math.abs(p.x) <= 2 && Math.abs(pcust.y) - Math.abs(p.y) <= 2)
-                                        .findFirst()
-                                        .isPresent())
+//                    }else{
+//                        Optional<MyPoint> first = myCustomPoints.values().stream()
+//                                .filter(m -> m.getPoints().stream()
+//                                        .filter(pcust -> Math.abs(pcust.x) - Math.abs(p.x) <= 2 && Math.abs(pcust.y) - Math.abs(p.y) <= 2)
+//                                        .findFirst()
+//                                        .isPresent())
+//                                .findFirst();
+//
+//                        if(first.isPresent()){
+//                            MyPoint myPoint1 = first.get();
+//
+//                            myCustomPoints.containsValue(myPoint1);
+//                        }
+
+
+//                    Optional<String> first = obiects.stream().map(o -> {
+//                        Optional<Point> first1 = o.getPoints().stream()
+//                                .filter(pcust -> Math.abs(pcust.x) - Math.abs(p.x) <= 2 && Math.abs(pcust.y) - Math.abs(p.y) <= 2)
+//                                .findFirst();
+//
+//                        if (first1.isPresent()) {
+//                            return o.getId().toString();
+//                        }
+//                        return "";
+//                    }).findFirst();
+//
+//                    if(first.isPresent()){
+//                        System.out.println("first  " + first.get());
+//                    }
+//                    }
+                    obiects.stream().forEach(o -> {
+                        Optional<Point> first1 = o.getPoints().stream()
+                                .filter(pcust -> Math.abs(pcust.x) - Math.abs(p.x) < 2 && Math.abs(pcust.y) - Math.abs(p.y) < 2)
                                 .findFirst();
 
-                        if(first.isPresent()){
-                            MyPoint myPoint1 = first.get();
-
-                            myCustomPoints.containsValue(myPoint1);
+                        if (first1.isPresent()) {
+//                            System.out.println("p " + p);
+                            System.out.println("first1.get()" + o.getId());
+                            o.addToPoints(p);
                         }
-                    }
-//                            ;
+                    });
+
+                    i++;
+                  obiects.stream().forEach(o -> {
+                      o.getPoints().forEach(po -> {
+                          if(o.getPoints().indexOf(po) > 1){
+                              Imgproc.line(firstScreen,po , o.getPoints().get(o.getPoints().indexOf(po) -1),  new Scalar(0, 0, 255), 2);
+                          }
+                      });
+
+                  });
                 });
+
+
 
 
 //
@@ -227,6 +275,8 @@ private static  int i ;
 
 //        }
 
+        System.out.println("status " + status.toList());
+
 
 //        oldFrame = secondFrame.clone();
         secondFrame.copyTo(oldFrame);
@@ -254,6 +304,8 @@ private static  int i ;
         detection_contours(fourthScreen);
 
         putScreenInVideoLabel();
+
+
     }
 
     private static void putScreenInVideoLabel() {

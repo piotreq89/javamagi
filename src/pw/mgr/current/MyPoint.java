@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class MyPoint{
 
-    private int id ;
+    private Integer id ;
     private List<Point> points;
     private Point point;
 
@@ -38,11 +38,11 @@ public class MyPoint{
         this.points = points;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 }
