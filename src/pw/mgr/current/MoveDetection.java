@@ -46,7 +46,7 @@ public class MoveDetection {
         Mat frame = new Mat();
 
         // kalasa z funkcjami do obrobki video
-        VideoCapture video = new VideoCapture("C:\\Users\\piotrek\\Desktop\\test\\test_film1.mp4");
+        VideoCapture video = new VideoCapture("D:\\moje\\magi\\test_film1.mp4");
 
 
         Mat morphOutput = new Mat();
@@ -81,7 +81,9 @@ public class MoveDetection {
         });
     }
 
-private static  Integer i ;
+    private static  Integer i ;
+    private static  Integer k ;
+
     private static void showframe(Mat frame, VideoCapture video) {
 
         /**pierwszy ekran*/
@@ -169,6 +171,12 @@ private static  Integer i ;
         if(i == null){
             i = 0 ;
         }
+        if(k == null){
+            k = 0;
+        }
+
+        k++ ;
+        System.out.println(k);
         points1.stream()
                 .forEach(p -> {
                     System.out.println("p " + i +" " + p );
@@ -177,55 +185,29 @@ private static  Integer i ;
 
 //                    List<MyPoint> test = new ArrayList();
 //                    test.add()
-                    MyPoint myPoint = new MyPoint();
-                    myPoint.addToPoints(p);
-                    myPoint.setId(i);
 
-//                    if(true){
+                    if(k == 1){
+                        MyPoint myPoint = new MyPoint();
+                        myPoint.addToPoints(p);
+                        myPoint.setId(i);
                         obiects.add(myPoint);
-//                        myCustomPoints.put(i, myPoint);
+                    }else{
+                        obiects.stream().forEach(o -> {
+                            Optional<Point> first1 = o.getPoints().stream()
+                                    .filter(pcust -> Math.abs(pcust.x) - Math.abs(p.x) < 2 && Math.abs(pcust.y) - Math.abs(p.y) < 2)
+                                    .findFirst();
 
-//                    }else{
-//                        Optional<MyPoint> first = myCustomPoints.values().stream()
-//                                .filter(m -> m.getPoints().stream()
-//                                        .filter(pcust -> Math.abs(pcust.x) - Math.abs(p.x) <= 2 && Math.abs(pcust.y) - Math.abs(p.y) <= 2)
-//                                        .findFirst()
-//                                        .isPresent())
-//                                .findFirst();
-//
-//                        if(first.isPresent()){
-//                            MyPoint myPoint1 = first.get();
-//
-//                            myCustomPoints.containsValue(myPoint1);
-//                        }
-
-
-//                    Optional<String> first = obiects.stream().map(o -> {
-//                        Optional<Point> first1 = o.getPoints().stream()
-//                                .filter(pcust -> Math.abs(pcust.x) - Math.abs(p.x) <= 2 && Math.abs(pcust.y) - Math.abs(p.y) <= 2)
-//                                .findFirst();
-//
-//                        if (first1.isPresent()) {
-//                            return o.getId().toString();
-//                        }
-//                        return "";
-//                    }).findFirst();
-//
-//                    if(first.isPresent()){
-//                        System.out.println("first  " + first.get());
-//                    }
-//                    }
-                    obiects.stream().forEach(o -> {
-                        Optional<Point> first1 = o.getPoints().stream()
-                                .filter(pcust -> Math.abs(pcust.x) - Math.abs(p.x) < 2 && Math.abs(pcust.y) - Math.abs(p.y) < 2)
-                                .findFirst();
-
-                        if (first1.isPresent()) {
+                            if (first1.isPresent()) {
 //                            System.out.println("p " + p);
-                            System.out.println("first1.get()" + o.getId());
-                            o.addToPoints(p);
-                        }
-                    });
+                                System.out.println("first1.get()" + o.getId());
+                                if(!o.getPoints().contains(p)){
+                                    o.addToPoints(p);
+                                }
+                            }
+                        });
+
+                    }
+
 
                     i++;
                   obiects.stream().forEach(o -> {
