@@ -22,7 +22,7 @@ public class MoveDetection {
         System.loadLibrary("opencv_java310");
     }
 
-    private static List<Point> myPoints = new ArrayList<>();
+    private static List<Rect> myPoints = new ArrayList<>();
     private static MyFrame myFrame = new MyFrame();
     private static Mat firstScreen = null;
 
@@ -38,15 +38,32 @@ public class MoveDetection {
 
     private static List<MyPoint> obiects = new ArrayList<>();
 
+    private static Mat previousFrame = null;
+    private static Mat diffFrame = null;
 
 
+    private static int slider = 1;
+    private static int slider2 = 1;
+    private static int slider3 = 1;
+    private static int slider4 = 9;
+
+    private static Mat frame = new Mat();
+    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\VIDEO0386.mp4";
+//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new.mp4";
+    private static VideoCapture video = new VideoCapture(videoAddress);
+
+    private static Map<Integer, Rect> detectedObjectMap;
+
+    private static List<DetectedObject> detectedObjectList;
     public static void main(String[] args) {
         StartClass startClass = new StartClass();
 
-        Mat frame = new Mat();
+//        Mat frame = new Mat();
 
         // kalasa z funkcjami do obrobki video
-        VideoCapture video = new VideoCapture("D:\\moje\\magi\\test_film1.mp4");
+//        VideoCapture video = new VideoCapture("D:\\moje\\magi\\test_film1.mp4");
+//        VideoCapture video = new VideoCapture("C:\\Users\\piotrek\\Desktop\\test\\test_film1.mp4");
+
 
 
         Mat morphOutput = new Mat();
@@ -73,20 +90,67 @@ public class MoveDetection {
             startClass.setStart(false);
         });
 
+        myFrame.getReloadButton().addActionListener(e -> {
+            System.out.println("reload video");
+            video = new VideoCapture(videoAddress);
+            detectedObjectList = new ArrayList<>();
+            group = 1;
+            seq = 1 ;
+
+        });
+
         myFrame.getDrawMoveButton().addActionListener(e -> {
             System.out.println("print points");
-            MyRunPrint myRunPrint = new MyRunPrint(myPoints);
+//            MyRunPrint myRunPrint = new MyRunPrint(myPoints);
+
+            MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, 1);
             myRunPrint.start();
             startClass.setStart(true);
         });
+
+        myFrame.getjSlider1().addChangeListener(e -> {
+            System.out.println("Change jSlider " + myFrame.getjSlider1().getValue());
+//            if(myFrame.getjSlider1().getValue() % 2 == 1){
+                slider = myFrame.getjSlider1().getValue();
+
+//            }
+        });
+
+        myFrame.getjSlider2().addChangeListener(e -> {
+            System.out.println("Change jSlider 2 " + myFrame.getjSlider2().getValue());
+//            if(myFrame.getjSlider2().getValue() % 2 == 1){
+                slider2 = myFrame.getjSlider2().getValue();
+
+//            }
+        });
+
+        myFrame.getjSlider3().addChangeListener(e -> {
+            System.out.println("Change jSlider 3 " + myFrame.getjSlider3().getValue());
+//            if(myFrame.getjSlider3().getValue() % 2 == 1){
+                slider3 = myFrame.getjSlider3().getValue();
+
+//            }
+        });
+
+        myFrame.getjSlider4().addChangeListener(e -> {
+            System.out.println("Change jSlider 4 " + myFrame.getjSlider4().getValue());
+//            if(myFrame.getjSlider4().getValue() % 2 == 1){
+                slider4 = myFrame.getjSlider4().getValue();
+
+//            }
+        });
     }
 
-    private static  Integer i ;
-    private static  Integer k ;
+    private static  Integer i = 1 ;
+    private static  Integer k = 0;
+    private static  Integer seq = 1;
+    private static  Integer group = 1;
 
     private static void showframe(Mat frame, VideoCapture video) {
 
         /**pierwszy ekran*/
+
+//        frame = new Mat();
 
         Mat secondFrame;
         video.read(frame);
@@ -108,6 +172,8 @@ public class MoveDetection {
 
         Mat subtractedFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
         Mat fgmask =  new Mat(secondFrame.size(), CvType.CV_8UC1);
+
+
 
         //BS oblicza maskę pierwszego planu, wykonując odejmowanie między bieżącą ramką a modelem tła,
         // zawierającą statyczną część sceny lub ogólnie wszystko, co można uznać za tło,
@@ -131,97 +197,56 @@ public class MoveDetection {
 //                        " \nmog2.getVarThreshold() " + mog2.getVarThreshold() +
 //                        "\n-------------------------------------------------"
 //        );
-        mog2.apply(secondFrame, fgmask);
 
-        Mat erode=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(8,8));
-        Mat dilate=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(8,8));
-        Mat openElem=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(3,3),new Point(1,1));
-        Mat closeElem=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(7,7),new Point(3,3));
+
+
+        if(previousFrame == null){
+            previousFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
+        }
+
+        if(diffFrame == null){
+            diffFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
+        }
+
+
+        k++ ;
+        if(k % 3 == 0){
+            Core.absdiff(previousFrame, secondFrame, diffFrame);
+            previousFrame =secondFrame.clone();
+        }
+
+        mog2.apply(secondFrame, fgmask);
+//        Mat erode=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(8,8));
+//        Mat dilate=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(8,8));
+//        Mat openElem=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(slider,slider),new Point(slider2,slider2));
+//        Mat closeElem=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(slider3,slider3),new Point(slider4,slider4));
 
 //        Imgproc.morphologyEx(fgmask,fgmask,Imgproc.MORPH_OPEN,erode);
 //        Imgproc.morphologyEx(fgmask,fgmask,Imgproc.MORPH_OPEN,dilate);
-        Imgproc.morphologyEx(fgmask,fgmask,Imgproc.MORPH_OPEN,openElem);
-        Imgproc.morphologyEx(fgmask,fgmask,Imgproc.MORPH_CLOSE,closeElem);
+//        Imgproc.morphologyEx(fgmask,fgmask,Imgproc.MORPH_OPEN,openElem);
+//        Imgproc.morphologyEx(fgmask,fgmask,Imgproc.MORPH_CLOSE,closeElem);
 
 //        Imgproc.morphologyEx(fgmask, subtractedFrame, Imgproc.MORPH_OPEN, kernel);
 
         subtractedFrame =fgmask;
 
         Mat flow = new Mat(secondFrame.size(),CvType.CV_8UC1);
-//        Mat flow2 = new Mat(secondFrame.size(),CvType.CV_8UC1);
-//        Mat flow3 = new Mat(secondFrame.size(),CvType.CV_8UC1);
 //        Video.calcOpticalFlowFarneback(subtractedFrame, subtractedFrame, flow ,0.5,1, 1, 1, 7, 1.5,1);
 ////
-//        flow2 = flow ;
-//        Core.normalize(flow, flow, 0, 255, Core.NORM_MINMAX);
-//        Imgproc.cvtColor(flow, flow, Imgproc.COLOR_BGR2GRAY);
-//        thirdScreen = flow2.clone();
 
-//        thirdScreen = subtractedFrame;
+
+        thirdScreen = diffFrame;
 
         MatOfPoint corners  = new MatOfPoint();
-        Imgproc.goodFeaturesToTrack(subtractedFrame, corners, 3000 , 0.5, 10);
-        System.out.println("corners " + corners);
+        Imgproc.goodFeaturesToTrack(secondFrame, corners, 3000 , 0.5, 10);
+
         List<Point> points1 = corners.toList();
-//        System.out.println("points1 " +points1);
 
-
-
-//        i = 0 ;
-        if(i == null){
-            i = 0 ;
-        }
-        if(k == null){
-            k = 0;
-        }
-
-        k++ ;
-        System.out.println(k);
         points1.stream()
                 .forEach(p -> {
-                    System.out.println("p " + i +" " + p );
-//                    Core.poi
+
                     Imgproc.rectangle(firstScreen, p, p , new Scalar(0, 0, 255), 2);
-
-//                    List<MyPoint> test = new ArrayList();
-//                    test.add()
-
-                    if(k == 1){
-                        MyPoint myPoint = new MyPoint();
-                        myPoint.addToPoints(p);
-                        myPoint.setId(i);
-                        obiects.add(myPoint);
-                    }else{
-                        obiects.stream().forEach(o -> {
-                            Optional<Point> first1 = o.getPoints().stream()
-                                    .filter(pcust -> Math.abs(pcust.x) - Math.abs(p.x) < 2 && Math.abs(pcust.y) - Math.abs(p.y) < 2)
-                                    .findFirst();
-
-                            if (first1.isPresent()) {
-//                            System.out.println("p " + p);
-                                System.out.println("first1.get()" + o.getId());
-                                if(!o.getPoints().contains(p)){
-                                    o.addToPoints(p);
-                                }
-                            }
-                        });
-
-                    }
-
-
-                    i++;
-                  obiects.stream().forEach(o -> {
-                      o.getPoints().forEach(po -> {
-                          if(o.getPoints().indexOf(po) > 1){
-                              Imgproc.line(firstScreen,po , o.getPoints().get(o.getPoints().indexOf(po) -1),  new Scalar(0, 0, 255), 2);
-                          }
-                      });
-
-                  });
                 });
-
-
-
 
 //
         if(oldFrame == null){
@@ -229,49 +254,30 @@ public class MoveDetection {
         }
 
         Mat gray = secondFrame.clone();
-////        new Mat(subtractedFrame.size(),CvType.CV_8UC1);
-//        Imgproc.cvtColor(frame,gray, Imgproc.COLOR_BGR2GRAY);
 ////
         MatOfPoint2f mp2f = new MatOfPoint2f(corners.toArray());
         if(oldMOPf == null){
             oldMOPf = mp2f;
         }
-//        Imgproc.cornerSubPix(subtractedFrame, mp2f, new Size(10, 10), new Size(-1, -1), new TermCriteria());
-////
-//        List<Point> lp = mp2f.toList();
-//        MatOfPoint2f[] points = new MatOfPoint2f[4];
-////        if(points[1] != null){
-//        points[1] = new MatOfPoint2f();
-//        points[0] = new MatOfPoint2f();
-//            points[1].fromList(lp);
-//
-//        MatOfPoint2f list = new MatOfPoint2f(new Point(90, 90));
-////        list.add(new MatOfPoint2f(new Point(90, 90)));
-//        List<Point> aaa = list.toList();
-//        points[0].fromList(aaa);
-////
             MatOfByte status = new MatOfByte();
             MatOfFloat err = new MatOfFloat();
 //
-            Video.calcOpticalFlowPyrLK(oldFrame,gray,oldMOPf , mp2f,  status, err);
-
-//        }
-
-        System.out.println("status " + status.toList());
+            Video.calcOpticalFlowPyrLK(oldFrame,gray ,oldMOPf , mp2f,  status, err);
 
 
-//        oldFrame = secondFrame.clone();
-        secondFrame.copyTo(oldFrame);
+        oldFrame = secondFrame.clone();
         mp2f.copyTo(oldMOPf);
 
-        thirdScreen = gray.clone();
-//        points[0] = MatOfPoint2f.pointSwap(points[1], points[1] = points[0]);
+//        thirdScreen = gray.clone();
 
         /**czwarty ekran*/
 
         Mat finalFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
 
-//        Imgproc.adaptiveThreshold(diff_frame, diff_frame, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY_INV, 5, 2);
+        //new
+        Imgproc.threshold(diffFrame, finalFrame, 10 , 500, Imgproc.THRESH_BINARY );
+//        Imgproc.adaptiveThreshold(diffFrame, finalFrame, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, slider2, slider3);
+
         // Adaptacyjne progi, metoda oblicza wartości progowe, usuwa szumy, czyli filtruje piksele z za małą albo za dużą wartością
         // src, dst, wartośc pixela jaka nalezy podać jeżeli wartość jest większa niż wartość progowa,
         // zmienna reprezentujaca metode adaptacyjna która ma być użyta(sa 2 możiwe)
@@ -279,7 +285,30 @@ public class MoveDetection {
         // - ADAPTIVE_THRESH_GAUSSIAN_C - wartość progowa jest ważoną sumą wartości sąsiedztwa, gdzie wagi są oknami Gaussa. ,
         // wielkość pikseli sąsiedztwa używana do obliczania wartości progowej. ,
         // stałą używaną w obu metodach (odejmowana od średniej lub ważonej średniej).
-        Imgproc.adaptiveThreshold(subtractedFrame, finalFrame, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 5, 2);
+
+        //old
+//        Imgproc.adaptiveThreshold(subtractedFrame, finalFrame, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, 5, 2);
+
+
+
+//        Mat erodeClose=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(1,1));
+//        Mat dilateClose=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(9,9));
+        Mat erodeClose=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(slider,slider));
+//        Mat dilateClose=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(slider2,slider2));
+
+//        Imgproc.morphologyEx(finalFrame,finalFrame,Imgproc.MORPH_CLOSE, dilateClose);
+        Imgproc.morphologyEx(finalFrame,finalFrame,Imgproc.MORPH_CLOSE, erodeClose);
+
+//        Mat erodeOpen=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(slider3,slider3));
+        Mat dilateOpen=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(slider4,slider4));
+
+//        Imgproc.morphologyEx(finalFrame,finalFrame,Imgproc.MORPH_OPEN, erodeOpen);
+        Imgproc.morphologyEx(finalFrame,finalFrame,Imgproc.MORPH_OPEN, dilateOpen);
+
+
+//        Imgproc.erode(finalFrame, finalFrame, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(slider3, slider3)));
+//
+//        Imgproc.dilate(finalFrame, finalFrame, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(slider4, slider4)));
 
         fourthScreen = finalFrame.clone();
 
@@ -306,7 +335,7 @@ public class MoveDetection {
     private static void printRectangle(ArrayList<Rect> array, Mat img) {
 //        array.stream().forEach(a -> System.out.println(a));
 //        Imgproc.matchShapes()
-        System.out.println("------------------------");
+//        System.out.println("------------------------");
         if (array.size() > 0) {
             Iterator<Rect> it2 = array.iterator();
 //            int i = 0 ;
@@ -315,7 +344,7 @@ public class MoveDetection {
                 Rect obj = it2.next();
                 obj.height += 20;
                 obj.width +=10;
-                Imgproc.rectangle(firstScreen, obj.br(), new Point(obj.br().x - 30, obj.br().y - 50), new Scalar(0, 255, 0), 1);
+//                Imgproc.rectangle(firstScreen, obj.br(), new Point(obj.br().x - 30, obj.br().y - 50), new Scalar(0, 255, 0), 1);
 //                System.out.println(" .br() " + obj.br() + " .tl() " + obj.tl());
                 Imgproc.putText(firstScreen, "obiekt " , new Point(700, 10), 2, 1, new Scalar(0, 255, 0), 1);
                 if(array.indexOf(obj) -1 > 1){
@@ -354,6 +383,7 @@ public class MoveDetection {
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         Imgproc.findContours(vv, contours, v, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0, 0));
 
+
 //        System.out.println(contours);
 //        Imgproc.
 
@@ -361,6 +391,16 @@ public class MoveDetection {
         int maxAreaIdx = -1;
         Rect r = null;
         ArrayList<Rect> rect_array = new ArrayList<Rect>();
+
+//        int i = 1 ;
+
+        if(detectedObjectList == null){
+            detectedObjectList = new ArrayList<>();
+        }
+
+        if(detectedObjectMap == null){
+            detectedObjectMap = new HashMap<>();
+        }
 
         for (int idx = 0; idx < contours.size(); idx++) {
             Mat contour = contours.get(idx);
@@ -371,13 +411,63 @@ public class MoveDetection {
 //                if (true) {
                 maxAreaIdx = idx;
                 r = Imgproc.boundingRect(contours.get(maxAreaIdx));
-                myPoints.add(new Point(r.y, r.x));
+//                System.out.println(maxAreaIdx + " " + r + " r.tl() " +r.tl() + " r.br() " + r.br());
+                myPoints.add(r);
                 rect_array.add(r);
-//                Imgproc.rectangle(fourthScreen, r.br(), r.tl(), new Scalar(0, 255, 0), 1);
-//                Imgproc.drawContours(fourthScreen, contours, maxAreaIdx, new Scalar(0,0, 255));
+                Imgproc.rectangle(firstScreen, r.br(), r.tl(), new Scalar(0, 255, 0), 1);
+//                Imgproc.drawContours(firstScreen, contours, maxAreaIdx, new Scalar(0,0, 255));
+
+
+
+                MyIter myIter = new MyIter(i, maxAreaIdx);
+
+                DetectedObject detectedObject = new DetectedObject(i, maxAreaIdx, r, seq);
+//                detectedObjectList.sget(i -1)
+
+                List<DetectedObject> collect = detectedObjectList.stream()
+                        .filter(doa -> doa.getIterationId().equals(i - 1))
+                        .collect(Collectors.toList());
+
+                int numer = 20 ;
+                Optional<DetectedObject> first = collect.stream()
+//                        .filter(doa -> (doa.getRect().br().x <= ((int) detectedObject.getRect().br().x + numer)
+//                                && doa.getRect().br().x >= ((int) detectedObject.getRect().br().x - numer)
+//                                && doa.getRect().br().y <= ((int) detectedObject.getRect().br().y + numer)
+//                                && doa.getRect().br().y >= ((int) detectedObject.getRect().br().y - numer))
+//
+//                                && (doa.getRect().tl().x <= ((int) detectedObject.getRect().tl().x + numer)
+//                                && doa.getRect().tl().x >= ((int) detectedObject.getRect().tl().x - numer)
+//                                && doa.getRect().tl().y <= ((int) detectedObject.getRect().tl().y + numer)
+//                                && doa.getRect().tl().y >= ((int) detectedObject.getRect().tl().y - numer)))
+                        .filter(doa -> doa.getRect().x <= (detectedObject.getRect().x + numer)
+                                && doa.getRect().x >= (detectedObject.getRect().x - numer)
+                                && doa.getRect().y <= (detectedObject.getRect().y + numer)
+                                && doa.getRect().y >= (detectedObject.getRect().y - numer))
+                        .findFirst();
+
+                if(first.isPresent()){
+                    detectedObject.setGroup(first.get().getGroup());
+                    detectedObjectList.add(detectedObject);
+
+                }else {
+                    detectedObject.setGroup(group);
+                    detectedObjectList.add(detectedObject);
+                    group++;
+
+                }
+//                detectedObject.put(myIter, r );
+                System.out.println(maxAreaIdx + " rect " + detectedObject.getRect() + " r.tl() " +detectedObject.getRect().tl() + " r.br() "
+                        + detectedObject.getRect().br() + " seq " + detectedObject.getSeq() + " group " + detectedObject.getGroup());
+
+                seq++ ;
+
 
             }
+
+
         }
+        i++ ;
+        System.out.println("---------------------------");
 
         v.release();
 
