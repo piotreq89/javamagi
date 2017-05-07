@@ -2,6 +2,8 @@ package pw.mgr.current;
 
 import org.opencv.core.*;
 import org.opencv.core.Point;
+import org.opencv.imgproc.Imgproc;
+import org.tc33.jheatchart.HeatChart;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -36,6 +38,13 @@ public class MyRunPrint extends Thread {
         System.out.println("print");
         BufferedImage image = new BufferedImage(910, 600, BufferedImage.TYPE_INT_RGB);
 
+        List<ColorMap> colorMaps = new ArrayList<>();
+        colorMaps.add(new ColorMap(1, Color.WHITE)) ;
+        colorMaps.add(new ColorMap(1, Color.PINK)) ;
+        colorMaps.add(new ColorMap(1, Color.ORANGE)) ;
+        colorMaps.add(new ColorMap(1, Color.RED)) ;
+
+
         Map<Integer, Color> integerColorMap = new HashMap<>();
         integerColorMap.put(1, Color.cyan);
         integerColorMap.put(2, Color.ORANGE);
@@ -68,6 +77,8 @@ public class MyRunPrint extends Thread {
 
 
 
+
+
         Graphics2D cg = image.createGraphics();
         int width = 10;
         int height = 10;
@@ -92,14 +103,89 @@ public class MyRunPrint extends Thread {
                     for (DetectedObject objects: collect ) {
 
                         if(collect.size() > (collect.indexOf(objects) + 1)){
+
+                            Optional<DetectedObject> first = detectedObjects.stream()
+                                    .filter(d -> !d.equals(objects))
+                                    .filter(d -> d.getSeq() < objects.getSeq())
+                                    .filter(d -> d.getRect().x == objects.getRect().x && d.getRect().y == objects.getRect().y)
+                                    .findFirst();
+
+//                            if(first.isPresent()){
+//                                DetectedObject detectedObject = first.get();
+//
+//                                objects.setColorMap(colorMaps.get(detectedObject.getColorMap().getId() + 1));
+//
+//                            }else {
+//                                objects.setColorMap(colorMaps.get(1));
+//
+//                            }
+
+//                            if(objects.getColorMap() == null){
+//                                objects.setColorMap(colorMaps.get(1));
+//                            }else{
+//                                objects.setColorMap(colorMaps.get(objects.getColorMap().getId() + 1));
+//                            }
+//                            cg.setColor(objects.getColorMap().getColor());
+////                            cg.setColor(Color.WHITE);
+
                             cg.setColor(integerColorMap.get(i));
                             cg.setStroke(new BasicStroke(5));
+//                            cg.fillOval(objects.getRect().x, objects.getRect().y , width, height);
+
+//                            cg.drawOval( objects.getRect().x, objects.getRect().y , width, height);
+//                            cg.fillRect(objects.getRect().x,objects.getRect().y, 4 ,4);
                             cg.drawLine(objects.getRect().x,objects.getRect().y, collect.get(collect.indexOf(objects) +1 ).getRect().x, collect.get(collect.indexOf(objects) +1 ).getRect().y );
 
                         }
                     }
 
                 });
+
+
+
+
+//        try {
+//            for (int x = 0; x < data.length; x++)
+//            {
+//                for (int y = 0; y < data[0].length; y++)
+//                {
+//                    int colorIndex = dataColorIndices[x][y];
+//                    if (colorIndex != NA) {
+//                        cg.setColor(integerColorMap.get((colorIndex)));
+//                        cg.fillRect(x, y, 1, 1);
+//                    }
+//// Alternate flow, if you really want the pixels to be white
+////                else {
+////                    bufferedGraphics.setColor(Color.WHITE);
+////                    bufferedGraphics.fillRect(x, y, 1, 1);
+////                }
+//                }
+//            }
+//        }
+//        finally {
+//            bufferedGraphics.dispose();
+//        }
+
+// Create some dummy data.
+//        double[][] data = new double[][]{{3,2,3,4,5,6,3,2,3,4,5,6},
+//                {2,3,4,5,6,7,3,2,3,4,5,6},
+//                {3,4,5,6,7,6,3,2,3,4,5,6},
+//                {4,5,6,7,6,5,3,2,3,4,5,6}};
+//
+//// Step 1: Create our heat map chart using our data.
+//        HeatChart map = new HeatChart(data);
+////
+////// Step 2: Customise the chart.
+//        map.setTitle("This is my heat chart title");
+//        map.setXAxisLabel("X aaa");
+//        map.setYAxisLabel("Y bbbb");
+////
+////// Step 3: Output the chart to a file.
+//        try {
+//            map.saveToFile(new File("result/java-heat-chart.png"));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
         File output = new File("result/wykryty_ruch6.jpg");

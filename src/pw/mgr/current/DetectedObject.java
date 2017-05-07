@@ -12,6 +12,7 @@ public class DetectedObject {
     private Rect rect;
     private Integer seq ;
     private Integer group;
+    private ColorMap colorMap ;
 
     public DetectedObject(Integer iterationId, Integer contourId, Rect rect, Integer seq, Integer group) {
         this.iterationId = iterationId;
@@ -69,6 +70,14 @@ public class DetectedObject {
 
     public void setGroup(Integer group) {
         this.group = group;
+    }
+
+    public ColorMap getColorMap() {
+        return colorMap;
+    }
+
+    public void setColorMap(ColorMap colorMap) {
+        this.colorMap = colorMap;
     }
 
     @Override

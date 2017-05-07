@@ -142,7 +142,7 @@ public class MyFrame extends JFrame{
         JPanel slidersPanel = new JPanel();
         slidersPanel.setLayout(gBLayout);
 
-        JTextField jTextField = new JTextField("slider1");
+        JTextField jTextField = new JTextField("Dylacja :");
         gbc.gridx = 0;
         gbc.gridy = 0;
         slidersPanel.add(jTextField, gbc);
@@ -152,7 +152,7 @@ public class MyFrame extends JFrame{
         gbc.gridy = 0;
         slidersPanel.add(jSlider1, gbc);
 
-        JTextField jTextField2 = new JTextField("slider2");
+        JTextField jTextField2 = new JTextField("Erozja :");
         gbc.gridx = 0;
         gbc.gridy = 1;
         slidersPanel.add(jTextField2, gbc);
@@ -165,22 +165,22 @@ public class MyFrame extends JFrame{
         JTextField jTextField3 = new JTextField("slider3");
         gbc.gridx = 0;
         gbc.gridy = 2;
-        slidersPanel.add(jTextField3, gbc);
+//        slidersPanel.add(jTextField3, gbc);
 
         setSliderParams(jSlider3);
         gbc.gridx = 1;
         gbc.gridy = 2;
-        slidersPanel.add(jSlider3, gbc);
+//        slidersPanel.add(jSlider3, gbc);
 
         JTextField jTextField4 = new JTextField("slider4");
         gbc.gridx = 0;
         gbc.gridy = 3;
-        slidersPanel.add(jTextField4, gbc);
+//        slidersPanel.add(jTextField4, gbc);
 
         setSliderParams(jSlider4);
         gbc.gridx = 1;
         gbc.gridy = 3;
-        slidersPanel.add(jSlider4, gbc);
+//        slidersPanel.add(jSlider4, gbc);
         return slidersPanel;
     }
 
