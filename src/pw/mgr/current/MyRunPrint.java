@@ -40,9 +40,9 @@ public class MyRunPrint extends Thread {
 
         List<ColorMap> colorMaps = new ArrayList<>();
         colorMaps.add(new ColorMap(1, Color.WHITE)) ;
-        colorMaps.add(new ColorMap(1, Color.PINK)) ;
-        colorMaps.add(new ColorMap(1, Color.ORANGE)) ;
-        colorMaps.add(new ColorMap(1, Color.RED)) ;
+        colorMaps.add(new ColorMap(2, Color.PINK)) ;
+        colorMaps.add(new ColorMap(3, Color.ORANGE)) ;
+        colorMaps.add(new ColorMap(4, Color.RED)) ;
 
 
         Map<Integer, Color> integerColorMap = new HashMap<>();
@@ -100,6 +100,145 @@ public class MyRunPrint extends Thread {
                             .sorted(((o1, o2) -> o1.getSeq().compareTo(o2.getSeq())))
                             .collect(Collectors.toList());
 
+/*
+                    for (DetectedObject objects: collect ) {
+
+                        if(collect.size() > (collect.indexOf(objects) + 1)){
+
+                            Optional<DetectedObject> first = detectedObjects.stream()
+                                    .filter(d -> !d.equals(objects))
+                                    .filter(d -> d.getSeq() < objects.getSeq())
+                                    .filter(d -> d.getRect().x == objects.getRect().x && d.getRect().y == objects.getRect().y)
+                                    .findFirst();
+
+                            if(first.isPresent()){
+                                DetectedObject detectedObject = first.get();
+
+//                                if(detectedObject.getColorMap() != null){
+//                                    objects.setColorMap(colorMaps.get(detectedObject.getColorMap().getId() + 1));
+//                                }else{
+//                                    objects.setColorMap(colorMaps.get(1));
+//                                }
+
+                                if(detectedObject.getColor() != null){
+                                    objects.setColor(new Color(i + 10, 255, 255));
+                                }else{
+                                    objects.setColor(Color.white);
+                                }
+
+                            }else {
+                                objects.setColor(Color.white);
+
+                            }
+
+//                            if(objects.getColorMap() == null){
+//                                objects.setColorMap(colorMaps.get(1));
+//                            }else{
+//                                objects.setColorMap(colorMaps.get(objects.getColorMap().getId() + 1));
+//                            }
+
+                            List<Rect> detectedPointToPrint = detectedObjects.stream()
+                                    .sorted(((o1, o2) -> o1.getSeq().compareTo(o2.getSeq())))
+                                    .map(o -> o.getRect())
+                                    .collect(Collectors.toList());
+
+                            List<SortedObject> sortedObjects = new ArrayList<>();
+
+                            int o = 1 ;
+
+                            for (Rect rect: detectedPointToPrint ) {
+                                if (sortedObjects.isEmpty()) {
+                                    SortedObject sortedObject = new SortedObject(o, 1, rect);
+                                    sortedObjects.add(sortedObject);
+                                    o++;
+
+                                }else {
+                                    Optional<SortedObject> first1 = sortedObjects.stream()
+                                            .filter(s -> s.getRect().x == rect.x && s.getRect().y == rect.y)
+                                            .findFirst();
+
+                                    if(first1.isPresent()){
+                                        SortedObject sortedObject = first1.get();
+                                        sortedObject.setSortedIdIn(sortedObject.getSortedIdIn() + 1);
+                                        sortedObjects.add(sortedObject);
+                                    }else{
+                                        SortedObject sortedObject = new SortedObject(o, 1, rect);
+                                        sortedObjects.add(sortedObject);
+                                        o++;
+                                    }
+                                }
+                            }
+
+                            int colour = 0 ;
+
+                            List<Integer> numbers = sortedObjects.stream()
+                                    .map(d -> d.getSortedId())
+                                    .distinct()
+                                    .collect(Collectors.toList());
+
+                            numbers.stream()
+                                    .forEach(n -> {
+                                        List<SortedObject> collect1 = sortedObjects.stream()
+                                                .filter(s -> s.getSortedId().equals(n))
+                                                .collect(Collectors.toList());
+
+                                        int size = collect1.size();
+                                        SortedObject sortedObject = collect1.stream()
+                                                .findFirst()
+                                                .get();
+
+//                                        System.out.println("rect.x " + rect.getRect().x + " rect.y " + rect.getRect().y + " rect.getSortedIdIn() " + rect.getSortedIdIn());
+//                                        int sortedIdInColour = rect.getSortedIdIn();
+//                                        rect.setSortedIdIn(sortedIdInColour);
+                                        size= size* 63 ;
+//                                        System.out.println("size " + size);
+                                        if(size <= 255 && size > 0){
+                                            cg.setColor(new Color(size,255, 255));
+                                        }else if(size <= 255 && size >= 510){
+                                            cg.setColor(new Color(255, size/2 , 255));
+                                        }else if(size <= 765 && size > 0){
+                                            cg.setColor(new Color(255, 255, size/3));
+                                        }
+                                        cg.fillOval(sortedObject.getRect().x, sortedObject.getRect().y, 5, 5);
+
+
+                                    });
+
+//                            sortedObjects.stream()
+//                                            .forEach(rect -> {
+//
+//                                                System.out.println("rect.x " + rect.getRect().x + " rect.y " + rect.getRect().y + " rect.getSortedIdIn() " + rect.getSortedIdIn());
+//                                                int sortedIdInColour = rect.getSortedIdIn();
+//                                                rect.setSortedIdIn(sortedIdInColour);
+//                                                if(rect.getSortedIdIn() <= 255 && rect.getSortedIdIn() > 0){
+//                                                    cg.setColor(new Color(rect.getSortedIdIn(),255, 255));
+//                                                }else if(rect.getSortedIdIn() <= 255 && rect.getSortedIdIn() >= 510){
+//                                                    cg.setColor(new Color(255, rect.getSortedIdIn()/2 , 255));
+//                                                }else if(rect.getSortedIdIn() <= 765 && rect.getSortedIdIn() > 0){
+//                                                    cg.setColor(new Color(255, 255, rect.getSortedIdIn()/3));
+//                                                }
+//                                                cg.fillOval(rect.getRect().x, rect.getRect().y, 10, 10);
+//
+//                                            });
+
+//                            cg.setColor(objects.getColor());
+////                            cg.setColor(Color.WHITE);
+
+//                            cg.setColor(integerColorMap.get(i));
+//                            cg.setStroke(new BasicStroke(5));
+//                            cg.fillOval(objects.getRect().x, objects.getRect().y , width, height);
+
+//                            cg.drawOval( objects.getRect().x, objects.getRect().y , width, height);
+//                            cg.fillRect(objects.getRect().x,objects.getRect().y, 4 ,4);
+//                            cg.drawLine(objects.getRect().x,objects.getRect().y, collect.get(collect.indexOf(objects) +1 ).getRect().x, collect.get(collect.indexOf(objects) +1 ).getRect().y );
+
+                                }
+
+
+
+                    }
+*/
+
                     for (DetectedObject objects: collect ) {
 
                         if(collect.size() > (collect.indexOf(objects) + 1)){
@@ -138,6 +277,7 @@ public class MyRunPrint extends Thread {
 
                         }
                     }
+
 
                 });
 
@@ -188,6 +328,7 @@ public class MyRunPrint extends Thread {
 //        }
 
 
+        System.out.println("finish print");
         File output = new File("result/wykryty_ruch6.jpg");
         output.mkdirs();
         try {

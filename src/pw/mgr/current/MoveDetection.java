@@ -5,6 +5,7 @@ import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.objdetect.Objdetect;
 import org.opencv.video.BackgroundSubtractorMOG2;
 import org.opencv.video.Video;
 import org.opencv.videoio.VideoCapture;
@@ -48,8 +49,12 @@ public class MoveDetection {
     private static  Integer seq = 1;
     private static  Integer group = 1;
 
-    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\VIDEO0386.mp4";
-//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new.mp4";
+//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\VIDEO0376.mp4";
+    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new.mp4";
+//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\test_film1.mp4";
+//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new2.mp4";
+//      private static String videoAddress = "E:\\magi\\film\\YDXJ0571.MP4";
+//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new3.mp4";
 
     private static VideoCapture video = new VideoCapture(videoAddress);
     private static List<DetectedObject> detectedObjectList;
@@ -134,7 +139,9 @@ public class MoveDetection {
 
         Mat secondFrame;
         video.read(frame);
-        Imgproc.resize(frame, frame,new Size(710, 400));
+
+        Imgproc.resize(frame, frame,new Size(640, 480));
+//        Imgproc.resize(frame, frame,new Size(710, 400));
 //        Imgproc.resize(frame, frame,new Size(890, 500));
 //        Imgproc.resize(frame, frame,new Size(1060, 600));
         firstScreen = frame;

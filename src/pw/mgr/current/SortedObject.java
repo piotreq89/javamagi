@@ -17,6 +17,11 @@ public class SortedObject {
         this.rect = rect;
     }
 
+    public SortedObject(Integer sortedId, Rect rect) {
+        this.rect = rect;
+        this.sortedId = sortedId;
+    }
+
     public SortedObject() {
     }
 

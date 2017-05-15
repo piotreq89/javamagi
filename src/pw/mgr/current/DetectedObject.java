@@ -2,6 +2,8 @@ package pw.mgr.current;
 
 import org.opencv.core.Rect;
 
+import java.awt.*;
+
 /**
  * Created by piotrek on 2017-05-06.
  */
@@ -13,6 +15,7 @@ public class DetectedObject {
     private Integer seq ;
     private Integer group;
     private ColorMap colorMap ;
+    private Color color ;
 
     public DetectedObject(Integer iterationId, Integer contourId, Rect rect, Integer seq, Integer group) {
         this.iterationId = iterationId;
@@ -78,6 +81,14 @@ public class DetectedObject {
 
     public void setColorMap(ColorMap colorMap) {
         this.colorMap = colorMap;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     @Override
