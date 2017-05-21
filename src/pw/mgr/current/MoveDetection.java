@@ -50,7 +50,8 @@ public class MoveDetection {
     private static  Integer group = 1;
 
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\VIDEO0376.mp4";
-    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new.mp4";
+//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new.mp4";
+    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new5.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\test_film1.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new2.mp4";
 //      private static String videoAddress = "E:\\magi\\film\\YDXJ0571.MP4";
@@ -136,77 +137,86 @@ public class MoveDetection {
         /**pierwszy ekran*/
 
 //        frame = new Mat();
-
+        k++ ;
         Mat secondFrame;
         video.read(frame);
 
-        Imgproc.resize(frame, frame,new Size(640, 480));
-//        Imgproc.resize(frame, frame,new Size(710, 400));
+        if(k % 3 == 0) {
+
+//        Imgproc.resize(frame, frame,new Size(640, 480));
+//        Imgproc.resize(frame, frame,new Size(1024, 768));
 //        Imgproc.resize(frame, frame,new Size(890, 500));
-//        Imgproc.resize(frame, frame,new Size(1060, 600));
-        firstScreen = frame;
+            Imgproc.resize(frame, frame, new Size(800, 480));
+//        Imgproc.resize(frame, frame,new Size(1260, 800));
+//        Imgproc.resize(frame, frame,new Size(1600, 1200));
+//        Imgproc.resize(frame, frame,new Size(1860, 1400));
+            firstScreen = frame;
 
-        /**drugi ekran*/
+            /**drugi ekran*/
 
-        secondFrame = new Mat(frame.size(), CvType.CV_8UC1);
-        //Konwertuje obraz do skali szarości
-        Imgproc.cvtColor(frame, secondFrame, Imgproc.COLOR_BGR2GRAY);
-        //Rozmycie filtrem Gaussa, usuwa on detale i eliminuje zakłócenia
-        // src, dst, wielkośc jądra gausa, odchylenie standardowe jądra w kierunku X
-        Imgproc.GaussianBlur(secondFrame, secondFrame, new Size(3, 3), 1.0, 1.0, 0);
-        secondScreen = secondFrame ;
+            secondFrame = new Mat(frame.size(), CvType.CV_8UC1);
+            //Konwertuje obraz do skali szarości
+            Imgproc.cvtColor(frame, secondFrame, Imgproc.COLOR_BGR2GRAY);
+            //Rozmycie filtrem Gaussa, usuwa on detale i eliminuje zakłócenia
+            // src, dst, wielkośc jądra gausa, odchylenie standardowe jądra w kierunku X
+            Imgproc.GaussianBlur(secondFrame, secondFrame, new Size(3, 3), 1.0, 1.0, 0);
+            secondScreen = secondFrame;
 
-        /**trzeci ekran*/
+            /**trzeci ekran*/
 
-        if(previousFrame == null){
-            previousFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
+            if (previousFrame == null) {
+                previousFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
+            }
+
+            if (diffFrame == null) {
+                diffFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
+            }
+
+
+            if (k % 3 == 0) {
+                Core.absdiff(previousFrame, secondFrame, diffFrame);
+                previousFrame = secondFrame.clone();
+            }
+
+
+            if (flow == null) {
+                flow = new Mat(secondFrame.size(), CvType.CV_8UC1);
+            }
+
+            Imgproc.applyColorMap(secondFrame, flow, Imgproc.COLORMAP_JET);
+            Imgproc.GaussianBlur(flow, flow, new Size(5, 5), 0, 0);
+
+
+            thirdScreen = diffFrame;
+
+
+            /**czwarty ekran*/
+
+            Mat finalFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
+
+            //new
+            Imgproc.threshold(diffFrame, finalFrame, 10, 500, Imgproc.THRESH_BINARY);
+
+            Mat erodeClose = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(slider, slider));
+            Imgproc.morphologyEx(finalFrame, finalFrame, Imgproc.MORPH_CLOSE, erodeClose);
+
+            Mat dilateOpen = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(slider2, slider2));
+
+            Imgproc.morphologyEx(finalFrame, finalFrame, Imgproc.MORPH_OPEN, dilateOpen);
+
+            fourthScreen = finalFrame.clone();
+//        if(k % 4 == 0) {
+            detection_contours(fourthScreen);
+//        }
+
+            putScreenInVideoLabel();
         }
-
-        if(diffFrame == null){
-            diffFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
-        }
-
-
-        k++ ;
-        if(k % 3 == 0){
-            Core.absdiff(previousFrame, secondFrame, diffFrame);
-            previousFrame =secondFrame.clone();
-        }
-
-
-        if(flow == null){
-            flow = new Mat(secondFrame.size(),CvType.CV_8UC1);
-        }
-
-        Imgproc.applyColorMap(secondFrame, flow, Imgproc.COLORMAP_JET);
-        Imgproc.GaussianBlur(flow, flow, new Size(5, 5) , 0, 0);
-
-
-        thirdScreen = diffFrame;
-
-
-        /**czwarty ekran*/
-
-        Mat finalFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
-
-        //new
-        Imgproc.threshold(diffFrame, finalFrame, 10 , 500, Imgproc.THRESH_BINARY );
-
-        Mat erodeClose=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(slider,slider));
-        Imgproc.morphologyEx(finalFrame,finalFrame,Imgproc.MORPH_CLOSE, erodeClose);
-
-        Mat dilateOpen=Imgproc.getStructuringElement(Imgproc.MORPH_RECT,new Size(slider2,slider2));
-
-        Imgproc.morphologyEx(finalFrame,finalFrame,Imgproc.MORPH_OPEN, dilateOpen);
-
-        fourthScreen = finalFrame.clone();
-        detection_contours(fourthScreen);
-
-        putScreenInVideoLabel();
     }
 
     private static void putScreenInVideoLabel() {
         ImageIcon firstImage = new ImageIcon(Mat2bufferedImage(firstScreen));
+//        System.out.println(" secondScreen.size() " + secondScreen.size());
+//        Imgproc.resize(secondScreen, secondScreen,new Size(800, 768));
         ImageIcon secondImage = new ImageIcon(Mat2bufferedImage(secondScreen));
         ImageIcon thirdImage = new ImageIcon(Mat2bufferedImage(thirdScreen));
         ImageIcon fourthImage = new ImageIcon(Mat2bufferedImage(fourthScreen));
@@ -274,7 +284,7 @@ public class MoveDetection {
             Mat contour = contours.get(idx);
 
             double contourarea = Imgproc.contourArea(contour);
-            if (contourarea > maxArea && contourarea < 2500) {
+            if (contourarea > maxArea && contourarea < 1500) {
                 maxAreaIdx = idx;
                 r = Imgproc.boundingRect(contours.get(maxAreaIdx));
 //                System.out.println(maxAreaIdx + " " + r + " r.tl() " +r.tl() + " r.br() " + r.br());

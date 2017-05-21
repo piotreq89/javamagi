@@ -24,8 +24,8 @@ public class MyFrame extends JFrame{
     private JButton stopButton = new JButton("Stop");
     private JButton reloadButton = new JButton("Przeładuj");
     private JButton drawMoveButton = new JButton("Narysuj ruch");
-    private JSlider jSlider1 = new JSlider(JSlider.HORIZONTAL, 0, 20, 1);
-    private JSlider jSlider2 = new JSlider(JSlider.HORIZONTAL, 0, 20, 1);
+    private JSlider jSlider1 = new JSlider(JSlider.HORIZONTAL, 0, 100, 1);
+    private JSlider jSlider2 = new JSlider(JSlider.HORIZONTAL, 0, 100, 1);
     private JSlider jSlider3 = new JSlider(JSlider.HORIZONTAL, 0, 20, 1);
     private JSlider jSlider4 = new JSlider(JSlider.HORIZONTAL, 0, 20, 1);
 
@@ -36,6 +36,7 @@ public class MyFrame extends JFrame{
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         this.setSize(1920, 1060);
+//        this.setSize(4096, 2304 );
 
         this.setVisible(true);
         this.setLocationRelativeTo(null);
