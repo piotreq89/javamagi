@@ -92,6 +92,19 @@ public class DetectedObject {
     }
 
     @Override
+    public String toString() {
+        return "DetectedObject{" +
+                "iterationId=" + iterationId +
+                ", contourId=" + contourId +
+                ", rect=" + rect +
+                ", seq=" + seq +
+                ", group=" + group +
+                ", colorMap=" + colorMap +
+                ", color=" + color +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

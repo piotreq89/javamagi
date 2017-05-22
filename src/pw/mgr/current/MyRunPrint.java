@@ -36,7 +36,8 @@ public class MyRunPrint extends Thread {
     @Override
     public void run() {
         System.out.println("print");
-        BufferedImage image = new BufferedImage(910, 600, BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
+//        BufferedImage image = new BufferedImage(1600, 1200, BufferedImage.TYPE_INT_RGB);
 
         List<ColorMap> colorMaps = new ArrayList<>();
         colorMaps.add(new ColorMap(1, Color.WHITE)) ;
