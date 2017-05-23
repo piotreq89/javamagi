@@ -26,8 +26,8 @@ public class MyFrame extends JFrame{
     private JButton drawMoveButton = new JButton("Narysuj ruch");
     private JSlider jSlider1 = new JSlider(JSlider.HORIZONTAL, 0, 50, 1);
     private JSlider jSlider2 = new JSlider(JSlider.HORIZONTAL, 0, 50, 1);
-    private JSlider jSlider3 = new JSlider(JSlider.HORIZONTAL, 0, 20, 1);
-    private JSlider jSlider4 = new JSlider(JSlider.HORIZONTAL, 0, 20, 1);
+    private JSlider jSlider3 = new JSlider(JSlider.HORIZONTAL, 0, 100, 1);
+    private JSlider jSlider4 = new JSlider(JSlider.HORIZONTAL, 0, 1000, 1);
 
 
     private MyFrame generateMyFrame(){
@@ -166,22 +166,22 @@ public class MyFrame extends JFrame{
         JTextField jTextField3 = new JTextField("slider3");
         gbc.gridx = 0;
         gbc.gridy = 2;
-//        slidersPanel.add(jTextField3, gbc);
+        slidersPanel.add(jTextField3, gbc);
 
         setSliderParams(jSlider3);
         gbc.gridx = 1;
         gbc.gridy = 2;
-//        slidersPanel.add(jSlider3, gbc);
+        slidersPanel.add(jSlider3, gbc);
 
         JTextField jTextField4 = new JTextField("slider4");
         gbc.gridx = 0;
         gbc.gridy = 3;
-//        slidersPanel.add(jTextField4, gbc);
+        slidersPanel.add(jTextField4, gbc);
 
         setSliderParams(jSlider4);
         gbc.gridx = 1;
         gbc.gridy = 3;
-//        slidersPanel.add(jSlider4, gbc);
+        slidersPanel.add(jSlider4, gbc);
         return slidersPanel;
     }
 

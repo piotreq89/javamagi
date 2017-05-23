@@ -5,6 +5,7 @@ import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.objdetect.HOGDescriptor;
 import org.opencv.objdetect.Objdetect;
 import org.opencv.video.BackgroundSubtractorMOG2;
 import org.opencv.video.Video;
@@ -51,7 +52,7 @@ public class MoveDetection {
 
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\VIDEO0376.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new.mp4";
-    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new7.mp4";
+    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new9.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\test_film1.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new2.mp4";
 //      private static String videoAddress = "E:\\magi\\film\\YDXJ0571.MP4";
@@ -164,6 +165,35 @@ public class MoveDetection {
             Imgproc.GaussianBlur(secondFrame, secondFrame, new Size(3, 3), 1.0, 1.0, 0);
             secondScreen = secondFrame;
 
+
+            HOGDescriptor hogDescriptor = new HOGDescriptor();
+
+            hogDescriptor.setSVMDetector(HOGDescriptor.getDefaultPeopleDetector());
+
+
+//            double ratio = 0.5;
+            int width = 800;
+            int height = 600 ;
+//            int w = (int) (width * ratio);
+//            int h = (int) (height * ratio);
+
+            Mat m3 = new Mat(height, width, CvType.CV_8UC1);
+
+//            MatOfRect found = new MatOfRect();
+//            MatOfDouble weight = new MatOfDouble();
+//
+//            hogDescriptor.detectMultiScale(m3, found, weight, 0, new Size(1, 1), new Size(1, 1), 1.05, 2, false);
+//
+//            List<Rect> rects = found.toList();
+//            if (rects.size()> 0) {
+//                for (int i=0; i<rects.size(); i++) {
+////                    rect(rects[i].x/ratio, rects[i].y/ratio, rects[i].width/ratio, rects[i].height/ratio);
+//                    Imgproc.rectangle(secondScreen, new Point(rects.get(i).x, rects.get(i).y),
+//                            new Point(rects.get(i).width, rects.get(i).height), new Scalar(0, 255, 0), 1);
+//                }
+//            }
+//            text("Frame Rate: " + round(frameRate), 500, 50);
+
             /**trzeci ekran*/
 
             if (previousFrame == null) {
@@ -175,8 +205,9 @@ public class MoveDetection {
             }
 
 
-            if (k % 3 == 0) {
+            if (k % 4 == 0) {
                 Core.absdiff(previousFrame, secondFrame, diffFrame);
+//                Core.subtract(previousFrame, secondFrame, diffFrame);
                 previousFrame = secondFrame.clone();
             }
 
@@ -197,7 +228,7 @@ public class MoveDetection {
             Mat finalFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
 
             //new
-            Imgproc.threshold(diffFrame, finalFrame, 10, 500, Imgproc.THRESH_BINARY);
+            Imgproc.threshold(diffFrame, finalFrame, slider3, slider4, Imgproc.THRESH_BINARY);
 
             Mat erodeClose = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(slider, slider));
             Imgproc.morphologyEx(finalFrame, finalFrame, Imgproc.MORPH_CLOSE, erodeClose);
@@ -285,7 +316,7 @@ public class MoveDetection {
             Mat contour = contours.get(idx);
 
             double contourarea = Imgproc.contourArea(contour);
-            if (contourarea > maxArea && contourarea < 2500) {
+            if (contourarea > maxArea && contourarea < 3500) {
                 maxAreaIdx = idx;
                 r = Imgproc.boundingRect(contours.get(maxAreaIdx));
 //                System.out.println(maxAreaIdx + " " + r + " r.tl() " +r.tl() + " r.br() " + r.br());
@@ -294,61 +325,75 @@ public class MoveDetection {
                 rect_array.add(r);
 
                 if (r.br().y > 60) {
-//
+                    if(r.br().y < 480 && r.br().x > 80 && r.tl().y <= 770 && r.tl().y >= 30 &&
+                            r.area() < 3000){
 
-                    Imgproc.rectangle(firstScreen, r.br(), r.tl(), new Scalar(0, 255, 0), 1);
-                    Imgproc.putText(firstScreen, "r.br().x " + r.br().x + "r.br().y " + r.br().y, r.br(), 1, 1, new Scalar(255, 255, 0), 1);
-//                Imgproc.drawContours(firstScreen, contours, maxAreaIdx, new Scalar(0,0, 255));
+                        DetectedObject detectedObject = new DetectedObject(i, maxAreaIdx, r, seq);
 
-                    DetectedObject detectedObject = new DetectedObject(i, maxAreaIdx, r, seq);
+                        List<DetectedObject> collect = detectedObjectList.stream()
+                                .filter(doa -> doa.getIterationId().equals(i - 1))
+                                .collect(Collectors.toList());
 
-                    List<DetectedObject> collect = detectedObjectList.stream()
-                            .filter(doa -> doa.getIterationId().equals(i - 1))
-                            .collect(Collectors.toList());
+                        int numer = 60;
+                        Optional<DetectedObject> first = collect.stream()
+                                .filter(doa -> (doa.getRect().tl().x <= (detectedObject.getRect().tl().x + numer)
+                                        && doa.getRect().tl().x >= (detectedObject.getRect().tl().x - numer)
+                                        && doa.getRect().tl().y <= (detectedObject.getRect().tl().y + numer)
+                                        && doa.getRect().tl().y >= (detectedObject.getRect().tl().y - numer)
+//                                    &&(doa.getRect().br().x <= (detectedObject.getRect().br().x + numer)
+//                                    && doa.getRect().br().x >= (detectedObject.getRect().br().x - numer)
+//                                    && doa.getRect().br().y <= (detectedObject.getRect().br().y + numer)
+//                                    && doa.getRect().br().y >= (detectedObject.getRect().br().y - numer))
+                                ))
+                                .findFirst();
 
-                    int numer = 40;
-                    Optional<DetectedObject> first = collect.stream()
-                            .filter(doa -> doa.getRect().x <= (detectedObject.getRect().x + numer)
-                                    && doa.getRect().x >= (detectedObject.getRect().x - numer)
-                                    && doa.getRect().y <= (detectedObject.getRect().y + numer)
-                                    && doa.getRect().y >= (detectedObject.getRect().y - numer))
-                            .findFirst();
+                        if (first.isPresent()) {
+                            detectedObject.setGroup(first.get().getGroup());
+                            detectedObjectList.add(detectedObject);
 
-                    if (first.isPresent()) {
-                        detectedObject.setGroup(first.get().getGroup());
-                        detectedObjectList.add(detectedObject);
+                        } else {
+                            detectedObject.setGroup(group);
+                            detectedObjectList.add(detectedObject);
+                            group++;
 
-                    } else {
-                        detectedObject.setGroup(group);
-                        detectedObjectList.add(detectedObject);
-                        group++;
+                        }
 
+                        System.out.println(maxAreaIdx + " rect " + detectedObject.getRect() + " r.tl() " + detectedObject.getRect().tl() + " r.br() "
+                                + detectedObject.getRect().br() + " seq " + detectedObject.getSeq() + " group " + detectedObject.getGroup());
+                        seq++;
                     }
-//
 
-
-                    System.out.println(maxAreaIdx + " rect " + detectedObject.getRect() + " r.tl() " + detectedObject.getRect().tl() + " r.br() "
-                            + detectedObject.getRect().br() + " seq " + detectedObject.getSeq() + " group " + detectedObject.getGroup());
-
-                    seq++;
                 }
             }
-
-
         }
 
-        int numer = 100 ;
+        int numer = 20 ;
 
         detectedObjectListOld.stream()
+                .filter(co -> co.getRect().br().y < 440 && co.getRect().br().x > 105 && co.getRect().tl().y <= 740 && co.getRect().tl().y >= 40)
+                .filter(co -> co.getRect().area() < 2500)
                 .forEach( co -> {
-//                    System.out.println("+++++ " + co + "+++++");
                     List<DetectedObject> collect2 = detectedObjectList.stream()
                             .filter(dol -> dol.getIterationId().equals(i)).collect(Collectors.toList());
                     Optional<DetectedObject> first1 = collect2.stream()
-                            .filter(doa -> co.getRect().x <= (doa.getRect().x + numer)
-                                    && co.getRect().x >= (doa.getRect().x - numer)
-                                    && co.getRect().y <= (doa.getRect().y + numer)
-                                    && co.getRect().y >= (doa.getRect().y - numer))
+                            .filter(doa ->
+
+                                            (co.getRect().tl().x <= (doa.getRect().tl().x + numer)
+                                                    && co.getRect().tl().x >= (doa.getRect().tl().x - numer)
+                                                    && co.getRect().tl().y <= (doa.getRect().tl().y + numer)
+                                                    && co.getRect().tl().y >= (doa.getRect().tl().y - numer)
+//                                                    &&(co.getRect().br().x <= (doa.getRect().br().x + numer)
+//                                                    && co.getRect().br().x >= (doa.getRect().br().x - numer)
+//                                                    && co.getRect().br().y <= (doa.getRect().br().y + numer)
+//                                                    && co.getRect().br().y >= (doa.getRect().br().y - numer))
+                                            ))
+
+
+
+//                                    co.getRect().x <= (doa.getRect().x + numer)
+//                                    && co.getRect().x >= (doa.getRect().x - numer)
+//                                    && co.getRect().y <= (doa.getRect().y + numer)
+//                                    && co.getRect().y >= (doa.getRect().y - numer))
                             .findFirst();
                     if(!first1.isPresent()){
                         co.setIterationId(i);
@@ -364,6 +409,16 @@ public class MoveDetection {
                 .forEach( c -> detectedObjectListOld.add(c));
 
 
+        detectedObjectList.stream()
+                .filter(d -> d.getIterationId().equals(i))
+                .forEach(d -> {
+
+                    Imgproc.rectangle(firstScreen, d.getRect().br(), d.getRect().tl(), new Scalar(0, 255, 0), 1);
+                    Imgproc.putText(firstScreen, "x " + d.getRect().br().x + " y " + d.getRect().br().y + " area " + d.getRect().area() ,
+                            d.getRect().br(), 1, 1, new Scalar(255, 255, 0), 2);
+                });
+
+
         i++ ;
 
             System.out.println("---------------------------");
@@ -372,6 +427,14 @@ public class MoveDetection {
 
             printRectangle(rect_array, outmat);
 //                }
+
+        Point pt1 = new Point(80, 30);
+        Point pt2 = new Point(750, 450);
+        Imgproc.rectangle(firstScreen, pt1,
+                pt2, new Scalar(0, 255, 255), 1);
+
+        Imgproc.putText(firstScreen, "pt1 x " + pt1.x + " pt1 y " + pt1.y , pt1 , 1, 1, new Scalar(255, 255, 255), 1);
+        Imgproc.putText(firstScreen, "pt2 x " + pt2.x + " pt2 y " + pt2.y , pt2 , 1, 1, new Scalar(255, 255, 255), 1);
 
 
     }
