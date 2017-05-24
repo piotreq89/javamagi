@@ -41,9 +41,9 @@ public class MoveDetection {
 
     private static int slider = 1;
     private static int slider2 = 9;
-    private static int slider3 = 1;
+    private static int slider3 = 20;
 
-    private static int slider4 = 9;
+    private static int slider4 = 500;
     private static  Integer i = 1 ;
     private static  Integer k = 0;
 
@@ -52,13 +52,13 @@ public class MoveDetection {
 
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\VIDEO0376.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new.mp4";
-    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new9.mp4";
+//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new9.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\test_film1.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new2.mp4";
 //      private static String videoAddress = "E:\\magi\\film\\YDXJ0571.MP4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new3.mp4";
 
-//    private static String videoAddress = "D:\\moje\\magi\\magi_new6.mp4";
+    private static String videoAddress = "D:\\moje\\magi\\magi_new6.mp4";
 
 
 
@@ -325,6 +325,16 @@ public class MoveDetection {
                 r = Imgproc.boundingRect(contours.get(maxAreaIdx));
 //                System.out.println(maxAreaIdx + " " + r + " r.tl() " +r.tl() + " r.br() " + r.br());
 //                if(r.br().x)
+
+                r.width= 20 ;
+                r.height= 40 ;
+
+//                double[] ints = {20, 40};
+//                r.set(ints);
+//                r.tl();
+                 r = new Rect((int)r.tl().x, (int)r.tl().y, 20 , 40);
+
+
                 myPoints.add(r);
                 rect_array.add(r);
 
@@ -338,17 +348,37 @@ public class MoveDetection {
                                 .filter(doa -> doa.getIterationId().equals(i - 1))
                                 .collect(Collectors.toList());
 
-                        int numer = 60;
+                        int numer = 40;
                         Optional<DetectedObject> first = collect.stream()
-                                .filter(doa -> (doa.getRect().tl().x <= (detectedObject.getRect().tl().x + numer)
-                                        && doa.getRect().tl().x >= (detectedObject.getRect().tl().x - numer)
-                                        && doa.getRect().tl().y <= (detectedObject.getRect().tl().y + numer)
-                                        && doa.getRect().tl().y >= (detectedObject.getRect().tl().y - numer)
-//                                    &&(doa.getRect().br().x <= (detectedObject.getRect().br().x + numer)
-//                                    && doa.getRect().br().x >= (detectedObject.getRect().br().x - numer)
-//                                    && doa.getRect().br().y <= (detectedObject.getRect().br().y + numer)
-//                                    && doa.getRect().br().y >= (detectedObject.getRect().br().y - numer))
-                                ))
+                                .filter(doa -> {
+                                            double doaTlX = detectedObject.getRect().tl().x;
+                                    double doaTlY = detectedObject.getRect().tl().y;
+                                    double doaBrX = detectedObject.getRect().br().x;
+                                    double doaBrY = detectedObject.getRect().br().y;
+                                    double dTlX = doa.getRect().tl().x;
+                                    double dBrX = doa.getRect().br().x;
+                                    int width = doa.getRect().width;
+                                    int doaWidth = detectedObject.getRect().width;
+                                    return (dTlX <= (doaTlX + numer)
+                                                    && dTlX >= (doaTlX - numer)
+                                                    && doa.getRect().tl().y <= (doaTlY + numer)
+                                                    && doa.getRect().tl().y >= (doaTlY - numer)
+                                                    && (dBrX <= (doaBrX + numer)
+                                                    && dBrX >= (doaBrX - numer)
+                                                    && doa.getRect().br().y <= (doaBrY + numer)
+                                                    && doa.getRect().br().y >= (doaBrY - numer))
+                                            )
+                                                    && (doaTlX + doaWidth <= (dTlX + width + numer)
+                                                    && doaTlX + doaWidth >= (dTlX + width - numer)
+                                                    && doaTlY <= (doa.getRect().tl().y + numer)
+                                                    && doaTlY >= (doa.getRect().tl().y - numer)
+                                                    && (doaBrX - doaWidth <= (dBrX - width + numer)
+                                                    && doaBrX - doaWidth >= (dBrX - width - numer)
+                                                    && doaBrY <= (doa.getRect().br().y + numer)
+                                                    && doaBrY >= (doa.getRect().br().y - numer)));
+                                        }
+
+                                )
                                 .findFirst();
 
                         if (first.isPresent()) {
@@ -371,7 +401,7 @@ public class MoveDetection {
             }
         }
 
-        int numer = 20 ;
+        int numer = 40 ;
 
         detectedObjectListOld.stream()
                 .filter(co -> co.getRect().br().y < 440 && co.getRect().br().x > 105 && co.getRect().tl().y <= 740 && co.getRect().tl().y >= 40)
@@ -380,17 +410,35 @@ public class MoveDetection {
                     List<DetectedObject> collect2 = detectedObjectList.stream()
                             .filter(dol -> dol.getIterationId().equals(i)).collect(Collectors.toList());
                     Optional<DetectedObject> first1 = collect2.stream()
-                            .filter(doa ->
+                            .filter(doa -> {
+                                        double doaTlX = doa.getRect().tl().x;
+                                        double doaTlY = doa.getRect().tl().y;
+                                        double doaBrX = doa.getRect().br().x;
+                                        double doaBrY = doa.getRect().br().y;
+                                        int width = doa.getRect().width;
+                                double coBrX = co.getRect().br().x;
+                                double coTlX = co.getRect().tl().x;
+                                int coWidth = co.getRect().width;
 
-                                            (co.getRect().tl().x <= (doa.getRect().tl().x + numer)
-                                                    && co.getRect().tl().x >= (doa.getRect().tl().x - numer)
-                                                    && co.getRect().tl().y <= (doa.getRect().tl().y + numer)
-                                                    && co.getRect().tl().y >= (doa.getRect().tl().y - numer)
-//                                                    &&(co.getRect().br().x <= (doa.getRect().br().x + numer)
-//                                                    && co.getRect().br().x >= (doa.getRect().br().x - numer)
-//                                                    && co.getRect().br().y <= (doa.getRect().br().y + numer)
-//                                                    && co.getRect().br().y >= (doa.getRect().br().y - numer))
-                                            ))
+                                return (coTlX <= (doaTlX + numer)
+                                                && coTlX >= (doaTlX - numer)
+                                                && co.getRect().tl().y <= (doaTlY + numer)
+                                                && co.getRect().tl().y >= (doaTlY - numer)
+                                                && (coBrX <= (doaBrX + numer)
+                                                && coBrX >= (doaBrX - numer)
+                                                && co.getRect().br().y <= (doaBrY + numer)
+                                                && co.getRect().br().y >= (doaBrY - numer)))
+
+                                                && (coTlX + coWidth <= (doaTlX + width + numer)
+                                                && coTlX + coWidth >= (doaTlX + width - numer)
+                                                && co.getRect().tl().y <= (doaTlY + numer)
+                                                && co.getRect().tl().y >= (doaTlY - numer)
+                                                && (coBrX - coWidth <= (doaBrX - width + numer)
+                                                && coBrX - coWidth >= (doaBrX - width - numer)
+                                                && co.getRect().br().y <= (doaBrY + numer)
+                                                && co.getRect().br().y >= (doaBrY - numer)));
+                                    }
+                            )
 
 
 
@@ -418,8 +466,20 @@ public class MoveDetection {
                 .forEach(d -> {
 
                     Imgproc.rectangle(firstScreen, d.getRect().br(), d.getRect().tl(), new Scalar(0, 255, 0), 1);
-                    Imgproc.putText(firstScreen, "x " + d.getRect().br().x + " y " + d.getRect().br().y + " area " + d.getRect().area() ,
+//                    Imgproc.putText(firstScreen, "br x " + d.getRect().br().x + " y " + d.getRect().br().y + " area " + d.getRect().area() ,
+//                            d.getRect().br(), 1, 1, new Scalar(255, 255, 0), 2);
+
+                    Imgproc.putText(firstScreen, "br",
                             d.getRect().br(), 1, 1, new Scalar(255, 255, 0), 2);
+
+                    Imgproc.putText(firstScreen, "tl" ,
+                            d.getRect().tl(), 1, 1, new Scalar(255, 255, 0), 2);
+
+                    Imgproc.putText(firstScreen, "1" ,
+                            new Point(d.getRect().tl().x + d.getRect().width, d.getRect().tl().y) , 1, 1, new Scalar(255, 255, 0), 2);
+
+                    Imgproc.putText(firstScreen, "2" ,
+                            new Point(d.getRect().br().x - d.getRect().width, d.getRect().br().y), 1, 1, new Scalar(255, 255, 0), 2);
                 });
 
 
@@ -438,7 +498,7 @@ public class MoveDetection {
                 pt2, new Scalar(0, 255, 255), 1);
 
         Imgproc.putText(firstScreen, "pt1 x " + pt1.x + " pt1 y " + pt1.y , pt1 , 1, 1, new Scalar(255, 255, 255), 1);
-        Imgproc.putText(firstScreen, "pt2 x " + pt2.x + " pt2 y " + pt2.y , pt2 , 1, 1, new Scalar(255, 255, 255), 1);
+        Imgproc.putText(firstScreen, "pt2 x " + pt2.x + " pt2 y " + pt2.y , new Point(pt2.x - 50, pt2.y) , 1, 1, new Scalar(255, 255, 255), 1);
 
 
     }

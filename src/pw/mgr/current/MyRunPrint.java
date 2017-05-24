@@ -270,11 +270,12 @@ public class MyRunPrint extends Thread {
 
                             cg.setColor(integerColorMap.get(i));
                             cg.setStroke(new BasicStroke(5));
-//                            cg.fillOval(objects.getRect().x, objects.getRect().y , width, height);
+                            cg.fillOval(objects.getRect().x, objects.getRect().y , width, height);
 
 //                            cg.drawOval( objects.getRect().x, objects.getRect().y , width, height);
 //                            cg.fillRect(objects.getRect().x,objects.getRect().y, 4 ,4);
-                            cg.drawLine(objects.getRect().x,objects.getRect().y, collect.get(collect.indexOf(objects) +1 ).getRect().x, collect.get(collect.indexOf(objects) +1 ).getRect().y );
+//                            cg.drawLine(objects.getRect().x,objects.getRect().y, collect.get(collect.indexOf(objects) +1 ).getRect().x
+//                                    , collect.get(collect.indexOf(objects) +1 ).getRect().y );
 
                         }
                     }

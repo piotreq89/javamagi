@@ -24,8 +24,8 @@ public class MyFrame extends JFrame{
     private JButton stopButton = new JButton("Stop");
     private JButton reloadButton = new JButton("Przeładuj");
     private JButton drawMoveButton = new JButton("Narysuj ruch");
-    private JSlider jSlider1 = new JSlider(JSlider.HORIZONTAL, 0, 50, 1);
-    private JSlider jSlider2 = new JSlider(JSlider.HORIZONTAL, 0, 50, 1);
+    private JSlider jSlider1 = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
+    private JSlider jSlider2 = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
     private JSlider jSlider3 = new JSlider(JSlider.HORIZONTAL, 0, 100, 1);
     private JSlider jSlider4 = new JSlider(JSlider.HORIZONTAL, 0, 1000, 1);
 
@@ -54,19 +54,23 @@ public class MyFrame extends JFrame{
         gbc.gridy = 0;
         buttonsPanel.add(startButton, gbc);
 
-        gbc.gridx = 1;
-        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         buttonsPanel.add(stopButton, gbc);
 
-        gbc.gridx = 2;
-        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         buttonsPanel.add(reloadButton, gbc);
 
-        gbc.gridx = 3;
-        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 3;
         buttonsPanel.add(drawMoveButton, gbc);
 
-        JPanel slidersPanel = getSliderPanel(gBLayout, gbc);
+        JPanel slidersPanel = getSliderPanel();
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        buttonsPanel.add(slidersPanel, gbc);
 
         JPanel videoPanel = new JPanel();
 //        BorderLayout borderLayout = new BorderLayout();
@@ -109,20 +113,20 @@ public class MyFrame extends JFrame{
         generalPanel.setLayout(gBGeneralLayout);
 
         GridBagConstraints gbcGeneral = new GridBagConstraints();
-        gbcGeneral.fill = GridBagConstraints.WEST;
+        gbcGeneral.anchor = GridBagConstraints.WEST;
         gbcGeneral.insets = new Insets(10, 25, 0, 0);
 
         gbcGeneral.gridx = 0;
         gbcGeneral.gridy = 0;
         generalPanel.add(buttonsPanel,gbcGeneral);
 
-        gbcGeneral.gridx = 0;
-        gbcGeneral.gridy = 1;
+        gbcGeneral.gridx = 1;
+        gbcGeneral.gridy = 0;
         generalPanel.add(videoPanel, gbcGeneral);
 
-        gbcGeneral.gridx = 1;
-        gbcGeneral.gridy = 1;
-        generalPanel.add(slidersPanel, gbcGeneral);
+//        gbcGeneral.gridx = 0;
+//        gbcGeneral.gridy = 1;
+//        generalPanel.add(slidersPanel, gbcGeneral);
 
 
         this.setContentPane(generalPanel);
@@ -139,56 +143,65 @@ public class MyFrame extends JFrame{
         return this;
     }
 
-    private JPanel getSliderPanel(GridBagLayout gBLayout, GridBagConstraints gbc) {
+    private JPanel getSliderPanel() {
+        GridBagLayout gBLayout = new GridBagLayout();
+
         JPanel slidersPanel = new JPanel();
         slidersPanel.setLayout(gBLayout);
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 25, 0, 0);
+
         JTextField jTextField = new JTextField("Dylacja :");
+        gbc.ipadx = 40;
         gbc.gridx = 0;
         gbc.gridy = 0;
         slidersPanel.add(jTextField, gbc);
 
-        setSliderParams(jSlider1);
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        slidersPanel.add(jSlider1, gbc);
-
         JTextField jTextField2 = new JTextField("Erozja :");
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         slidersPanel.add(jTextField2, gbc);
 
-        setSliderParams(jSlider2);
-        gbc.gridx = 1;
+//        JTextField jTextField3 = new JTextField("slider3");
+//        gbc.gridx = 0;
+//        gbc.gridy = 4;
+//        slidersPanel.add(jTextField3, gbc);
+//
+//        JTextField jTextField4 = new JTextField("slider4");
+//        gbc.gridx = 0;
+//        gbc.gridy = 6;
+//        slidersPanel.add(jTextField4, gbc);
+
+        setSliderParams(jSlider1);
+        gbc.ipadx = 100;
+        gbc.gridx = 0;
         gbc.gridy = 1;
+        slidersPanel.add(jSlider1, gbc);
+
+
+        setSliderParams(jSlider2);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
         slidersPanel.add(jSlider2, gbc);
-
-        JTextField jTextField3 = new JTextField("slider3");
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        slidersPanel.add(jTextField3, gbc);
-
-        setSliderParams(jSlider3);
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        slidersPanel.add(jSlider3, gbc);
-
-        JTextField jTextField4 = new JTextField("slider4");
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        slidersPanel.add(jTextField4, gbc);
-
-        setSliderParams(jSlider4);
-        gbc.gridx = 1;
-        gbc.gridy = 3;
-        slidersPanel.add(jSlider4, gbc);
+//
+//        setSliderParams(jSlider3);
+//        gbc.gridx = 0;
+//        gbc.gridy = 5;
+//        slidersPanel.add(jSlider3, gbc);
+//
+//        setSliderParams(jSlider4);
+//        gbc.gridx = 0;
+//        gbc.gridy = 7;
+//        slidersPanel.add(jSlider4, gbc);
         return slidersPanel;
     }
 
     private void setSliderParams(JSlider jSlider) {
         jSlider.setMinorTickSpacing(5);
         jSlider.setPaintTicks(true);
-        jSlider.setLabelTable(jSlider.createStandardLabels(2));
+        jSlider.setLabelTable(jSlider.createStandardLabels(5));
         jSlider.setPaintLabels(true);
     }
 

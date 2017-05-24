@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7986b63b-cf4c-4c6c-bfdf-935f208ad5fa" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/opencv_310.xml" afterPath="$PROJECT_DIR$/.idea/libraries/opencv_310.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/result/wykryty_ruch6.jpg" afterPath="$PROJECT_DIR$/result/wykryty_ruch6.jpg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Praca_Magisterska_PW.iml" afterPath="$PROJECT_DIR$/Praca_Magisterska_PW.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pw/mgr/current/MoveDetection.java" afterPath="$PROJECT_DIR$/src/pw/mgr/current/MoveDetection.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pw/mgr/current/MyFrame.java" afterPath="$PROJECT_DIR$/src/pw/mgr/current/MyFrame.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pw/mgr/current/MyRunPrint.java" afterPath="$PROJECT_DIR$/src/pw/mgr/current/MyRunPrint.java" />
     </list>
     <ignored path="Praca_Magisterska_PW.iws" />
@@ -32,31 +32,38 @@
       <file leaf-file-name="MoveDetection.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/pw/mgr/current/MoveDetection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
-              <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+            <state relative-caret-position="714">
+              <caret line="452" column="49" selection-start-line="452" selection-start-column="47" selection-end-line="452" selection-end-column="49" />
               <folding>
                 <element signature="initializer##0;class#MoveDetection#0" expanded="false" />
-                <element signature="method#main#0;class#MoveDetection#0" expanded="false" />
-                <element signature="method#addActionListenerToButtons#0;class#MoveDetection#0" expanded="false" />
-                <element signature="class#2672:2931" expanded="false" />
-                <element signature="method#run#0;class#2672:2931" expanded="false" />
-                <element signature="method#addChangeListenerForSlider#0;class#MoveDetection#0" expanded="false" />
-                <element signature="method#showframe#0;class#MoveDetection#0" expanded="false" />
-                <element signature="e#5050#5108#0" expanded="false" />
-                <element signature="e#5290#5349#0" expanded="false" />
-                <element signature="e#5736#5801#0" expanded="false" />
-                <element signature="e#6266#6310#0" expanded="false" />
-                <element signature="e#6420#6468#0" expanded="false" />
-                <element signature="method#putScreenInVideoLabel#0;class#MoveDetection#0" expanded="false" />
-                <element signature="e#8968#9044#0" expanded="false" />
-                <element signature="method#printRectangle#0;class#MoveDetection#0" expanded="false" />
-                <element signature="e#9976#10106#0" expanded="false" />
-                <element signature="method#Mat2bufferedImage#0;class#MoveDetection#0" expanded="false" />
-                <element signature="method#detection_contours#0;class#MoveDetection#0" expanded="false" />
-                <element signature="e#11972#12074#0" expanded="false" />
-                <element signature="e#13239#13345#0" expanded="false" />
-                <element signature="e#15589#15699#0" expanded="false" />
-                <element signature="e#16084#16165#0" expanded="false" />
+                <element signature="class#2675:2934" expanded="false" />
+                <element signature="method#run#0;class#2675:2934" expanded="false" />
+                <element signature="e#9979#10109#0" expanded="false" />
+                <element signature="e#11975#12077#0" expanded="false" />
+                <element signature="e#18867#18948#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Point.java" pinned="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/../../magi/opencv310/opencv/build/java/opencv-310.jar!/org/opencv/core/Point.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-187">
+              <caret line="7" column="25" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Component.java" pinned="false" current-in-tab="false">
+        <entry file="jar://C:/Program Files/Java/jdk1.8.0_60/src.zip!/java/awt/Component.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="214">
+              <caret line="3311" column="16" selection-start-line="3311" selection-start-column="16" selection-end-line="3311" selection-end-column="16" />
+              <folding>
+                <element signature="e#114530#114531#0" expanded="true" />
+                <element signature="e#114577#114578#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -85,8 +92,8 @@
       <file leaf-file-name="MyRunPrint.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/pw/mgr/current/MyRunPrint.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="213">
-              <caret line="169" column="33" selection-start-line="169" selection-start-column="33" selection-end-line="169" selection-end-column="33" />
+            <state relative-caret-position="468">
+              <caret line="277" column="87" selection-start-line="277" selection-start-column="87" selection-end-line="277" selection-end-column="87" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -97,9 +104,12 @@
       <file leaf-file-name="MyFrame.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/pw/mgr/current/MyFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="397">
-              <caret line="116" column="44" selection-start-line="116" selection-start-column="44" selection-end-line="116" selection-end-column="44" />
-              <folding />
+            <state relative-caret-position="527">
+              <caret line="175" column="0" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
+              <folding>
+                <element signature="e#7562#7563#0" expanded="true" />
+                <element signature="e#7593#7594#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -114,16 +124,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JavaCVPrjt01.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/pw/mgr/old/JavaCVPrjt01.java">
+      <file leaf-file-name="wykryty_ruch6.jpg" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/result/wykryty_ruch6.jpg">
+          <provider selected="true" editor-type-id="images">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Rect.java" pinned="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/../../magi/opencv310/opencv/build/java/opencv-310.jar!/org/opencv/core/Rect.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1003">
-              <caret line="75" column="74" selection-start-line="75" selection-start-column="62" selection-end-line="75" selection-end-column="74" />
+            <state relative-caret-position="119">
+              <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
               <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#1183#1189#0" expanded="false" />
-                <element signature="e#4434#4446#0" expanded="false" />
-                <element signature="e#4678#4684#0" expanded="false" />
+                <element signature="e#278#279#0" expanded="true" />
+                <element signature="e#310#311#0" expanded="true" />
+                <element signature="e#1300#1301#0" expanded="true" />
+                <element signature="e#1355#1356#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -155,10 +172,10 @@
         <option value="$PROJECT_DIR$/src/pw/mgr/current/MotionDetection.java" />
         <option value="$PROJECT_DIR$/src/pw/mgr/old/MotionDetection.java" />
         <option value="$PROJECT_DIR$/src/pw/mgr/current/StartClass.java" />
-        <option value="$PROJECT_DIR$/src/pw/mgr/current/MyFrame.java" />
         <option value="$PROJECT_DIR$/src/pw/mgr/old/OLD11_03/MoveDetection.java" />
         <option value="$PROJECT_DIR$/src/pw/mgr/old/JavaCVPrjt01.java" />
         <option value="$PROJECT_DIR$/src/pw/mgr/current/MyRunPrint.java" />
+        <option value="$PROJECT_DIR$/src/pw/mgr/current/MyFrame.java" />
         <option value="$PROJECT_DIR$/src/pw/mgr/current/MoveDetection.java" />
       </list>
     </option>
@@ -249,15 +266,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mgr" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="current" />
+              <option name="myItemId" value="result" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -884,7 +893,7 @@
       <workItem from="1491912307333" duration="234000" />
       <workItem from="1492093530314" duration="880000" />
       <workItem from="1495451028508" duration="256000" />
-      <workItem from="1495451293944" duration="9398000" />
+      <workItem from="1495451293944" duration="18435000" />
     </task>
     <task id="LOCAL-00001" summary="AAA">
       <created>1491912496180</created>
@@ -893,11 +902,18 @@
       <option name="project" value="LOCAL" />
       <updated>1491912496181</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="AAA">
+      <created>1495631320195</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1495631320195</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="82565000" />
+    <option name="totallyTimeSpent" value="91602000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1911" y="-9" width="1938" height="1092" extended-state="0" />
@@ -911,7 +927,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31926864" sideWeight="0.51666665" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="JRebel Executor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.261807" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.261807" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3090349" sideWeight="0.48333332" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JRebel remote servers log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
@@ -924,7 +940,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.325462" sideWeight="0.49861112" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32340863" sideWeight="0.49861112" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -969,8 +985,32 @@
           <properties />
           <option name="timeStamp" value="19" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/pw/mgr/current/MoveDetection.java</url>
+          <line>180</line>
+          <properties />
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/pw/mgr/current/MoveDetection.java</url>
+          <line>337</line>
+          <properties />
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/pw/mgr/current/MoveDetection.java</url>
+          <line>328</line>
+          <properties />
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/pw/mgr/current/MoveDetection.java</url>
+          <line>394</line>
+          <properties />
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="20" />
+      <option name="time" value="27" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -979,32 +1019,14 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/pw/mgr/old/StartClass.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="16" column="3" selection-start-line="16" selection-start-column="3" selection-end-line="16" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pw/mgr/old/MyFrame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="15" column="2" selection-start-line="15" selection-start-column="2" selection-end-line="15" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pw/mgr/old/MotionDetection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4650">
-          <caret line="186" column="144" selection-start-line="186" selection-start-column="136" selection-end-line="186" selection-end-column="144" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/pw/mgr/current/MyFrame.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="525">
           <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#7562#7563#0" expanded="true" />
+            <element signature="e#7593#7594#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1014,27 +1036,11 @@
           <caret line="108" column="42" selection-start-line="108" selection-start-column="42" selection-end-line="108" selection-end-column="42" />
           <folding>
             <element signature="initializer##0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#main#0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#addActionListenerToButtons#0;class#MoveDetection#0" expanded="false" />
-            <element signature="class#2672:2931" expanded="false" />
-            <element signature="method#run#0;class#2672:2931" expanded="false" />
-            <element signature="method#addChangeListenerForSlider#0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#showframe#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#5050#5108#0" expanded="false" />
-            <element signature="e#5290#5349#0" expanded="false" />
-            <element signature="e#5736#5801#0" expanded="false" />
-            <element signature="e#6266#6310#0" expanded="false" />
-            <element signature="e#6420#6468#0" expanded="false" />
-            <element signature="method#putScreenInVideoLabel#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#8968#9044#0" expanded="false" />
-            <element signature="method#printRectangle#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#9976#10106#0" expanded="false" />
-            <element signature="method#Mat2bufferedImage#0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#detection_contours#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#11972#12074#0" expanded="false" />
-            <element signature="e#13239#13345#0" expanded="false" />
-            <element signature="e#15589#15699#0" expanded="false" />
-            <element signature="e#16084#16165#0" expanded="false" />
+            <element signature="class#2675:2934" expanded="false" />
+            <element signature="method#run#0;class#2675:2934" expanded="false" />
+            <element signature="e#9979#10109#0" expanded="false" />
+            <element signature="e#11975#12077#0" expanded="false" />
+            <element signature="e#18867#18948#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1086,7 +1092,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="525">
           <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#7562#7563#0" expanded="true" />
+            <element signature="e#7593#7594#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1096,27 +1105,11 @@
           <caret line="108" column="42" selection-start-line="108" selection-start-column="42" selection-end-line="108" selection-end-column="42" />
           <folding>
             <element signature="initializer##0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#main#0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#addActionListenerToButtons#0;class#MoveDetection#0" expanded="false" />
-            <element signature="class#2672:2931" expanded="false" />
-            <element signature="method#run#0;class#2672:2931" expanded="false" />
-            <element signature="method#addChangeListenerForSlider#0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#showframe#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#5050#5108#0" expanded="false" />
-            <element signature="e#5290#5349#0" expanded="false" />
-            <element signature="e#5736#5801#0" expanded="false" />
-            <element signature="e#6266#6310#0" expanded="false" />
-            <element signature="e#6420#6468#0" expanded="false" />
-            <element signature="method#putScreenInVideoLabel#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#8968#9044#0" expanded="false" />
-            <element signature="method#printRectangle#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#9976#10106#0" expanded="false" />
-            <element signature="method#Mat2bufferedImage#0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#detection_contours#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#11972#12074#0" expanded="false" />
-            <element signature="e#13239#13345#0" expanded="false" />
-            <element signature="e#15589#15699#0" expanded="false" />
-            <element signature="e#16084#16165#0" expanded="false" />
+            <element signature="class#2675:2934" expanded="false" />
+            <element signature="method#run#0;class#2675:2934" expanded="false" />
+            <element signature="e#9979#10109#0" expanded="false" />
+            <element signature="e#11975#12077#0" expanded="false" />
+            <element signature="e#18867#18948#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1168,7 +1161,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="600">
           <caret line="25" column="4" selection-start-line="25" selection-start-column="4" selection-end-line="25" selection-end-column="4" />
-          <folding />
+          <folding>
+            <element signature="e#7562#7563#0" expanded="true" />
+            <element signature="e#7593#7594#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1178,27 +1174,11 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="initializer##0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#main#0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#addActionListenerToButtons#0;class#MoveDetection#0" expanded="false" />
-            <element signature="class#2672:2931" expanded="false" />
-            <element signature="method#run#0;class#2672:2931" expanded="false" />
-            <element signature="method#addChangeListenerForSlider#0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#showframe#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#5050#5108#0" expanded="false" />
-            <element signature="e#5290#5349#0" expanded="false" />
-            <element signature="e#5736#5801#0" expanded="false" />
-            <element signature="e#6266#6310#0" expanded="false" />
-            <element signature="e#6420#6468#0" expanded="false" />
-            <element signature="method#putScreenInVideoLabel#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#8968#9044#0" expanded="false" />
-            <element signature="method#printRectangle#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#9976#10106#0" expanded="false" />
-            <element signature="method#Mat2bufferedImage#0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#detection_contours#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#11972#12074#0" expanded="false" />
-            <element signature="e#13239#13345#0" expanded="false" />
-            <element signature="e#15589#15699#0" expanded="false" />
-            <element signature="e#16084#16165#0" expanded="false" />
+            <element signature="class#2675:2934" expanded="false" />
+            <element signature="method#run#0;class#2675:2934" expanded="false" />
+            <element signature="e#9979#10109#0" expanded="false" />
+            <element signature="e#11975#12077#0" expanded="false" />
+            <element signature="e#18867#18948#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1276,11 +1256,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/result/wykryty_ruch6.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/../opencv/build/java/opencv-310.jar!/org/opencv/core/CvType.java" />
     <entry file="jar://$PROJECT_DIR$/../opencv/build/java/opencv-310.jar!/org/opencv/core/Core.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_60/src.zip!/java/lang/System.java">
@@ -1343,32 +1318,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1003">
           <caret line="90" column="0" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pw/mgr/current/MyRunPrint.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="169" column="33" selection-start-line="169" selection-start-column="33" selection-end-line="169" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/../../magi/opencv310/opencv/build/java/opencv-310.jar!/org/opencv/imgproc/Imgproc.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="660" column="6" selection-start-line="660" selection-start-column="6" selection-end-line="660" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pw/mgr/current/MyFrame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="397">
-          <caret line="116" column="44" selection-start-line="116" selection-start-column="44" selection-end-line="116" selection-end-column="44" />
           <folding />
         </state>
       </provider>
@@ -1437,33 +1386,83 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$PROJECT_DIR$/../../magi/opencv310/opencv/build/java/opencv-310.jar!/org/opencv/imgproc/Imgproc.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="660" column="6" selection-start-line="660" selection-start-column="6" selection-end-line="660" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_60/src.zip!/java/awt/Component.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="3311" column="16" selection-start-line="3311" selection-start-column="16" selection-end-line="3311" selection-end-column="16" />
+          <folding>
+            <element signature="e#114530#114531#0" expanded="true" />
+            <element signature="e#114577#114578#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pw/mgr/current/MyRunPrint.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="277" column="87" selection-start-line="277" selection-start-column="87" selection-end-line="277" selection-end-column="87" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pw/mgr/current/MyFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="527">
+          <caret line="175" column="0" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
+          <folding>
+            <element signature="e#7562#7563#0" expanded="true" />
+            <element signature="e#7593#7594#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../magi/opencv310/opencv/build/java/opencv-310.jar!/org/opencv/core/Point.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-187">
+          <caret line="7" column="25" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../magi/opencv310/opencv/build/java/opencv-310.jar!/org/opencv/core/Rect.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
+          <folding>
+            <element signature="e#278#279#0" expanded="true" />
+            <element signature="e#310#311#0" expanded="true" />
+            <element signature="e#1300#1301#0" expanded="true" />
+            <element signature="e#1355#1356#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/result/wykryty_ruch6.jpg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/pw/mgr/current/MoveDetection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+        <state relative-caret-position="714">
+          <caret line="452" column="49" selection-start-line="452" selection-start-column="47" selection-end-line="452" selection-end-column="49" />
           <folding>
             <element signature="initializer##0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#main#0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#addActionListenerToButtons#0;class#MoveDetection#0" expanded="false" />
-            <element signature="class#2672:2931" expanded="false" />
-            <element signature="method#run#0;class#2672:2931" expanded="false" />
-            <element signature="method#addChangeListenerForSlider#0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#showframe#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#5050#5108#0" expanded="false" />
-            <element signature="e#5290#5349#0" expanded="false" />
-            <element signature="e#5736#5801#0" expanded="false" />
-            <element signature="e#6266#6310#0" expanded="false" />
-            <element signature="e#6420#6468#0" expanded="false" />
-            <element signature="method#putScreenInVideoLabel#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#8968#9044#0" expanded="false" />
-            <element signature="method#printRectangle#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#9976#10106#0" expanded="false" />
-            <element signature="method#Mat2bufferedImage#0;class#MoveDetection#0" expanded="false" />
-            <element signature="method#detection_contours#0;class#MoveDetection#0" expanded="false" />
-            <element signature="e#11972#12074#0" expanded="false" />
-            <element signature="e#13239#13345#0" expanded="false" />
-            <element signature="e#15589#15699#0" expanded="false" />
-            <element signature="e#16084#16165#0" expanded="false" />
+            <element signature="class#2675:2934" expanded="false" />
+            <element signature="method#run#0;class#2675:2934" expanded="false" />
+            <element signature="e#9979#10109#0" expanded="false" />
+            <element signature="e#11975#12077#0" expanded="false" />
+            <element signature="e#18867#18948#0" expanded="false" />
           </folding>
         </state>
       </provider>
