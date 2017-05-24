@@ -3,7 +3,7 @@ package pw.mgr.current;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
-import org.tc33.jheatchart.HeatChart;
+//import org.tc33.jheatchart.HeatChart;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

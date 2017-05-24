@@ -58,6 +58,10 @@ public class MoveDetection {
 //      private static String videoAddress = "E:\\magi\\film\\YDXJ0571.MP4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new3.mp4";
 
+//    private static String videoAddress = "D:\\moje\\magi\\magi_new6.mp4";
+
+
+
     private static VideoCapture video = new VideoCapture(videoAddress);
     private static List<DetectedObject> detectedObjectList;
 
