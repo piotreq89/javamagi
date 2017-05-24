@@ -52,13 +52,13 @@ public class MoveDetection {
 
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\VIDEO0376.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new.mp4";
-//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new9.mp4";
+    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new9.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\test_film1.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new2.mp4";
 //      private static String videoAddress = "E:\\magi\\film\\YDXJ0571.MP4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new3.mp4";
 
-    private static String videoAddress = "D:\\moje\\magi\\magi_new6.mp4";
+//    private static String videoAddress = "D:\\moje\\magi\\magi_new6.mp4";
 
 
 
@@ -268,17 +268,17 @@ public class MoveDetection {
     private static void printRectangle(ArrayList<Rect> array, Mat img) {
         if (array.size() > 0) {
             Iterator<Rect> it2 = array.iterator();
-            while (it2.hasNext()) {
-                Rect obj = it2.next();
-                obj.height += 20;
-                obj.width +=10;
-//                Imgproc.rectangle(firstScreen, obj.br(), new Point(obj.br().x - 30, obj.br().y - 50), new Scalar(0, 255, 0), 1);
-//                System.out.println(" .br() " + obj.br() + " .tl() " + obj.tl());
-//                Imgproc.putText(firstScreen, "obiekt " , new Point(700, 10), 2, 1, new Scalar(0, 255, 0), 1);
-                if(array.indexOf(obj) -1 > 1){
-//                    Imgproc.line(firstScreen,obj.br(), array.get(array.indexOf(obj) -1).br(),  new Scalar(0, 0, 255), 2);
-                }
-            }
+//            while (it2.hasNext()) {
+//                Rect obj = it2.next();
+////                obj.height += 20;
+////                obj.width +=10;
+////                Imgproc.rectangle(firstScreen, obj.br(), new Point(obj.br().x - 30, obj.br().y - 50), new Scalar(0, 255, 0), 1);
+////                System.out.println(" .br() " + obj.br() + " .tl() " + obj.tl());
+////                Imgproc.putText(firstScreen, "obiekt " , new Point(700, 10), 2, 1, new Scalar(0, 255, 0), 1);
+//                if(array.indexOf(obj) -1 > 1){
+////                    Imgproc.line(firstScreen,obj.br(), array.get(array.indexOf(obj) -1).br(),  new Scalar(0, 0, 255), 2);
+//                }
+//            }
         }
 
     }
@@ -326,20 +326,20 @@ public class MoveDetection {
 //                System.out.println(maxAreaIdx + " " + r + " r.tl() " +r.tl() + " r.br() " + r.br());
 //                if(r.br().x)
 
-                r.width= 20 ;
-                r.height= 40 ;
+//                r.width= 40 ;
+//                r.height= 60 ;
 
 //                double[] ints = {20, 40};
 //                r.set(ints);
 //                r.tl();
-                 r = new Rect((int)r.tl().x, (int)r.tl().y, 20 , 40);
+                 r = new Rect((int)r.tl().x, (int)r.tl().y, 30 , 60);
 
 
                 myPoints.add(r);
                 rect_array.add(r);
 
-                if (r.br().y > 60) {
-                    if(r.br().y < 480 && r.br().x > 80 && r.tl().y <= 770 && r.tl().y >= 30 &&
+                if (r.br().y > 20) {
+                    if(r.br().y < 480 && r.br().x > 80 && r.tl().y <= 790 && r.tl().y >= 30 &&
                             r.area() < 3000){
 
                         DetectedObject detectedObject = new DetectedObject(i, maxAreaIdx, r, seq);
@@ -348,7 +348,7 @@ public class MoveDetection {
                                 .filter(doa -> doa.getIterationId().equals(i - 1))
                                 .collect(Collectors.toList());
 
-                        int numer = 40;
+                        int numer = 20;
                         Optional<DetectedObject> first = collect.stream()
                                 .filter(doa -> {
                                             double doaTlX = detectedObject.getRect().tl().x;
@@ -401,10 +401,10 @@ public class MoveDetection {
             }
         }
 
-        int numer = 40 ;
+        int numer = 30 ;
 
         detectedObjectListOld.stream()
-                .filter(co -> co.getRect().br().y < 440 && co.getRect().br().x > 105 && co.getRect().tl().y <= 740 && co.getRect().tl().y >= 40)
+                .filter(co -> co.getRect().br().y < 440 && co.getRect().br().x > 105 && co.getRect().tl().y <= 770 && co.getRect().tl().y >= 20)
                 .filter(co -> co.getRect().area() < 2500)
                 .forEach( co -> {
                     List<DetectedObject> collect2 = detectedObjectList.stream()
@@ -466,20 +466,20 @@ public class MoveDetection {
                 .forEach(d -> {
 
                     Imgproc.rectangle(firstScreen, d.getRect().br(), d.getRect().tl(), new Scalar(0, 255, 0), 1);
-//                    Imgproc.putText(firstScreen, "br x " + d.getRect().br().x + " y " + d.getRect().br().y + " area " + d.getRect().area() ,
-//                            d.getRect().br(), 1, 1, new Scalar(255, 255, 0), 2);
-
-                    Imgproc.putText(firstScreen, "br",
+                    Imgproc.putText(firstScreen, "br " + d.getRect().br() ,
                             d.getRect().br(), 1, 1, new Scalar(255, 255, 0), 2);
 
-                    Imgproc.putText(firstScreen, "tl" ,
+//                    Imgproc.putText(firstScreen, "br",
+//                            d.getRect().br(), 1, 1, new Scalar(255, 255, 0), 2);
+
+                    Imgproc.putText(firstScreen, "tl " + d.getRect().tl() ,
                             d.getRect().tl(), 1, 1, new Scalar(255, 255, 0), 2);
 
-                    Imgproc.putText(firstScreen, "1" ,
-                            new Point(d.getRect().tl().x + d.getRect().width, d.getRect().tl().y) , 1, 1, new Scalar(255, 255, 0), 2);
-
-                    Imgproc.putText(firstScreen, "2" ,
-                            new Point(d.getRect().br().x - d.getRect().width, d.getRect().br().y), 1, 1, new Scalar(255, 255, 0), 2);
+//                    Imgproc.putText(firstScreen, "1" ,
+//                            new Point(d.getRect().tl().x + d.getRect().width, d.getRect().tl().y) , 1, 1, new Scalar(255, 255, 0), 2);
+//
+//                    Imgproc.putText(firstScreen, "2" ,
+//                            new Point(d.getRect().br().x - d.getRect().width, d.getRect().br().y), 1, 1, new Scalar(255, 255, 0), 2);
                 });
 
 
