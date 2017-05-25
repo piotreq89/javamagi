@@ -1,5 +1,7 @@
 package pw.mgr.current;
 
+import org.opencv.core.Size;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -90,13 +92,20 @@ public class MyFrame extends JFrame{
         gbcScreens.gridy = 0;
         videoPanel.add(videoLabelFirstScreen, gbcScreens);
 
-        gbcScreens.gridx = 0;
-        gbcScreens.gridy = 1;
-
-        videoPanel.add(videoLabelSecondScreen, gbcScreens);
-
         gbcScreens.gridx = 1;
         gbcScreens.gridy = 0;
+
+        ImageIcon image = new ImageIcon("result/wykryty_ruch6.jpg");
+        JLabel label = new JLabel();
+        label.setSize(800, 600);
+        label.setIcon(image);
+//        JPanel panel = new JPanel(new BorderLayout());
+        videoPanel.add( label, gbcScreens);
+
+//        videoPanel.add(videoLabelSecondScreen, gbcScreens);
+
+        gbcScreens.gridx = 0;
+        gbcScreens.gridy = 1;
         videoPanel.add(videoLabelThirdScreen, gbcScreens);
 
         gbcScreens.gridx = 1;
@@ -212,14 +221,14 @@ public class MyFrame extends JFrame{
         return videoLabelFirstScreen;
     }
 
-    public JLabel getVideoLabelThirdScreen() {
+    public JLabel getVideoLabelSecondScreen() {
         if (videoLabelSecondScreen == null){
             videoLabelSecondScreen = new JLabel();
         }
         return videoLabelSecondScreen;
     }
 
-    public JLabel getVideoLabelSecondScreen() {
+    public JLabel getVideoLabelThirdScreen() {
         if (videoLabelThirdScreen == null){
             videoLabelThirdScreen = new JLabel();
         }

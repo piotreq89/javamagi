@@ -52,13 +52,13 @@ public class MoveDetection {
 
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\VIDEO0376.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new.mp4";
-    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new9.mp4";
+//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new9.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\test_film1.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new2.mp4";
 //      private static String videoAddress = "E:\\magi\\film\\YDXJ0571.MP4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new3.mp4";
 
-//    private static String videoAddress = "D:\\moje\\magi\\magi_new6.mp4";
+    private static String videoAddress = "D:\\moje\\magi\\magi_new6.mp4";
 
 
 
@@ -147,6 +147,8 @@ public class MoveDetection {
         k++ ;
         Mat secondFrame;
         video.read(frame);
+
+        System.out.println(">>> " +  video.get(5));
 
         if(k % 4 == 0) {
 
@@ -259,7 +261,7 @@ public class MoveDetection {
         ImageIcon fourthImage = new ImageIcon(Mat2bufferedImage(fourthScreen));
 
         myFrame.getVideoLabelFirstScreen().setIcon(firstImage);
-        myFrame.getVideoLabelSecondScreen().setIcon(secondImage);
+//        myFrame.getVideoLabelSecondScreen().setIcon(secondImage);
         myFrame.getVideoLabelThirdScreen().setIcon(thirdImage);
         myFrame.getVideoLabelFourthScreen().setIcon(fourthImage);
         myFrame.getVideoLabelFourthScreen().repaint();

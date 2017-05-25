@@ -269,6 +269,15 @@ public class MyRunPrint extends Thread {
 ////                            cg.setColor(Color.WHITE);
 
                             cg.setColor(integerColorMap.get(i));
+
+                            if(objects.getIterationId() < 255){
+                                cg.setColor(new Color(objects.getIterationId(), 0, 0 ));
+                            }else if (objects.getIterationId() > 255 && objects.getIterationId() < 510){
+                                cg.setColor(new Color(255, objects.getIterationId()/2, 0 ));
+                            }else if(objects.getIterationId() > 510 && objects.getIterationId() < 760){
+                                cg.setColor(new Color(0, 0, objects.getIterationId()/3 ));
+                            }
+
                             cg.setStroke(new BasicStroke(5));
                             cg.fillOval(objects.getRect().x, objects.getRect().y , width, height);
 
@@ -335,6 +344,8 @@ public class MyRunPrint extends Thread {
         output.mkdirs();
         try {
             ImageIO.write( image, "jpg", output);
+
+//            repaint();
 //            startClass.setStart(true);
         } catch (IOException e1) {
             e1.printStackTrace();
