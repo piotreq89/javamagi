@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7986b63b-cf4c-4c6c-bfdf-935f208ad5fa" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/result/wykryty_ruch6.jpg" afterPath="$PROJECT_DIR$/result/wykryty_ruch6.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Praca_Magisterska_PW/pw/mgr/current/MoveDetection$1MyRun.class" afterPath="$PROJECT_DIR$/out/production/Praca_Magisterska_PW/pw/mgr/current/MoveDetection$1MyRun.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Praca_Magisterska_PW/pw/mgr/current/MoveDetection.class" afterPath="$PROJECT_DIR$/out/production/Praca_Magisterska_PW/pw/mgr/current/MoveDetection.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Praca_Magisterska_PW/pw/mgr/current/MyFrame$1.class" afterPath="$PROJECT_DIR$/out/production/Praca_Magisterska_PW/pw/mgr/current/MyFrame$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Praca_Magisterska_PW/pw/mgr/current/MyFrame.class" afterPath="$PROJECT_DIR$/out/production/Praca_Magisterska_PW/pw/mgr/current/MyFrame.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Praca_Magisterska_PW/pw/mgr/current/MyRunPrint.class" afterPath="$PROJECT_DIR$/out/production/Praca_Magisterska_PW/pw/mgr/current/MyRunPrint.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pw/mgr/current/MoveDetection.java" afterPath="$PROJECT_DIR$/src/pw/mgr/current/MoveDetection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pw/mgr/current/MyFrame.java" afterPath="$PROJECT_DIR$/src/pw/mgr/current/MyFrame.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/pw/mgr/current/MyRunPrint.java" afterPath="$PROJECT_DIR$/src/pw/mgr/current/MyRunPrint.java" />
     </list>
     <ignored path="Praca_Magisterska_PW.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,15 +34,15 @@
       <file leaf-file-name="MoveDetection.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/pw/mgr/current/MoveDetection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
-              <caret line="452" column="49" selection-start-line="452" selection-start-column="47" selection-end-line="452" selection-end-column="49" />
+            <state relative-caret-position="357">
+              <caret line="402" column="71" selection-start-line="402" selection-start-column="71" selection-end-line="402" selection-end-column="71" />
               <folding>
                 <element signature="initializer##0;class#MoveDetection#0" expanded="false" />
                 <element signature="class#2675:2934" expanded="false" />
                 <element signature="method#run#0;class#2675:2934" expanded="false" />
                 <element signature="e#9979#10109#0" expanded="false" />
                 <element signature="e#11975#12077#0" expanded="false" />
-                <element signature="e#18867#18948#0" expanded="false" />
+                <element signature="e#18577#18658#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -893,7 +895,7 @@
       <workItem from="1491912307333" duration="234000" />
       <workItem from="1492093530314" duration="880000" />
       <workItem from="1495451028508" duration="256000" />
-      <workItem from="1495451293944" duration="18435000" />
+      <workItem from="1495451293944" duration="19144000" />
     </task>
     <task id="LOCAL-00001" summary="AAA">
       <created>1491912496180</created>
@@ -909,11 +911,18 @@
       <option name="project" value="LOCAL" />
       <updated>1495631320195</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="AAA">
+      <created>1495640380475</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1495640380475</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="91602000" />
+    <option name="totallyTimeSpent" value="92311000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1911" y="-9" width="1938" height="1092" extended-state="0" />
@@ -927,7 +936,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31926864" sideWeight="0.51666665" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="JRebel Executor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.261807" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.261807" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3090349" sideWeight="0.48333332" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JRebel remote servers log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
@@ -940,7 +949,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32340863" sideWeight="0.49861112" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32340863" sideWeight="0.49861112" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1005,7 +1014,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/pw/mgr/current/MoveDetection.java</url>
-          <line>394</line>
+          <line>385</line>
           <properties />
           <option name="timeStamp" value="26" />
         </line-breakpoint>
@@ -1040,7 +1049,7 @@
             <element signature="method#run#0;class#2675:2934" expanded="false" />
             <element signature="e#9979#10109#0" expanded="false" />
             <element signature="e#11975#12077#0" expanded="false" />
-            <element signature="e#18867#18948#0" expanded="false" />
+            <element signature="e#18577#18658#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1109,7 +1118,7 @@
             <element signature="method#run#0;class#2675:2934" expanded="false" />
             <element signature="e#9979#10109#0" expanded="false" />
             <element signature="e#11975#12077#0" expanded="false" />
-            <element signature="e#18867#18948#0" expanded="false" />
+            <element signature="e#18577#18658#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1178,7 +1187,7 @@
             <element signature="method#run#0;class#2675:2934" expanded="false" />
             <element signature="e#9979#10109#0" expanded="false" />
             <element signature="e#11975#12077#0" expanded="false" />
-            <element signature="e#18867#18948#0" expanded="false" />
+            <element signature="e#18577#18658#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1454,15 +1463,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/pw/mgr/current/MoveDetection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="452" column="49" selection-start-line="452" selection-start-column="47" selection-end-line="452" selection-end-column="49" />
+        <state relative-caret-position="357">
+          <caret line="402" column="71" selection-start-line="402" selection-start-column="71" selection-end-line="402" selection-end-column="71" />
           <folding>
             <element signature="initializer##0;class#MoveDetection#0" expanded="false" />
             <element signature="class#2675:2934" expanded="false" />
             <element signature="method#run#0;class#2675:2934" expanded="false" />
             <element signature="e#9979#10109#0" expanded="false" />
             <element signature="e#11975#12077#0" expanded="false" />
-            <element signature="e#18867#18948#0" expanded="false" />
+            <element signature="e#18577#18658#0" expanded="false" />
           </folding>
         </state>
       </provider>

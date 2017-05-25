@@ -350,33 +350,24 @@ public class MoveDetection {
 
                         int numer = 40;
                         Optional<DetectedObject> first = collect.stream()
-                                .filter(doa -> {
-                                            double doaTlX = detectedObject.getRect().tl().x;
-                                    double doaTlY = detectedObject.getRect().tl().y;
-                                    double doaBrX = detectedObject.getRect().br().x;
-                                    double doaBrY = detectedObject.getRect().br().y;
-                                    double dTlX = doa.getRect().tl().x;
-                                    double dBrX = doa.getRect().br().x;
-                                    int width = doa.getRect().width;
-                                    int doaWidth = detectedObject.getRect().width;
-                                    return (dTlX <= (doaTlX + numer)
-                                                    && dTlX >= (doaTlX - numer)
-                                                    && doa.getRect().tl().y <= (doaTlY + numer)
-                                                    && doa.getRect().tl().y >= (doaTlY - numer)
-                                                    && (dBrX <= (doaBrX + numer)
-                                                    && dBrX >= (doaBrX - numer)
-                                                    && doa.getRect().br().y <= (doaBrY + numer)
-                                                    && doa.getRect().br().y >= (doaBrY - numer))
-                                            )
-                                                    && (doaTlX + doaWidth <= (dTlX + width + numer)
-                                                    && doaTlX + doaWidth >= (dTlX + width - numer)
-                                                    && doaTlY <= (doa.getRect().tl().y + numer)
-                                                    && doaTlY >= (doa.getRect().tl().y - numer)
-                                                    && (doaBrX - doaWidth <= (dBrX - width + numer)
-                                                    && doaBrX - doaWidth >= (dBrX - width - numer)
-                                                    && doaBrY <= (doa.getRect().br().y + numer)
-                                                    && doaBrY >= (doa.getRect().br().y - numer)));
-                                        }
+                                .filter(doa ->
+                                        (doa.getRect().tl().x <= (detectedObject.getRect().tl().x + numer)
+                                        && doa.getRect().tl().x >= (detectedObject.getRect().tl().x - numer)
+                                        && doa.getRect().tl().y <= (detectedObject.getRect().tl().y + numer)
+                                        && doa.getRect().tl().y >= (detectedObject.getRect().tl().y - numer)
+                                        &&(doa.getRect().br().x <= (detectedObject.getRect().br().x + numer)
+                                        && doa.getRect().br().x >= (detectedObject.getRect().br().x - numer)
+                                        && doa.getRect().br().y <= (detectedObject.getRect().br().y + numer)
+                                        && doa.getRect().br().y >= (detectedObject.getRect().br().y - numer))
+                                )
+                                 &&          (detectedObject.getRect().tl().x + detectedObject.getRect().width <= (doa.getRect().tl().x + doa.getRect().width + numer)
+                                                && detectedObject.getRect().tl().x + detectedObject.getRect().width >= (doa.getRect().tl().x + doa.getRect().width  - numer)
+                                                && detectedObject.getRect().tl().y <= (doa.getRect().tl().y + numer)
+                                                && detectedObject.getRect().tl().y >= (doa.getRect().tl().y - numer)
+                                                &&(detectedObject.getRect().br().x - detectedObject.getRect().width <= (doa.getRect().br().x - doa.getRect().width + numer)
+                                                && detectedObject.getRect().br().x - detectedObject.getRect().width >= (doa.getRect().br().x - doa.getRect().width - numer)
+                                                && detectedObject.getRect().br().y <= (doa.getRect().br().y + numer)
+                                                && detectedObject.getRect().br().y >= (doa.getRect().br().y - numer)))
 
                                 )
                                 .findFirst();
@@ -410,34 +401,25 @@ public class MoveDetection {
                     List<DetectedObject> collect2 = detectedObjectList.stream()
                             .filter(dol -> dol.getIterationId().equals(i)).collect(Collectors.toList());
                     Optional<DetectedObject> first1 = collect2.stream()
-                            .filter(doa -> {
-                                        double doaTlX = doa.getRect().tl().x;
-                                        double doaTlY = doa.getRect().tl().y;
-                                        double doaBrX = doa.getRect().br().x;
-                                        double doaBrY = doa.getRect().br().y;
-                                        int width = doa.getRect().width;
-                                double coBrX = co.getRect().br().x;
-                                double coTlX = co.getRect().tl().x;
-                                int coWidth = co.getRect().width;
+                            .filter(doa ->
 
-                                return (coTlX <= (doaTlX + numer)
-                                                && coTlX >= (doaTlX - numer)
-                                                && co.getRect().tl().y <= (doaTlY + numer)
-                                                && co.getRect().tl().y >= (doaTlY - numer)
-                                                && (coBrX <= (doaBrX + numer)
-                                                && coBrX >= (doaBrX - numer)
-                                                && co.getRect().br().y <= (doaBrY + numer)
-                                                && co.getRect().br().y >= (doaBrY - numer)))
+                                            (co.getRect().tl().x <= (doa.getRect().tl().x + numer)
+                                                    && co.getRect().tl().x >= (doa.getRect().tl().x - numer)
+                                                    && co.getRect().tl().y <= (doa.getRect().tl().y + numer)
+                                                    && co.getRect().tl().y >= (doa.getRect().tl().y - numer)
+                                                    &&(co.getRect().br().x <= (doa.getRect().br().x + numer)
+                                                    && co.getRect().br().x >= (doa.getRect().br().x - numer)
+                                                    && co.getRect().br().y <= (doa.getRect().br().y + numer)
+                                                    && co.getRect().br().y >= (doa.getRect().br().y - numer)))
 
-                                                && (coTlX + coWidth <= (doaTlX + width + numer)
-                                                && coTlX + coWidth >= (doaTlX + width - numer)
-                                                && co.getRect().tl().y <= (doaTlY + numer)
-                                                && co.getRect().tl().y >= (doaTlY - numer)
-                                                && (coBrX - coWidth <= (doaBrX - width + numer)
-                                                && coBrX - coWidth >= (doaBrX - width - numer)
-                                                && co.getRect().br().y <= (doaBrY + numer)
-                                                && co.getRect().br().y >= (doaBrY - numer)));
-                                    }
+                                    &&          (co.getRect().tl().x + co.getRect().width <= (doa.getRect().tl().x + doa.getRect().width + numer)
+                                                    && co.getRect().tl().x + co.getRect().width >= (doa.getRect().tl().x + doa.getRect().width  - numer)
+                                                    && co.getRect().tl().y <= (doa.getRect().tl().y + numer)
+                                                    && co.getRect().tl().y >= (doa.getRect().tl().y - numer)
+                                                    &&(co.getRect().br().x - co.getRect().width <= (doa.getRect().br().x - doa.getRect().width + numer)
+                                                    && co.getRect().br().x - co.getRect().width >= (doa.getRect().br().x - doa.getRect().width - numer)
+                                                    && co.getRect().br().y <= (doa.getRect().br().y + numer)
+                                                    && co.getRect().br().y >= (doa.getRect().br().y - numer)))
                             )
 
 
