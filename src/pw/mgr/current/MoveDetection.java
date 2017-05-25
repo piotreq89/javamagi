@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,13 +53,13 @@ public class MoveDetection {
 
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\VIDEO0376.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new.mp4";
-//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new9.mp4";
+    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new9.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\test_film1.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new2.mp4";
 //      private static String videoAddress = "E:\\magi\\film\\YDXJ0571.MP4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new3.mp4";
 
-    private static String videoAddress = "D:\\moje\\magi\\magi_new6.mp4";
+//    private static String videoAddress = "D:\\moje\\magi\\magi_new6.mp4";
 
 
 
@@ -112,6 +113,20 @@ public class MoveDetection {
 //            MyRunPrint myRunPrint = new MyRunPrint(myPoints);
 
             MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, 1);
+
+
+
+            BufferedImage paintImage = null;
+            try {
+                paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
+            } catch (IOException er) {
+                er.printStackTrace();
+            }
+            ImageIcon image = new ImageIcon(paintImage);
+
+            myFrame.getResultLabel().repaint();
+            myFrame.getResultLabel().setIcon(image);
+            myFrame.repaint();
             myRunPrint.start();
             startClass.setStart(true);
         });
@@ -148,7 +163,7 @@ public class MoveDetection {
         Mat secondFrame;
         video.read(frame);
 
-        System.out.println(">>> " +  video.get(5));
+//        System.out.println(">>> " +  video.get(5));
 
         if(k % 4 == 0) {
 
@@ -248,6 +263,25 @@ public class MoveDetection {
             detection_contours(fourthScreen);
 //        }
 
+//            if(k % 4 == 0 ){
+//                MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, 1);
+//
+//
+//
+//                BufferedImage paintImage = null;
+//                try {
+//                    paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
+//                } catch (IOException er) {
+//                    er.printStackTrace();
+//                }
+//                ImageIcon image = new ImageIcon(paintImage);
+//
+//                myFrame.getResultLabel().repaint();
+//                myFrame.getResultLabel().setIcon(image);
+////        myFrame.repaint();
+//                myRunPrint.start();
+//            }
+
             putScreenInVideoLabel();
         }
     }
@@ -264,7 +298,9 @@ public class MoveDetection {
 //        myFrame.getVideoLabelSecondScreen().setIcon(secondImage);
         myFrame.getVideoLabelThirdScreen().setIcon(thirdImage);
         myFrame.getVideoLabelFourthScreen().setIcon(fourthImage);
-        myFrame.getVideoLabelFourthScreen().repaint();
+
+
+
     }
 
     private static void printRectangle(ArrayList<Rect> array, Mat img) {
@@ -341,7 +377,7 @@ public class MoveDetection {
                 rect_array.add(r);
 
                 if (r.br().y > 20) {
-                    if(r.br().y < 480 && r.br().x > 80 && r.tl().y <= 790 && r.tl().y >= 30 &&
+                    if(r.br().y < 480 && r.br().x > 80 && r.tl().y <= 790 && r.tl().y >= 10 &&
                             r.area() < 3000){
 
                         DetectedObject detectedObject = new DetectedObject(i, maxAreaIdx, r, seq);
@@ -350,7 +386,7 @@ public class MoveDetection {
                                 .filter(doa -> doa.getIterationId().equals(i - 1))
                                 .collect(Collectors.toList());
 
-                        int numer = 20;
+                        int numer = 25;
                         Optional<DetectedObject> first = collect.stream()
                                 .filter(doa ->
                                         (doa.getRect().tl().x <= (detectedObject.getRect().tl().x + numer)
@@ -394,10 +430,10 @@ public class MoveDetection {
             }
         }
 
-        int numer = 30 ;
+        int numer = 35 ;
 
         detectedObjectListOld.stream()
-                .filter(co -> co.getRect().br().y < 440 && co.getRect().br().x > 105 && co.getRect().tl().y <= 770 && co.getRect().tl().y >= 20)
+                .filter(co -> co.getRect().br().y < 440 && co.getRect().br().x > 105 && co.getRect().tl().y <= 800 && co.getRect().tl().y >= 0)
                 .filter(co -> co.getRect().area() < 2500)
                 .forEach( co -> {
                     List<DetectedObject> collect2 = detectedObjectList.stream()

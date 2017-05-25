@@ -1,11 +1,13 @@
 package pw.mgr.current;
 
-import org.opencv.core.Size;
-
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by piotrek on 2017-01-28.
@@ -21,6 +23,7 @@ public class MyFrame extends JFrame{
     private JLabel videoLabelSecondScreen = new JLabel();
     private JLabel videoLabelThirdScreen = new JLabel();
     private JLabel videoLabelFourthScreen = new JLabel();
+    private JLabel resultLabel = new JLabel();
 
     private JButton startButton = new JButton("Start");
     private JButton stopButton = new JButton("Stop");
@@ -31,6 +34,16 @@ public class MyFrame extends JFrame{
     private JSlider jSlider3 = new JSlider(JSlider.HORIZONTAL, 0, 100, 1);
     private JSlider jSlider4 = new JSlider(JSlider.HORIZONTAL, 0, 1000, 1);
 
+    private BufferedImage paintImage = new BufferedImage(800, 600, BufferedImage.TYPE_3BYTE_BGR);
+
+
+    public BufferedImage getPaintImage() {
+        return paintImage;
+    }
+
+    public void setPaintImage(BufferedImage paintImage) {
+        this.paintImage = paintImage;
+    }
 
     private MyFrame generateMyFrame(){
 
@@ -95,12 +108,15 @@ public class MyFrame extends JFrame{
         gbcScreens.gridx = 1;
         gbcScreens.gridy = 0;
 
-        ImageIcon image = new ImageIcon("result/wykryty_ruch6.jpg");
-        JLabel label = new JLabel();
-        label.setSize(800, 600);
-        label.setIcon(image);
+//        ImageIcon image = new ImageIcon(paintImage);
+        // update panel with new paint image
+
+        resultLabel.setSize(800, 600);
+//        resultLabel.repaint();
+//        resultLabel.setIcon(image);
 //        JPanel panel = new JPanel(new BorderLayout());
-        videoPanel.add( label, gbcScreens);
+        videoPanel.add(resultLabel, gbcScreens);
+//        repaint();
 
 //        videoPanel.add(videoLabelSecondScreen, gbcScreens);
 
@@ -242,11 +258,16 @@ public class MyFrame extends JFrame{
         return videoLabelFourthScreen;
     }
 
+    public JLabel getResultLabel() {
+        return resultLabel;
+    }
+
     public void setVideoLabelFourthScreen(JLabel videoLabelFourthScreen) {
         this.videoLabelFourthScreen = videoLabelFourthScreen;
     }
 
     public JButton getStartButton() {
+
         return startButton;
     }
 
@@ -259,6 +280,7 @@ public class MyFrame extends JFrame{
     }
 
     public JButton getDrawMoveButton() {
+
         return drawMoveButton;
     }
 

@@ -32,6 +32,41 @@ public class MyRunPrint extends Thread {
     }
 
 
+    static class PointToDraw{
+        Rect rect;
+        Integer count ;
+
+        public PointToDraw(Rect rect, int count) {
+            this.rect = rect;
+            this.count = count;
+        }
+
+        public Rect getRect() {
+            return rect;
+        }
+
+        public void setRect(Rect rect) {
+            this.rect = rect;
+        }
+
+        public Integer getCount() {
+            return count;
+        }
+
+        public void setCount(Integer count) {
+            this.count = count;
+        }
+
+        @Override
+        public String toString() {
+            return "PointToDraw{" +
+                    "rect=" + rect +
+                    ", count=" + count +
+                    '}';
+        }
+    }
+
+    List<PointToDraw> pointToDrawList = new ArrayList<>();
 
     @Override
     public void run() {
@@ -81,13 +116,38 @@ public class MyRunPrint extends Thread {
 
 
         Graphics2D cg = image.createGraphics();
-        int width = 10;
-        int height = 10;
+        int width = 15;
+        int height = 15;
 
 //        for (Rect mp: myPoints) {
 //            System.out.println(mp);
 //            cg.drawOval( mp.y * 2, mp.x * 2, width, height);
 //        }
+
+        List<PointToDraw> pointToDraws = detectedObjects.stream()
+                .map(DetectedObject::getRect)
+                .distinct()
+                .map(d -> new PointToDraw(d, (int) detectedObjects.stream()
+                        .filter(r -> (r.getRect().x <= d.x + 10 && r.getRect().x >= d.x - 10
+                                && r.getRect().y <= d.y + 10 && r.getRect().y >= d.y - 10)).count()))
+                .sorted((o1, o2) -> o1.getCount().compareTo(o2.getCount()))
+                .collect(Collectors.toList());
+
+        pointToDraws.stream().forEach(objects -> {
+            objects.setCount(objects.getCount());
+            System.out.println("-> " + objects);
+            if(objects.getCount() < 255){
+                cg.setColor(new Color(0, objects.getCount(), 255 - objects.getCount()));
+            }else if (objects.getCount() > 255 && objects.getCount() < 510){
+                cg.setColor(new Color(0, objects.getCount()/2, 255 - objects.getCount()/2 ));
+            }else if(objects.getCount() > 510 && objects.getCount() < 760){
+                cg.setColor(new Color(objects.getCount()/3, 255 - objects.getCount()/3, 0 ));
+            }
+
+            cg.setStroke(new BasicStroke(1));
+            cg.fillOval(objects.getRect().x, objects.getRect().y , width, height);
+
+        });
 
         List<Integer> integers = detectedObjects.stream()
                 .map(d -> d.getGroup())
@@ -240,6 +300,13 @@ public class MyRunPrint extends Thread {
                     }
 */
 
+                    detectedObjects.stream()
+                            .map(d -> d.getRect())
+                            .count();
+
+                    int r  = 0;
+                    int g = 0 ;
+                    int t = 0 ;
                     for (DetectedObject objects: collect ) {
 
                         if(collect.size() > (collect.indexOf(objects) + 1)){
@@ -268,18 +335,23 @@ public class MyRunPrint extends Thread {
 //                            cg.setColor(objects.getColorMap().getColor());
 ////                            cg.setColor(Color.WHITE);
 
-                            cg.setColor(integerColorMap.get(i));
 
-                            if(objects.getIterationId() < 255){
-                                cg.setColor(new Color(objects.getIterationId(), 0, 0 ));
-                            }else if (objects.getIterationId() > 255 && objects.getIterationId() < 510){
-                                cg.setColor(new Color(255, objects.getIterationId()/2, 0 ));
-                            }else if(objects.getIterationId() > 510 && objects.getIterationId() < 760){
-                                cg.setColor(new Color(0, 0, objects.getIterationId()/3 ));
-                            }
 
-                            cg.setStroke(new BasicStroke(5));
-                            cg.fillOval(objects.getRect().x, objects.getRect().y , width, height);
+
+
+//                            cg.setColor(integerColorMap.get(i));
+
+//                            if(objects.getIterationId() < 255){
+//                                cg.setColor(new Color(0, objects.getIterationId(), 255 - objects.getIterationId()));
+//                            }else if (objects.getIterationId() > 255 && objects.getIterationId() < 510){
+//                                cg.setColor(new Color(0, objects.getIterationId()/2, 255 - objects.getIterationId()/2 ));
+//                            }else if(objects.getIterationId() > 510 && objects.getIterationId() < 760){
+//                                cg.setColor(new Color(objects.getIterationId()/3, 255 - objects.getIterationId()/3, 0 ));
+//                            }
+//
+//                            cg.setStroke(new BasicStroke(5));
+//                            cg.fillOval(objects.getRect().x, objects.getRect().y , width, height);
+
 
 //                            cg.drawOval( objects.getRect().x, objects.getRect().y , width, height);
 //                            cg.fillRect(objects.getRect().x,objects.getRect().y, 4 ,4);
@@ -340,6 +412,9 @@ public class MyRunPrint extends Thread {
 
 
         System.out.println("finish print");
+
+
+
         File output = new File("result/wykryty_ruch6.jpg");
         output.mkdirs();
         try {
@@ -350,4 +425,14 @@ public class MyRunPrint extends Thread {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-    }}
+    }
+
+//    void convert_to_rgb(minval, maxval, val, colors):
+//    max_index = len(colors)-1
+//    v = float(val-minval) / float(maxval-minval) * max_index
+//    i1, i2 = int(v), min(int(v)+1, max_index)
+//            (r1, g1, b1), (r2, g2, b2) = colors[i1], colors[i2]
+//    f = v - i1
+//    return int(r1 + f*(r2-r1)), int(g1 + f*(g2-g1)), int(b1 + f*(b2-b1))
+
+}
