@@ -18,6 +18,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 public class MoveDetection {
@@ -37,7 +39,7 @@ public class MoveDetection {
     private static Mat previousFrame = null;
     private static Mat diffFrame = null;
 
-    private static Mat frame = new Mat();
+    private static Mat frame;
     private static  Mat flow ;
 
     private static int slider = 1;
@@ -53,7 +55,7 @@ public class MoveDetection {
 
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\VIDEO0376.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new.mp4";
-    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new9.mp4";
+//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new9.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\test_film1.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new2.mp4";
 //      private static String videoAddress = "E:\\magi\\film\\YDXJ0571.MP4";
@@ -61,12 +63,14 @@ public class MoveDetection {
 
 //    private static String videoAddress = "D:\\moje\\magi\\magi_new6.mp4";
 
+    private static String oldMovieLocation;
+    private static Movie movie = new Movie() ;
 
-
-    private static VideoCapture video = new VideoCapture(videoAddress);
+    private static String videoAddress;
+    private static VideoCapture video;
     private static List<DetectedObject> detectedObjectList;
 
-    private static List<DetectedObject> detectedObjectListOld  = new ArrayList<>();
+    private static List<DetectedObject> detectedObjectListOld;
 
     public static void main(String[] args) {
         StartClass startClass = new StartClass();
@@ -78,18 +82,34 @@ public class MoveDetection {
 
     private static void addActionListenerToButtons(final StartClass startClass) {
         class MyRun extends Thread {
+
             @Override
             public void run() {
-                System.out.println("show");
-                while (startClass.isStart()){
-                    showframe(frame, video);
+                if(!startClass.isStart()){
+                    startClass.setStart(true);
+                    System.out.println("show");
+                    while (startClass.isStart()){
+                        showframe(frame, video);
+                    }
+                    System.out.println("after while");
                 }
             }
         }
 
+
         myFrame.getStartButton().addActionListener(e -> {
+            String movieLocationBaseOnName = movie.getMovieLocationBaseOnName(myFrame.getSelectedMovie());
             System.out.println("Start");
-            startClass.setStart(true);
+            if(!movieLocationBaseOnName.equals(oldMovieLocation)){
+                frame = new Mat();
+                video = new VideoCapture(movieLocationBaseOnName);
+                detectedObjectListOld  = new ArrayList<>();
+                detectedObjectList = new ArrayList<>();
+                group = 1;
+                seq = 1 ;
+            }
+            oldMovieLocation = movieLocationBaseOnName;
+
             MyRun myRun = new MyRun();
             myRun.start();
         });
@@ -101,7 +121,10 @@ public class MoveDetection {
 
         myFrame.getReloadButton().addActionListener(e -> {
             System.out.println("reload video");
-            video = new VideoCapture(videoAddress);
+            System.out.println("selected " + movie.getMovieLocationBaseOnName(myFrame.getSelectedMovie()));
+            detectedObjectListOld  = new ArrayList<>();
+            frame = new Mat();
+            video = new VideoCapture(movie.getMovieLocationBaseOnName(myFrame.getSelectedMovie()));
             detectedObjectList = new ArrayList<>();
             group = 1;
             seq = 1 ;

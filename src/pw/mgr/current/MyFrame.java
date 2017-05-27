@@ -8,6 +8,8 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by piotrek on 2017-01-28.
@@ -33,6 +35,8 @@ public class MyFrame extends JFrame{
     private JSlider jSlider2 = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
     private JSlider jSlider3 = new JSlider(JSlider.HORIZONTAL, 0, 100, 1);
     private JSlider jSlider4 = new JSlider(JSlider.HORIZONTAL, 0, 1000, 1);
+
+    private String selectedMovie;
 
     private BufferedImage paintImage = new BufferedImage(800, 600, BufferedImage.TYPE_3BYTE_BGR);
 
@@ -65,26 +69,47 @@ public class MyFrame extends JFrame{
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 25, 0, 0);
 
+        String [] movies = new String[] {"Film 1","Film 2","Film 3"};
+
+        JComboBox<String> movieList = new JComboBox<>(movies);
+
+// add to the parent container (e.g. a JFrame):
         gbc.gridx = 0;
         gbc.gridy = 0;
-        buttonsPanel.add(startButton, gbc);
+        buttonsPanel.add(movieList, gbc);
+
+        movieList.addActionListener(e -> {
+            selectedMovie = (String) movieList.getSelectedItem();
+            System.out.println("selectedMovie " + selectedMovie);
+        });
+// get the selected item:
+//        String selectedName = (String) movieList.getSelectedItem();
+//        selectedMovie = selectedName;
+////
+////
+//        System.out.println("You seleted the movie: " + selectedName);
+
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        buttonsPanel.add(stopButton, gbc);
+        buttonsPanel.add(startButton, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        buttonsPanel.add(reloadButton, gbc);
+        buttonsPanel.add(stopButton, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 3;
+        buttonsPanel.add(reloadButton, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
         buttonsPanel.add(drawMoveButton, gbc);
 
         JPanel slidersPanel = getSliderPanel();
 
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         buttonsPanel.add(slidersPanel, gbc);
 
         JPanel videoPanel = new JPanel();
@@ -298,5 +323,13 @@ public class MyFrame extends JFrame{
 
     public JSlider getjSlider4() {
         return jSlider4;
+    }
+
+    public String getSelectedMovie() {
+        return selectedMovie;
+    }
+
+    public void setSelectedMovie(String selectedMovie) {
+        this.selectedMovie = selectedMovie;
     }
 }
