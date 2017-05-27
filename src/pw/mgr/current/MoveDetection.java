@@ -255,6 +255,11 @@ public class MoveDetection {
                 previousFrame = secondFrame.clone();
             }
 
+            Mat fgmask =  new Mat(secondFrame.size(), CvType.CV_8UC1);
+            BackgroundSubtractorMOG2 mog2 = Video.createBackgroundSubtractorMOG2();
+            mog2.apply(secondFrame, fgmask);
+
+
 
             if (flow == null) {
                 flow = new Mat(secondFrame.size(), CvType.CV_8UC1);
@@ -264,7 +269,7 @@ public class MoveDetection {
             Imgproc.GaussianBlur(flow, flow, new Size(5, 5), 0, 0);
 
 
-            thirdScreen = diffFrame;
+            thirdScreen = fgmask;
 
 
             /**czwarty ekran*/
@@ -272,7 +277,7 @@ public class MoveDetection {
             Mat finalFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
 
             //new
-            Imgproc.threshold(diffFrame, finalFrame, slider3, slider4, Imgproc.THRESH_BINARY);
+            Imgproc.threshold(fgmask, finalFrame, slider3, slider4, Imgproc.THRESH_BINARY);
 
             Mat erodeClose = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(slider, slider));
             Imgproc.morphologyEx(finalFrame, finalFrame, Imgproc.MORPH_CLOSE, erodeClose);
@@ -287,22 +292,22 @@ public class MoveDetection {
 //        }
 
 //            if(k % 4 == 0 ){
-//                MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, 1);
-//
-//
-//
-//                BufferedImage paintImage = null;
-//                try {
-//                    paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
-//                } catch (IOException er) {
-//                    er.printStackTrace();
-//                }
-//                ImageIcon image = new ImageIcon(paintImage);
-//
-//                myFrame.getResultLabel().repaint();
-//                myFrame.getResultLabel().setIcon(image);
-////        myFrame.repaint();
-//                myRunPrint.start();
+                MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, 1);
+
+
+
+                BufferedImage paintImage = null;
+                try {
+                    paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
+                } catch (IOException er) {
+                    er.printStackTrace();
+                }
+                ImageIcon image = new ImageIcon(paintImage);
+
+                myFrame.getResultLabel().repaint();
+                myFrame.getResultLabel().setIcon(image);
+//        myFrame.repaint();
+                myRunPrint.start();
 //            }
 
             putScreenInVideoLabel();
@@ -399,9 +404,14 @@ public class MoveDetection {
                 myPoints.add(r);
                 rect_array.add(r);
 
-                if (r.br().y > 20) {
-                    if(r.br().y < 480 && r.br().x > 80 && r.tl().y <= 790 && r.tl().y >= 10 &&
-                            r.area() < 3000){
+//                if (r.br().y > 20) {
+                    if((r.br().y > 20 && r.br().y < 480)
+                            && (r.br().x > 90 && r.br().x < 760)
+                            && (r.tl().y > 20 && r.tl().y < 450)
+                            && (r.tl().x > 30 && r.tl().x < 740)&& r.area() < 3000){
+
+//                            && r.br().x > 80 && r.tl().y <= 790 && r.tl().y >= 10 && r.area() < 3000){
+//                        if(r.br().y < 480 && r.br().x > 80 && r.tl().y <= 790 && r.tl().y >= 10 && r.area() < 3000){
 
                         DetectedObject detectedObject = new DetectedObject(i, maxAreaIdx, r, seq);
 
@@ -409,7 +419,7 @@ public class MoveDetection {
                                 .filter(doa -> doa.getIterationId().equals(i - 1))
                                 .collect(Collectors.toList());
 
-                        int numer = 25;
+                        int numer = 35;
                         Optional<DetectedObject> first = collect.stream()
                                 .filter(doa ->
                                         (doa.getRect().tl().x <= (detectedObject.getRect().tl().x + numer)
@@ -449,16 +459,21 @@ public class MoveDetection {
                         seq++;
                     }
 
-                }
+//                }
             }
         }
 
         int numer = 35 ;
 
         detectedObjectListOld.stream()
-                .filter(co -> co.getRect().br().y < 440 && co.getRect().br().x > 105 && co.getRect().tl().y <= 800 && co.getRect().tl().y >= 0)
+                .filter(co -> (co.getRect().br().y > 40 && co.getRect().br().y < 465)
+                        && (co.getRect().br().x > 110 && co.getRect().br().x < 730)
+                        && (co.getRect().tl().y > 40 && co.getRect().tl().y < 440)
+                        && (co.getRect().tl().x > 50 && co.getRect().tl().x < 680))
+//                .filter(co -> co.getRect().br().y < 440 && co.getRect().br().x > 105 && co.getRect().tl().y <= 440 && co.getRect().tl().y >= 0)
                 .filter(co -> co.getRect().area() < 2500)
                 .forEach( co -> {
+
                     List<DetectedObject> collect2 = detectedObjectList.stream()
                             .filter(dol -> dol.getIterationId().equals(i)).collect(Collectors.toList());
                     Optional<DetectedObject> first1 = collect2.stream()
@@ -509,14 +524,16 @@ public class MoveDetection {
                 .forEach(d -> {
 
                     Imgproc.rectangle(firstScreen, d.getRect().br(), d.getRect().tl(), new Scalar(0, 255, 0), 1);
+
+                    Imgproc.putText(firstScreen, "tl " + d.getRect().tl() ,
+                            new Point( d.getRect().tl().x - 25 , d.getRect().tl().y - 5), 1, 1, new Scalar(255, 255, 0), 1);
+
                     Imgproc.putText(firstScreen, "br " + d.getRect().br() ,
-                            d.getRect().br(), 1, 1, new Scalar(255, 255, 0), 2);
+                            new Point(d.getRect().br().x - 25 ,d.getRect().br().y + 10) , 1, 1, new Scalar(255, 255, 0), 1);
 
 //                    Imgproc.putText(firstScreen, "br",
 //                            d.getRect().br(), 1, 1, new Scalar(255, 255, 0), 2);
 
-                    Imgproc.putText(firstScreen, "tl " + d.getRect().tl() ,
-                            d.getRect().tl(), 1, 1, new Scalar(255, 255, 0), 2);
 
 //                    Imgproc.putText(firstScreen, "1" ,
 //                            new Point(d.getRect().tl().x + d.getRect().width, d.getRect().tl().y) , 1, 1, new Scalar(255, 255, 0), 2);
@@ -535,13 +552,14 @@ public class MoveDetection {
             printRectangle(rect_array, outmat);
 //                }
 
-        Point pt1 = new Point(80, 30);
+        Point pt1 = new Point(80, 40);
         Point pt2 = new Point(750, 450);
-        Imgproc.rectangle(firstScreen, pt1,
-                pt2, new Scalar(0, 255, 255), 1);
+        Imgproc.rectangle(firstScreen, pt1, pt2, new Scalar(0, 255, 255), 1);
 
         Imgproc.putText(firstScreen, "pt1 x " + pt1.x + " pt1 y " + pt1.y , pt1 , 1, 1, new Scalar(255, 255, 255), 1);
-        Imgproc.putText(firstScreen, "pt2 x " + pt2.x + " pt2 y " + pt2.y , new Point(pt2.x - 50, pt2.y) , 1, 1, new Scalar(255, 255, 255), 1);
+        Imgproc.putText(firstScreen, "pt2 x " + pt2.x + " pt2 y " + pt2.y , new Point(pt2.x - 200, pt2.y) , 1, 1, new Scalar(255, 255, 255), 1);
+        Imgproc.putText(firstScreen, "pt3 x " + pt1.x + " pt3 y " + (pt2.y - pt1.y) , new Point(pt1.x, pt2.y) , 1, 1, new Scalar(255, 255, 255), 1);
+        Imgproc.putText(firstScreen, "pt4 x " + (pt2.x - pt1.x) + " pt4 y " + pt1.y , new Point(pt2.x - 200, pt1.y) , 1, 1, new Scalar(255, 255, 255), 1);
 
 
     }

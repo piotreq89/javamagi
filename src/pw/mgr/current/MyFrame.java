@@ -69,7 +69,14 @@ public class MyFrame extends JFrame{
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 25, 0, 0);
 
-        String [] movies = new String[] {"Film 1","Film 2","Film 3"};
+        String [] movies = new String[] {
+                ""
+                ,"Film numer 1"
+                ,"Film numer 2"
+                ,"Film numer 3"
+                ,"Film numer 4"
+                ,"Film numer 5"
+                ,"Film numer 6"};
 
         JComboBox<String> movieList = new JComboBox<>(movies);
 
@@ -137,6 +144,7 @@ public class MyFrame extends JFrame{
         // update panel with new paint image
 
         resultLabel.setSize(800, 600);
+        resultLabel.setBackground(new Color(0,0,255));
 //        resultLabel.repaint();
 //        resultLabel.setIcon(image);
 //        JPanel panel = new JPanel(new BorderLayout());
