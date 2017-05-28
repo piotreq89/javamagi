@@ -130,15 +130,17 @@ public class MyRunPrint extends Thread {
                 .distinct()
                 .map(d -> new PointToDraw(d, (int) detectedObjects.stream()
                         .filter(r -> {
-                            int area = 30;
+                            int area = 35;
                             return (r.getRect().x <= d.x + area && r.getRect().x >= d.x - area
                                     && r.getRect().y <= d.y + area && r.getRect().y >= d.y - area);
                         }).count()))
                 .sorted((o1, o2) -> o1.getCount().compareTo(o2.getCount()))
                 .collect(Collectors.toList());
+//        cg.setColor(new Color(0,0,255));
+        cg.fillRect(0,0, 800, 600);
 
         pointToDraws.stream().forEach(objects -> {
-            objects.setCount(objects.getCount());
+            objects.setCount(objects.getCount() + 10);
             if(objects.getCount() < 255){
                 cg.setColor(new Color(0, objects.getCount(), 255 - objects.getCount()));
             }else if (objects.getCount() >= 255 && objects.getCount() < 510){
@@ -156,7 +158,7 @@ public class MyRunPrint extends Thread {
 
 //            cg.setColor(new Color(0,0,255));
 //            cg.setBackground(new Color(0,0,255));
-            System.out.println(cg.getBackground());
+//            System.out.println(cg.getBackground());
 
         });
 

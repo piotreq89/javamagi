@@ -76,7 +76,8 @@ public class MyFrame extends JFrame{
                 ,"Film numer 3"
                 ,"Film numer 4"
                 ,"Film numer 5"
-                ,"Film numer 6"};
+                ,"Film numer 6"
+                ,"Film numer 7"};
 
         JComboBox<String> movieList = new JComboBox<>(movies);
 

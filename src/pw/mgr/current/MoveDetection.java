@@ -10,6 +10,7 @@ import org.opencv.objdetect.Objdetect;
 import org.opencv.video.BackgroundSubtractorMOG2;
 import org.opencv.video.Video;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -186,6 +187,8 @@ public class MoveDetection {
         Mat secondFrame;
         video.read(frame);
 
+//        video.get( PROP_FPS)
+        System.out.println("klatki per second" + video.get(Videoio.CAP_PROP_FPS));
 //        System.out.println(">>> " +  video.get(5));
 
         if(k % 4 == 0) {
@@ -210,9 +213,16 @@ public class MoveDetection {
             secondScreen = secondFrame;
 
 
-            HOGDescriptor hogDescriptor = new HOGDescriptor();
+//            Mat fgmask =  new Mat(secondFrame.size(), CvType.CV_8UC1);
+//            BackgroundSubtractorMOG2 mog2 = Video.createBackgroundSubtractorMOG2();
+//            mog2.apply(secondFrame, fgmask);
+//
+//
+//            thirdScreen = fgmask;
 
-            hogDescriptor.setSVMDetector(HOGDescriptor.getDefaultPeopleDetector());
+//            HOGDescriptor hogDescriptor = new HOGDescriptor();
+//
+//            hogDescriptor.setSVMDetector(HOGDescriptor.getDefaultPeopleDetector());
 
 
 //            double ratio = 0.5;
@@ -255,29 +265,24 @@ public class MoveDetection {
                 previousFrame = secondFrame.clone();
             }
 
-            Mat fgmask =  new Mat(secondFrame.size(), CvType.CV_8UC1);
-            BackgroundSubtractorMOG2 mog2 = Video.createBackgroundSubtractorMOG2();
-            mog2.apply(secondFrame, fgmask);
 
 
+//            if (flow == null) {
+//                flow = new Mat(secondFrame.size(), CvType.CV_8UC1);
+//            }
 
-            if (flow == null) {
-                flow = new Mat(secondFrame.size(), CvType.CV_8UC1);
-            }
-
-            Imgproc.applyColorMap(secondFrame, flow, Imgproc.COLORMAP_JET);
-            Imgproc.GaussianBlur(flow, flow, new Size(5, 5), 0, 0);
+//            Imgproc.applyColorMap(secondFrame, flow, Imgproc.COLORMAP_JET);
+//            Imgproc.GaussianBlur(flow, flow, new Size(5, 5), 0, 0);
 
 
-            thirdScreen = fgmask;
-
+            thirdScreen = diffFrame;
 
             /**czwarty ekran*/
 
             Mat finalFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
 
             //new
-            Imgproc.threshold(fgmask, finalFrame, slider3, slider4, Imgproc.THRESH_BINARY);
+            Imgproc.threshold(diffFrame, finalFrame, slider3, slider4, Imgproc.THRESH_BINARY);
 
             Mat erodeClose = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(slider, slider));
             Imgproc.morphologyEx(finalFrame, finalFrame, Imgproc.MORPH_CLOSE, erodeClose);
@@ -405,9 +410,9 @@ public class MoveDetection {
                 rect_array.add(r);
 
 //                if (r.br().y > 20) {
-                    if((r.br().y > 20 && r.br().y < 480)
+                    if((r.br().y > 20 && r.br().y < 490)
                             && (r.br().x > 90 && r.br().x < 760)
-                            && (r.tl().y > 20 && r.tl().y < 450)
+                            && (r.tl().y > 20 && r.tl().y < 480)
                             && (r.tl().x > 30 && r.tl().x < 740)&& r.area() < 3000){
 
 //                            && r.br().x > 80 && r.tl().y <= 790 && r.tl().y >= 10 && r.area() < 3000){
@@ -463,12 +468,12 @@ public class MoveDetection {
             }
         }
 
-        int numer = 35 ;
+        int numer = 40 ;
 
         detectedObjectListOld.stream()
-                .filter(co -> (co.getRect().br().y > 40 && co.getRect().br().y < 465)
+                .filter(co -> (co.getRect().br().y > 50 && co.getRect().br().y < 470)
                         && (co.getRect().br().x > 110 && co.getRect().br().x < 730)
-                        && (co.getRect().tl().y > 40 && co.getRect().tl().y < 440)
+                        && (co.getRect().tl().y > 50 && co.getRect().tl().y < 460)
                         && (co.getRect().tl().x > 50 && co.getRect().tl().x < 680))
 //                .filter(co -> co.getRect().br().y < 440 && co.getRect().br().x > 105 && co.getRect().tl().y <= 440 && co.getRect().tl().y >= 0)
                 .filter(co -> co.getRect().area() < 2500)

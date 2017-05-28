@@ -39,13 +39,13 @@ public class Movie {
 
     public List<Movie> getMovieList() {
         if(movieList.isEmpty()){
-            movieList.add(new Movie("Film numer 1", "C:\\Users\\piotrek\\Desktop\\test\\magi_new9.mp4"));
+            movieList.add(new Movie("Film numer 1", "C:\\Users\\piotrek\\Desktop\\test\\film_test_1.mp4"));
             movieList.add(new Movie("Film numer 2", "C:\\Users\\piotrek\\Desktop\\test\\film_test_2.mp4"));
             movieList.add(new Movie("Film numer 3", "C:\\Users\\piotrek\\Desktop\\test\\film_test_3.mp4"));
             movieList.add(new Movie("Film numer 4", "C:\\Users\\piotrek\\Desktop\\test\\film_test_4.mp4"));
             movieList.add(new Movie("Film numer 5", "C:\\Users\\piotrek\\Desktop\\test\\film_test_5.mp4"));
-            movieList.add(new Movie("Film numer 6", "C:\\Users\\piotrek\\Desktop\\test\\magi_new3.mp4"));
-            movieList.add(new Movie("Film numer 7", "C:\\Users\\piotrek\\Desktop\\test\\magi_new2.mp4"));
+            movieList.add(new Movie("Film numer 6", "C:\\Users\\piotrek\\Desktop\\test\\film_test_6.mp4"));
+            movieList.add(new Movie("Film numer 7", "C:\\Users\\piotrek\\Desktop\\test\\film_test_7.mp4"));
 
         }
         return movieList;
