@@ -26,6 +26,7 @@ public class MyFrame extends JFrame{
     private JLabel videoLabelThirdScreen = new JLabel();
     private JLabel videoLabelFourthScreen = new JLabel();
     private JLabel resultLabel = new JLabel();
+    private JLabel scalaLabel = new JLabel();
 
     private JButton startButton = new JButton("Start");
     private JButton stopButton = new JButton("Stop");
@@ -39,6 +40,7 @@ public class MyFrame extends JFrame{
     private String selectedMovie;
 
     private BufferedImage paintImage = new BufferedImage(800, 600, BufferedImage.TYPE_3BYTE_BGR);
+    private BufferedImage scalaImage = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
 
 
     public BufferedImage getPaintImage() {
@@ -119,6 +121,19 @@ public class MyFrame extends JFrame{
         gbc.gridx = 0;
         gbc.gridy = 5;
         buttonsPanel.add(slidersPanel, gbc);
+
+        BufferedImage scalaImage = null;
+        try {
+            scalaImage = ImageIO.read(new File("resources/skala2.jpg"));
+        } catch (IOException er) {
+            er.printStackTrace();
+        }
+        ImageIcon image = new ImageIcon(scalaImage);
+        scalaLabel.setIcon(image);
+
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        buttonsPanel.add(scalaLabel, gbc);
 
         JPanel videoPanel = new JPanel();
 //        BorderLayout borderLayout = new BorderLayout();

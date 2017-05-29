@@ -140,7 +140,7 @@ public class MyRunPrint extends Thread {
         cg.fillRect(0,0, 800, 600);
 
         pointToDraws.stream().forEach(objects -> {
-            objects.setCount(objects.getCount() + 10);
+            objects.setCount(objects.getCount());
             if(objects.getCount() < 255){
                 cg.setColor(new Color(0, objects.getCount(), 255 - objects.getCount()));
             }else if (objects.getCount() >= 255 && objects.getCount() < 510){
@@ -155,6 +155,12 @@ public class MyRunPrint extends Thread {
             cg.setStroke(new BasicStroke(1));
 //            cg.fillRect(objects.getRect().x, objects.getRect().y , width, height);
             cg.fillOval(objects.getRect().x, objects.getRect().y , width, height);
+//
+//            if(objects.getCount() % 10 ==0){
+//                cg.setColor(new Color(0, 0, 0));
+//                cg.drawString(objects.getCount().toString() , objects.getRect().x, objects.getRect().y);
+//
+//            }
 
 //            cg.setColor(new Color(0,0,255));
 //            cg.setBackground(new Color(0,0,255));

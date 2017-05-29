@@ -189,7 +189,9 @@ public class MoveDetection {
 
 //        video.get( PROP_FPS)
         System.out.println("klatki per second" + video.get(Videoio.CAP_PROP_FPS));
-//        System.out.println(">>> " +  video.get(5));
+//        video.set(Videoio.CAP_PROP_FPS, 5);
+//        System.out.println("klatki per second 2 " + video.get(Videoio.CAP_PROP_FPS));
+////        System.out.println(">>> " +  video.get(5));
 
         if(k % 4 == 0) {
 
@@ -259,11 +261,11 @@ public class MoveDetection {
             }
 
 
-            if (k % 4 == 0) {
+//            if (k % 4 == 0) {
                 Core.absdiff(previousFrame, secondFrame, diffFrame);
 //                Core.subtract(previousFrame, secondFrame, diffFrame);
                 previousFrame = secondFrame.clone();
-            }
+//            }
 
 
 
