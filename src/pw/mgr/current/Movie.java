@@ -46,6 +46,7 @@ public class Movie {
             movieList.add(new Movie("Film numer 5", "C:\\Users\\piotrek\\Desktop\\test\\film_test_5.mp4"));
             movieList.add(new Movie("Film numer 6", "C:\\Users\\piotrek\\Desktop\\test\\film_test_6.mp4"));
             movieList.add(new Movie("Film numer 7", "C:\\Users\\piotrek\\Desktop\\test\\film_test_7.mp4"));
+            movieList.add(new Movie("Film numer 8", "C:\\Users\\piotrek\\Desktop\\test\\film_test_8.mp4"));
 
         }
         return movieList;

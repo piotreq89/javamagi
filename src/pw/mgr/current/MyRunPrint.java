@@ -136,7 +136,7 @@ public class MyRunPrint extends Thread {
                         }).count()))
                 .sorted((o1, o2) -> o1.getCount().compareTo(o2.getCount()))
                 .collect(Collectors.toList());
-//        cg.setColor(new Color(0,0,255));
+//        cg.setColor(new Color(255,255,255));
         cg.fillRect(0,0, 800, 600);
 
         pointToDraws.stream().forEach(objects -> {

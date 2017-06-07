@@ -188,7 +188,7 @@ public class MoveDetection {
         video.read(frame);
 
 //        video.get( PROP_FPS)
-        System.out.println("klatki per second" + video.get(Videoio.CAP_PROP_FPS));
+//        System.out.println("klatki per second" + video.get(Videoio.CAP_PROP_FPS));
 //        video.set(Videoio.CAP_PROP_FPS, 5);
 //        System.out.println("klatki per second 2 " + video.get(Videoio.CAP_PROP_FPS));
 ////        System.out.println(">>> " +  video.get(5));
@@ -532,6 +532,7 @@ public class MoveDetection {
 
                     Imgproc.rectangle(firstScreen, d.getRect().br(), d.getRect().tl(), new Scalar(0, 255, 0), 1);
 
+                    Imgproc.rectangle(firstScreen, d.getRect().tl(), d.getRect().br() , new Scalar(0, 255, 0, 255), 50);
                     Imgproc.putText(firstScreen, "tl " + d.getRect().tl() ,
                             new Point( d.getRect().tl().x - 25 , d.getRect().tl().y - 5), 1, 1, new Scalar(255, 255, 0), 1);
 
