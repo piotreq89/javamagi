@@ -150,8 +150,11 @@ public class MoveDetection {
 
             myFrame.getResultLabel().repaint();
             myFrame.getResultLabel().setIcon(image);
-            myFrame.repaint();
             myRunPrint.start();
+            myFrame.setData(myRunPrint.getData());
+            myFrame.getPanel().repaint();
+            myFrame.repaint();
+
             startClass.setStart(true);
         });
     }
@@ -309,13 +312,20 @@ public class MoveDetection {
                 } catch (IOException er) {
                     er.printStackTrace();
                 }
+            if(paintImage != null){
                 ImageIcon image = new ImageIcon(paintImage);
+
 
                 myFrame.getResultLabel().repaint();
                 myFrame.getResultLabel().setIcon(image);
+
+            }
+
 //        myFrame.repaint();
                 myRunPrint.start();
-//            }
+//            myFrame.setData(myRunPrint.getData());
+//            myFrame.getPanel().repaint();
+            //            }
 
             putScreenInVideoLabel();
         }
@@ -532,7 +542,7 @@ public class MoveDetection {
 
                     Imgproc.rectangle(firstScreen, d.getRect().br(), d.getRect().tl(), new Scalar(0, 255, 0), 1);
 
-                    Imgproc.rectangle(firstScreen, d.getRect().tl(), d.getRect().br() , new Scalar(0, 255, 0, 255), 50);
+//                    Imgproc.rectangle(firstScreen, d.getRect().tl(), d.getRect().br() , new Scalar(0, 255, 0, 255), 50);
                     Imgproc.putText(firstScreen, "tl " + d.getRect().tl() ,
                             new Point( d.getRect().tl().x - 25 , d.getRect().tl().y - 5), 1, 1, new Scalar(255, 255, 0), 1);
 

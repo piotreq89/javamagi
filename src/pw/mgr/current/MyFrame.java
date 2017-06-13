@@ -1,5 +1,8 @@
 package pw.mgr.current;
 
+import com.github.matthewbeckler.heatmap.Gradient;
+import com.github.matthewbeckler.heatmap.HeatMap;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -42,6 +45,9 @@ public class MyFrame extends JFrame{
     private BufferedImage paintImage = new BufferedImage(800, 600, BufferedImage.TYPE_3BYTE_BGR);
     private BufferedImage scalaImage = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
 
+
+    HeatMap panel;
+    double[][] data = new double[800][600];
 
     public BufferedImage getPaintImage() {
         return paintImage;
@@ -125,7 +131,7 @@ public class MyFrame extends JFrame{
 
         BufferedImage scalaImage = null;
         try {
-            scalaImage = ImageIO.read(new File("resources/skala2.jpg"));
+            scalaImage = ImageIO.read(new File("resources/skala3.jpg"));
         } catch (IOException er) {
             er.printStackTrace();
         }
@@ -165,7 +171,25 @@ public class MyFrame extends JFrame{
 //        resultLabel.repaint();
 //        resultLabel.setIcon(image);
 //        JPanel panel = new JPanel(new BorderLayout());
-        videoPanel.add(resultLabel, gbcScreens);
+
+
+        // you can use a pre-defined gradient:
+        boolean useGraphicsYAxis = true;
+
+
+        panel = new HeatMap(data, useGraphicsYAxis, Gradient.GRADIENT_BLUE_TO_RED);
+
+        Color[] gradientColors = new Color[]{Color.blue,Color.green,Color.yellow, Color.red};
+        Color[] customGradient = Gradient.createMultiGradient(gradientColors, 500);
+        panel.updateGradient(customGradient);
+
+
+
+
+
+
+        videoPanel.add(panel, gbcScreens);
+//        videoPanel.add(resultLabel, gbcScreens);
 //        repaint();
 
 //        videoPanel.add(videoLabelSecondScreen, gbcScreens);
@@ -356,5 +380,21 @@ public class MyFrame extends JFrame{
 
     public void setSelectedMovie(String selectedMovie) {
         this.selectedMovie = selectedMovie;
+    }
+
+    public double[][] getData() {
+        return data;
+    }
+
+    public void setData(double[][] data) {
+        this.data = data;
+    }
+
+    public HeatMap getPanel() {
+        return panel;
+    }
+
+    public void setPanel(HeatMap panel) {
+        this.panel = panel;
     }
 }

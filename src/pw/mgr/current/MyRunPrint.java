@@ -1,11 +1,14 @@
 package pw.mgr.current;
 
+import com.github.matthewbeckler.heatmap.Gradient;
+import com.github.matthewbeckler.heatmap.HeatMap;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 //import org.tc33.jheatchart.HeatChart;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -19,9 +22,10 @@ import java.util.stream.Collectors;
  */
 public class MyRunPrint extends Thread {
 
-
+    HeatMap panel;
     private List<Rect> myPoints = new ArrayList<>();
     private List<DetectedObject> detectedObjects = new ArrayList<>();
+    double[][] data = new double[800][600];
 
     public MyRunPrint(List<Rect> myPoints ) {
         this.myPoints = myPoints ;
@@ -139,6 +143,8 @@ public class MyRunPrint extends Thread {
 //        cg.setColor(new Color(255,255,255));
         cg.fillRect(0,0, 800, 600);
 
+
+
         pointToDraws.stream().forEach(objects -> {
             objects.setCount(objects.getCount());
             if(objects.getCount() < 255){
@@ -148,6 +154,10 @@ public class MyRunPrint extends Thread {
             }else{
                 cg.setColor(new Color(255, 0, 0 ));
             }
+
+            data[objects.getRect().y][objects.getRect().x] = objects.getCount() ;
+
+            System.out.println(data[objects.getRect().y][objects.getRect().x] + " " + objects.getRect().y + " " +  objects.getRect().x);
 
 //            System.out.println(" -> objects " + objects );
 
@@ -434,6 +444,38 @@ public class MyRunPrint extends Thread {
 
 
 
+
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+                try
+                {
+                    boolean useGraphicsYAxis = true;
+
+                    panel = new HeatMap(data, useGraphicsYAxis, Gradient.GRADIENT_BLUE_TO_RED);
+                    // or you can also make a custom gradient:
+
+                    Color[] gradientColors = new Color[]{Color.blue,Color.green,Color.yellow, Color.red};
+                    Color[] customGradient = Gradient.createMultiGradient(gradientColors, 500);
+                    panel.updateGradient(customGradient);
+
+
+                    JFrame jFrame = new JFrame();
+                    jFrame.getContentPane().add(panel);
+                    jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    jFrame.setSize(800,600);
+                    jFrame.setVisible(true);
+                }
+                catch (Exception e)
+                {
+                    System.err.println(e);
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
         File output = new File("result/wykryty_ruch6.jpg");
         output.mkdirs();
         try {
@@ -454,4 +496,12 @@ public class MyRunPrint extends Thread {
 //    f = v - i1
 //    return int(r1 + f*(r2-r1)), int(g1 + f*(g2-g1)), int(b1 + f*(b2-b1))
 
+
+    public double[][] getData() {
+        return data;
+    }
+
+    public void setData(double[][] data) {
+        this.data = data;
+    }
 }
