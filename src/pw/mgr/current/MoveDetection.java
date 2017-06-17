@@ -54,6 +54,10 @@ public class MoveDetection {
     private static  Integer seq = 1;
     private static  Integer group = 1;
 
+    private static  Integer y = 0;
+
+    private static  Mat baseFrame = null;
+
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\VIDEO0376.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new.mp4";
 //    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new9.mp4";
@@ -136,7 +140,8 @@ public class MoveDetection {
             System.out.println("print points");
 //            MyRunPrint myRunPrint = new MyRunPrint(myPoints);
 
-            MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, 1);
+            MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, 1, null);
+            myRunPrint.start();
 
 
 
@@ -150,9 +155,8 @@ public class MoveDetection {
 
             myFrame.getResultLabel().repaint();
             myFrame.getResultLabel().setIcon(image);
-            myRunPrint.start();
-            myFrame.setData(myRunPrint.getData());
-            myFrame.getPanel().repaint();
+//            myFrame.setData(myRunPrint.getData());
+//            myFrame.getPanel().repaint();
             myFrame.repaint();
 
             startClass.setStart(true);
@@ -206,6 +210,10 @@ public class MoveDetection {
 //        Imgproc.resize(frame, frame,new Size(1600, 1200));
 //        Imgproc.resize(frame, frame,new Size(1860, 1400));
             firstScreen = frame;
+
+            if(baseFrame == null){
+                baseFrame = frame.clone() ;
+            }
 
             /**drugi ekran*/
 
@@ -301,48 +309,71 @@ public class MoveDetection {
             detection_contours(fourthScreen);
 //        }
 
-//            if(k % 4 == 0 ){
-                MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, 1);
+            if(k % 3 == 0 ) {
+                ImageIcon baseImage = new ImageIcon(Mat2bufferedImage(baseFrame));
 
+                MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, y, baseImage);
 
 
                 BufferedImage paintImage = null;
                 try {
                     paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
-                } catch (IOException er) {
+                } catch (Exception er) {
                     er.printStackTrace();
+                    paintImage = null;
                 }
-            if(paintImage != null){
-                ImageIcon image = new ImageIcon(paintImage);
+                if (paintImage != null) {
+                    ImageIcon image = new ImageIcon(paintImage);
 
 
-                myFrame.getResultLabel().repaint();
-                myFrame.getResultLabel().setIcon(image);
+                    myFrame.getVideoLabelFourthScreen().repaint();
+                    myFrame.getVideoLabelFourthScreen().setIcon(image);
 
-            }
+                }
+
+                BufferedImage baseBuffImage = null;
+                try {
+                    baseBuffImage = ImageIO.read(new File("result/wykryty_ruchBase.jpg"));
+                } catch (Exception er) {
+                    er.printStackTrace();
+                    baseBuffImage = null;
+                }
+                if (baseBuffImage != null) {
+                    ImageIcon image = new ImageIcon(baseBuffImage);
+
+
+//                myFrame.getVideoLabelThirdScreen())
+                    myFrame.getVideoLabelThirdScreen().setIcon(image);
+
+                }
+
+
+                y++;
 
 //        myFrame.repaint();
                 myRunPrint.start();
 //            myFrame.setData(myRunPrint.getData());
 //            myFrame.getPanel().repaint();
-            //            }
+                //            }
 
-            putScreenInVideoLabel();
+                putScreenInVideoLabel();
+            }
         }
     }
 
     private static void putScreenInVideoLabel() {
+
         ImageIcon firstImage = new ImageIcon(Mat2bufferedImage(firstScreen));
 //        System.out.println(" secondScreen.size() " + secondScreen.size());
 //        Imgproc.resize(secondScreen, secondScreen,new Size(800, 768));
-        ImageIcon secondImage = new ImageIcon(Mat2bufferedImage(secondScreen));
-        ImageIcon thirdImage = new ImageIcon(Mat2bufferedImage(thirdScreen));
+//        ImageIcon secondImage = new ImageIcon(Mat2bufferedImage(secondScreen));
+//        ImageIcon thirdImage = new ImageIcon(Mat2bufferedImage(thirdScreen));
         ImageIcon fourthImage = new ImageIcon(Mat2bufferedImage(fourthScreen));
 
         myFrame.getVideoLabelFirstScreen().setIcon(firstImage);
-//        myFrame.getVideoLabelSecondScreen().setIcon(secondImage);
-        myFrame.getVideoLabelThirdScreen().setIcon(thirdImage);
-        myFrame.getVideoLabelFourthScreen().setIcon(fourthImage);
+        myFrame.getResultLabel().setIcon(fourthImage);
+//        myFrame.getVideoLabelThirdScreen().setIcon(thirdImage);
+//        myFrame.getVideoLabelFourthScreen().setIcon(fourthImage);
 
 
 
@@ -463,7 +494,6 @@ public class MoveDetection {
                         if (first.isPresent()) {
                             detectedObject.setGroup(first.get().getGroup());
                             detectedObjectList.add(detectedObject);
-
                         } else {
                             detectedObject.setGroup(group);
                             detectedObjectList.add(detectedObject);

@@ -3,9 +3,6 @@ package pw.mgr.current;
 import com.github.matthewbeckler.heatmap.Gradient;
 import com.github.matthewbeckler.heatmap.HeatMap;
 import org.opencv.core.*;
-import org.opencv.core.Point;
-import org.opencv.imgproc.Imgproc;
-//import org.tc33.jheatchart.HeatChart;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -22,17 +19,22 @@ import java.util.stream.Collectors;
  */
 public class MyRunPrint extends Thread {
 
-    HeatMap panel;
+    private static HeatMap panel;
     private List<Rect> myPoints = new ArrayList<>();
     private List<DetectedObject> detectedObjects = new ArrayList<>();
-    double[][] data = new double[800][600];
+    double[][] data = new double[740][540];
+    ImageIcon baseImage;
+
+    private int i ;
 
     public MyRunPrint(List<Rect> myPoints ) {
         this.myPoints = myPoints ;
     }
 
-    public MyRunPrint(List<DetectedObject> detectedObjects, int i ) {
+    public MyRunPrint(List<DetectedObject> detectedObjects, int i ,  ImageIcon baseImage ) {
         this.detectedObjects = detectedObjects ;
+        this.i = i ;
+        this.baseImage = baseImage ;
     }
 
 
@@ -75,6 +77,7 @@ public class MyRunPrint extends Thread {
     @Override
     public void run() {
         System.out.println("print");
+        BufferedImage imageBase = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
         BufferedImage image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
 //        BufferedImage image = new BufferedImage(1600, 1200, BufferedImage.TYPE_INT_RGB);
 
@@ -120,8 +123,12 @@ public class MyRunPrint extends Thread {
 
 
         Graphics2D cg = image.createGraphics();
+        Graphics2D cgBase = imageBase.createGraphics();
+
         int width = 30;
-        int height = 30;
+        int height = 50;
+
+
 
 
 //        for (Rect mp: myPoints) {
@@ -134,30 +141,89 @@ public class MyRunPrint extends Thread {
                 .distinct()
                 .map(d -> new PointToDraw(d, (int) detectedObjects.stream()
                         .filter(r -> {
-                            int area = 35;
+                            int area = 20;
                             return (r.getRect().x <= d.x + area && r.getRect().x >= d.x - area
                                     && r.getRect().y <= d.y + area && r.getRect().y >= d.y - area);
                         }).count()))
                 .sorted((o1, o2) -> o1.getCount().compareTo(o2.getCount()))
                 .collect(Collectors.toList());
-//        cg.setColor(new Color(255,255,255));
+
+        cg.setColor(new Color(0, 0, 255));
         cg.fillRect(0,0, 800, 600);
 
+        cgBase.drawImage(baseImage.getImage(), 10, 10, null );
 
 
         pointToDraws.stream().forEach(objects -> {
-            objects.setCount(objects.getCount());
+            objects.setCount(objects.getCount() + 25);
+            int alfa = 30;
             if(objects.getCount() < 255){
                 cg.setColor(new Color(0, objects.getCount(), 255 - objects.getCount()));
+                cgBase.setColor(new Color(0, objects.getCount(), 255 - objects.getCount(), alfa));
             }else if (objects.getCount() >= 255 && objects.getCount() < 510){
-                cg.setColor(new Color(objects.getCount() - 255 , 255 - (objects.getCount() - 255), 0 ));
+                cg.setColor(new Color(objects.getCount() - 255 , 255 - (objects.getCount() - 255), 0));
+                cgBase.setColor(new Color(objects.getCount() - 255 , 255 - (objects.getCount() - 255), 0 , alfa + 10));
             }else{
-                cg.setColor(new Color(255, 0, 0 ));
+                cg.setColor(new Color(255, 0, 0));
+                cgBase.setColor(new Color(255, 0, 0 , alfa + 20));
             }
+//            int x = 20;
+//            int y = 7;
+//            GradientPaint redtowhite = new GradientPaint(objects.getRect().x + 20, objects.getRect().y + 20, cg.getColor(), objects.getRect().x + height, objects.getRect().y + width, new Color(0, 0, 255));
 
-            data[objects.getRect().y][objects.getRect().x] = objects.getCount() ;
+//            data[objects.getRect().x][objects.getRect().y] = objects.getCount() ;
 
-            System.out.println(data[objects.getRect().y][objects.getRect().x] + " " + objects.getRect().y + " " +  objects.getRect().x);
+//            cg.setPaint(redtowhite);
+//            int variable = 1;
+//            if(objects.getCount() > 0){
+//                for(int a = 0; a < variable; a++ ){
+//                    for( int b = 0; b < variable; b ++ ){
+//                        data[objects.getRect().x][objects.getRect().y - b] = objects.getCount() ;
+//                        data[objects.getRect().x][objects.getRect().y + b] = objects.getCount() ;
+//                        data[objects.getRect().x - a][objects.getRect().y] = objects.getCount() ;
+//                        data[objects.getRect().x + a][objects.getRect().y] = objects.getCount() ;
+//                        data[objects.getRect().x + a][objects.getRect().y + b] = objects.getCount() ;
+//                        data[objects.getRect().x + a][objects.getRect().y - b] = objects.getCount() ;
+//                    }
+//                }
+//            }
+
+
+
+////            data[objects.getRect().x/ variable][objects.getRect().y/ variable] = objects.getCount() ;
+//            data[objects.getRect().x/ variable + 1][objects.getRect().y/ variable + 1] = objects.getCount() ;
+//            data[objects.getRect().x/ variable + 1][objects.getRect().y/ variable -  1] = objects.getCount() ;
+//            data[objects.getRect().x/ variable + 1][objects.getRect().y/ variable] = objects.getCount() ;
+//            data[objects.getRect().x/ variable - 1][objects.getRect().y/ variable] = objects.getCount() ;
+//            data[objects.getRect().x/ variable - 1][objects.getRect().y/ variable -1] = objects.getCount() ;
+//            data[objects.getRect().x/ variable - 1][objects.getRect().y/ variable + 1] = objects.getCount() ;
+//            data[objects.getRect().x/ variable][objects.getRect().y/ variable -1 ] = objects.getCount() ;
+//            data[objects.getRect().x/ variable][objects.getRect().y/ variable + 1] = objects.getCount() ;
+////
+////
+//            data[objects.getRect().x/ variable][objects.getRect().y/ variable - 2] = objects.getCount() ;
+//            data[objects.getRect().x/ variable][objects.getRect().y/ variable + 2] = objects.getCount() ;
+//
+//            data[objects.getRect().x/ variable - 2][objects.getRect().y/ variable - 2] = objects.getCount() ;
+//            data[objects.getRect().x/ variable - 2][objects.getRect().y/ variable - 1] = objects.getCount() ;
+//            data[objects.getRect().x/ variable - 2][objects.getRect().y/ variable + 1] = objects.getCount() ;
+//            data[objects.getRect().x/ variable - 2][objects.getRect().y/ variable + 2] = objects.getCount() ;
+//            data[objects.getRect().x/ variable - 2][objects.getRect().y/ variable] = objects.getCount() ;
+//
+//            data[objects.getRect().x/ variable - 1][objects.getRect().y/ variable + 2] = objects.getCount() ;
+//            data[objects.getRect().x/ variable - 1][objects.getRect().y/ variable - 2] = objects.getCount() ;
+//
+//            data[objects.getRect().x/ variable + 1][objects.getRect().y/ variable - 2] = objects.getCount() ;
+//            data[objects.getRect().x/ variable + 1][objects.getRect().y/ variable + 2] = objects.getCount() ;
+//
+//            data[objects.getRect().x/ variable + 2][objects.getRect().y/ variable] = objects.getCount() ;
+//            data[objects.getRect().x/ variable + 2][objects.getRect().y/ variable - 1] = objects.getCount() ;
+//            data[objects.getRect().x/ variable + 2][objects.getRect().y/ variable + 1] = objects.getCount() ;
+//            data[objects.getRect().x/ variable + 2][objects.getRect().y/ variable + 2] = objects.getCount() ;
+//            data[objects.getRect().x/ variable + 2][objects.getRect().y/ variable - 2] = objects.getCount() ;
+
+
+//            System.out.println(data[objects.getRect().y][objects.getRect().x] + " " + objects.getRect().y + " " +  objects.getRect().x);
 
 //            System.out.println(" -> objects " + objects );
 
@@ -165,327 +231,91 @@ public class MyRunPrint extends Thread {
             cg.setStroke(new BasicStroke(1));
 //            cg.fillRect(objects.getRect().x, objects.getRect().y , width, height);
             cg.fillOval(objects.getRect().x, objects.getRect().y , width, height);
+            cgBase.setStroke(new BasicStroke(1));
+//            cg.fillRect(objects.getRect().x, objects.getRect().y , width, height);
+            cgBase.fillOval(objects.getRect().x, objects.getRect().y , width, height);
 //
-//            if(objects.getCount() % 10 ==0){
-//                cg.setColor(new Color(0, 0, 0));
-//                cg.drawString(objects.getCount().toString() , objects.getRect().x, objects.getRect().y);
-//
-//            }
-
-//            cg.setColor(new Color(0,0,255));
-//            cg.setBackground(new Color(0,0,255));
-//            System.out.println(cg.getBackground());
 
         });
 
-//        List<Integer> integers = detectedObjects.stream()
-//                .map(d -> d.getGroup())
-//                .distinct()
-//                .collect(Collectors.toList());
 
-//        integers.stream()
-//                .forEach(i -> {
-//                    List<DetectedObject> collect = detectedObjects.stream()
-//                            .filter(d -> d.getGroup().equals(i))
-//                            .sorted(((o1, o2) -> o1.getSeq().compareTo(o2.getSeq())))
-//                            .collect(Collectors.toList());
-//
-///*
-//                    for (DetectedObject objects: collect ) {
-//
-//                        if(collect.size() > (collect.indexOf(objects) + 1)){
-//
-//                            Optional<DetectedObject> first = detectedObjects.stream()
-//                                    .filter(d -> !d.equals(objects))
-//                                    .filter(d -> d.getSeq() < objects.getSeq())
-//                                    .filter(d -> d.getRect().x == objects.getRect().x && d.getRect().y == objects.getRect().y)
-//                                    .findFirst();
-//
-//                            if(first.isPresent()){
-//                                DetectedObject detectedObject = first.get();
-//
-////                                if(detectedObject.getColorMap() != null){
-////                                    objects.setColorMap(colorMaps.get(detectedObject.getColorMap().getId() + 1));
-////                                }else{
-////                                    objects.setColorMap(colorMaps.get(1));
-////                                }
-//
-//                                if(detectedObject.getColor() != null){
-//                                    objects.setColor(new Color(i + 10, 255, 255));
-//                                }else{
-//                                    objects.setColor(Color.white);
-//                                }
-//
-//                            }else {
-//                                objects.setColor(Color.white);
-//
-//                            }
-//
-////                            if(objects.getColorMap() == null){
-////                                objects.setColorMap(colorMaps.get(1));
-////                            }else{
-////                                objects.setColorMap(colorMaps.get(objects.getColorMap().getId() + 1));
-////                            }
-//
-//                            List<Rect> detectedPointToPrint = detectedObjects.stream()
-//                                    .sorted(((o1, o2) -> o1.getSeq().compareTo(o2.getSeq())))
-//                                    .map(o -> o.getRect())
-//                                    .collect(Collectors.toList());
-//
-//                            List<SortedObject> sortedObjects = new ArrayList<>();
-//
-//                            int o = 1 ;
-//
-//                            for (Rect rect: detectedPointToPrint ) {
-//                                if (sortedObjects.isEmpty()) {
-//                                    SortedObject sortedObject = new SortedObject(o, 1, rect);
-//                                    sortedObjects.add(sortedObject);
-//                                    o++;
-//
-//                                }else {
-//                                    Optional<SortedObject> first1 = sortedObjects.stream()
-//                                            .filter(s -> s.getRect().x == rect.x && s.getRect().y == rect.y)
-//                                            .findFirst();
-//
-//                                    if(first1.isPresent()){
-//                                        SortedObject sortedObject = first1.get();
-//                                        sortedObject.setSortedIdIn(sortedObject.getSortedIdIn() + 1);
-//                                        sortedObjects.add(sortedObject);
-//                                    }else{
-//                                        SortedObject sortedObject = new SortedObject(o, 1, rect);
-//                                        sortedObjects.add(sortedObject);
-//                                        o++;
-//                                    }
-//                                }
-//                            }
-//
-//                            int colour = 0 ;
-//
-//                            List<Integer> numbers = sortedObjects.stream()
-//                                    .map(d -> d.getSortedId())
-//                                    .distinct()
-//                                    .collect(Collectors.toList());
-//
-//                            numbers.stream()
-//                                    .forEach(n -> {
-//                                        List<SortedObject> collect1 = sortedObjects.stream()
-//                                                .filter(s -> s.getSortedId().equals(n))
-//                                                .collect(Collectors.toList());
-//
-//                                        int size = collect1.size();
-//                                        SortedObject sortedObject = collect1.stream()
-//                                                .findFirst()
-//                                                .get();
-//
-////                                        System.out.println("rect.x " + rect.getRect().x + " rect.y " + rect.getRect().y + " rect.getSortedIdIn() " + rect.getSortedIdIn());
-////                                        int sortedIdInColour = rect.getSortedIdIn();
-////                                        rect.setSortedIdIn(sortedIdInColour);
-//                                        size= size* 63 ;
-////                                        System.out.println("size " + size);
-//                                        if(size <= 255 && size > 0){
-//                                            cg.setColor(new Color(size,255, 255));
-//                                        }else if(size <= 255 && size >= 510){
-//                                            cg.setColor(new Color(255, size/2 , 255));
-//                                        }else if(size <= 765 && size > 0){
-//                                            cg.setColor(new Color(255, 255, size/3));
-//                                        }
-//                                        cg.fillOval(sortedObject.getRect().x, sortedObject.getRect().y, 5, 5);
-//
-//
-//                                    });
-//
-////                            sortedObjects.stream()
-////                                            .forEach(rect -> {
-////
-////                                                System.out.println("rect.x " + rect.getRect().x + " rect.y " + rect.getRect().y + " rect.getSortedIdIn() " + rect.getSortedIdIn());
-////                                                int sortedIdInColour = rect.getSortedIdIn();
-////                                                rect.setSortedIdIn(sortedIdInColour);
-////                                                if(rect.getSortedIdIn() <= 255 && rect.getSortedIdIn() > 0){
-////                                                    cg.setColor(new Color(rect.getSortedIdIn(),255, 255));
-////                                                }else if(rect.getSortedIdIn() <= 255 && rect.getSortedIdIn() >= 510){
-////                                                    cg.setColor(new Color(255, rect.getSortedIdIn()/2 , 255));
-////                                                }else if(rect.getSortedIdIn() <= 765 && rect.getSortedIdIn() > 0){
-////                                                    cg.setColor(new Color(255, 255, rect.getSortedIdIn()/3));
-////                                                }
-////                                                cg.fillOval(rect.getRect().x, rect.getRect().y, 10, 10);
-////
-////                                            });
-//
-////                            cg.setColor(objects.getColor());
-//////                            cg.setColor(Color.WHITE);
-//
-////                            cg.setColor(integerColorMap.get(i));
-////                            cg.setStroke(new BasicStroke(5));
-////                            cg.fillOval(objects.getRect().x, objects.getRect().y , width, height);
-//
-////                            cg.drawOval( objects.getRect().x, objects.getRect().y , width, height);
-////                            cg.fillRect(objects.getRect().x,objects.getRect().y, 4 ,4);
-////                            cg.drawLine(objects.getRect().x,objects.getRect().y, collect.get(collect.indexOf(objects) +1 ).getRect().x, collect.get(collect.indexOf(objects) +1 ).getRect().y );
-//
-//                                }
-//
-//
-//
-//                    }
-//*/
-//
-//                    detectedObjects.stream()
-//                            .map(d -> d.getRect())
-//                            .count();
-//
-//                    int r  = 0;
-//                    int g = 0 ;
-//                    int t = 0 ;
-//                    for (DetectedObject objects: collect ) {
-//
-//                        if(collect.size() > (collect.indexOf(objects) + 1)){
-//
-//                            Optional<DetectedObject> first = detectedObjects.stream()
-//                                    .filter(d -> !d.equals(objects))
-//                                    .filter(d -> d.getSeq() < objects.getSeq())
-//                                    .filter(d -> d.getRect().x == objects.getRect().x && d.getRect().y == objects.getRect().y)
-//                                    .findFirst();
-//
-////                            if(first.isPresent()){
-////                                DetectedObject detectedObject = first.get();
-////
-////                                objects.setColorMap(colorMaps.get(detectedObject.getColorMap().getId() + 1));
-////
-////                            }else {
-////                                objects.setColorMap(colorMaps.get(1));
-////
-////                            }
-//
-////                            if(objects.getColorMap() == null){
-////                                objects.setColorMap(colorMaps.get(1));
-////                            }else{
-////                                objects.setColorMap(colorMaps.get(objects.getColorMap().getId() + 1));
-////                            }
-////                            cg.setColor(objects.getColorMap().getColor());
-//////                            cg.setColor(Color.WHITE);
-//
-//
-//
-//
-//
-////                            cg.setColor(integerColorMap.get(i));
-//
-////                            if(objects.getIterationId() < 255){
-////                                cg.setColor(new Color(0, objects.getIterationId(), 255 - objects.getIterationId()));
-////                            }else if (objects.getIterationId() > 255 && objects.getIterationId() < 510){
-////                                cg.setColor(new Color(0, objects.getIterationId()/2, 255 - objects.getIterationId()/2 ));
-////                            }else if(objects.getIterationId() > 510 && objects.getIterationId() < 760){
-////                                cg.setColor(new Color(objects.getIterationId()/3, 255 - objects.getIterationId()/3, 0 ));
-////                            }
-////
-////                            cg.setStroke(new BasicStroke(5));
-////                            cg.fillOval(objects.getRect().x, objects.getRect().y , width, height);
-//
-//
-////                            cg.drawOval( objects.getRect().x, objects.getRect().y , width, height);
-////                            cg.fillRect(objects.getRect().x,objects.getRect().y, 4 ,4);
-////                            cg.drawLine(objects.getRect().x,objects.getRect().y, collect.get(collect.indexOf(objects) +1 ).getRect().x
-////                                    , collect.get(collect.indexOf(objects) +1 ).getRect().y );
-//
-//                        }
-//                    }
-//
-//
-//                });
+        if(i % 10 == 0){
 
 
+            boolean useGraphicsYAxis = true;
 
-
-//        try {
-//            for (int x = 0; x < data.length; x++)
-//            {
-//                for (int y = 0; y < data[0].length; y++)
-//                {
-//                    int colorIndex = dataColorIndices[x][y];
-//                    if (colorIndex != NA) {
-//                        cg.setColor(integerColorMap.get((colorIndex)));
-//                        cg.fillRect(x, y, 1, 1);
-//                    }
-//// Alternate flow, if you really want the pixels to be white
-////                else {
-////                    bufferedGraphics.setColor(Color.WHITE);
-////                    bufferedGraphics.fillRect(x, y, 1, 1);
-////                }
-//                }
-//            }
-//        }
-//        finally {
-//            bufferedGraphics.dispose();
-//        }
-
-// Create some dummy data.
-//        double[][] data = new double[][]{{3,2,3,4,5,6,3,2,3,4,5,6},
-//                {2,3,4,5,6,7,3,2,3,4,5,6},
-//                {3,4,5,6,7,6,3,2,3,4,5,6},
-//                {4,5,6,7,6,5,3,2,3,4,5,6}};
+//            panel = new HeatMap(data, useGraphicsYAxis, Gradient.GRADIENT_BLUE_TO_RED);
+//            // or you can also make a custom gradient:
 //
-//// Step 1: Create our heat map chart using our data.
-//        HeatChart map = new HeatChart(data);
-////
-////// Step 2: Customise the chart.
-//        map.setTitle("This is my heat chart title");
-//        map.setXAxisLabel("X aaa");
-//        map.setYAxisLabel("Y bbbb");
-////
-////// Step 3: Output the chart to a file.
-//        try {
-//            map.saveToFile(new File("result/java-heat-chart.png"));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+//            Color[] gradientColors = new Color[]{Color.blue,Color.green,Color.yellow, Color.red};
+//            Color[] customGradient = Gradient.createMultiGradient(gradientColors, 10);
+//            panel.updateGradient(customGradient);
+//
+//            // set miscellaneous settings
+//
+//            panel.setDrawLegend(true);
+//
+//            panel.setTitle("Height (m)");
+//            panel.setDrawTitle(true);
+//
+//            panel.setXAxisTitle("X-Distance (m)");
+//            panel.setDrawXAxisTitle(true);
+//
+//            panel.setYAxisTitle("Y-Distance (m)");
+//            panel.setDrawYAxisTitle(true);
+//
+//            panel.setCoordinateBounds(0, 6.28, 0, 6.28);
+//
+//            panel.setDrawXTicks(true);
+//            panel.setDrawYTicks(true);
+//            panel.setSize(800, 600);
 
+//        hmf.getContentPane().add(panel);
 
-        System.out.println("finish print");
+//        hmf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        hmf.setSize(800,600);
+//        hmf.setVisible(true);
 
+            File output = new File("result/wykryty_ruch6.jpg");
+            File outputBase = new File("result/wykryty_ruchBase.jpg");
+//            Container content = panel;//andShowGUI.getContentPane();
 
+//            BufferedImage img = new BufferedImage(content.getWidth(), content.getHeight(), BufferedImage.TYPE_INT_RGB);
+//            Graphics2D g2d = img.createGraphics();
+//            content.printAll(g2d);
 
+//            g2d.dispose();
 
-        SwingUtilities.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                try
-                {
-                    boolean useGraphicsYAxis = true;
-
-                    panel = new HeatMap(data, useGraphicsYAxis, Gradient.GRADIENT_BLUE_TO_RED);
-                    // or you can also make a custom gradient:
-
-                    Color[] gradientColors = new Color[]{Color.blue,Color.green,Color.yellow, Color.red};
-                    Color[] customGradient = Gradient.createMultiGradient(gradientColors, 500);
-                    panel.updateGradient(customGradient);
-
-
-                    JFrame jFrame = new JFrame();
-                    jFrame.getContentPane().add(panel);
-                    jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    jFrame.setSize(800,600);
-                    jFrame.setVisible(true);
-                }
-                catch (Exception e)
-                {
-                    System.err.println(e);
-                    e.printStackTrace();
-                }
+//            output.mkdirs();
+            try {// dziala dla jhearmaps
+//                ImageIO.write( img, "jpg", output);
+                ImageIO.write( image, "jpg", output);
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
-        });
 
-
-        File output = new File("result/wykryty_ruch6.jpg");
-        output.mkdirs();
-        try {
-            ImageIO.write( image, "jpg", output);
-
-//            repaint();
-//            startClass.setStart(true);
-        } catch (IOException e1) {
-            e1.printStackTrace();
+            try {// dziala dla jhearmaps
+//                ImageIO.write( img, "jpg", output);
+                ImageIO.write( imageBase, "jpg", outputBase);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
+
+
+
+//        System.out.println(" data from print" );
+//        for(int i =0 ; i < 540 ; i++){
+//            for(int j =0 ; j < 740 ; j++){
+//
+//                double v = data[j][i];
+//                if(v > 0){
+//                    System.out.println(" v " + v + " j " + j + " i " + i);
+//                }
+//
+//            }
+//        }
+//        System.out.println("finish print");
     }
 
 //    void convert_to_rgb(minval, maxval, val, colors):

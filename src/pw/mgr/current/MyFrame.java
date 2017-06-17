@@ -22,6 +22,17 @@ public class MyFrame extends JFrame{
     public MyFrame() {
 
         generateMyFrame();
+//        this.setTitle("Detektor ruchu");
+//        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+//
+//        this.setSize(1920, 1060);
+//
+//        this.setVisible(true);
+//        this.setLocationRelativeTo(null);
+//
+//        this.setContentPane(new App().getMainPanel());
+
+
     }
 
     private JLabel videoLabelFirstScreen = new JLabel();
@@ -63,11 +74,9 @@ public class MyFrame extends JFrame{
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         this.setSize(1920, 1060);
-//        this.setSize(4096, 2304 );
 
         this.setVisible(true);
         this.setLocationRelativeTo(null);
-
 
         GridBagLayout gBLayout = new GridBagLayout();
         JPanel buttonsPanel = new JPanel();
@@ -76,6 +85,7 @@ public class MyFrame extends JFrame{
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 25, 0, 0);
+        gbc.gridwidth= 1;
 
         String [] movies = new String[] {
                 ""
@@ -90,7 +100,6 @@ public class MyFrame extends JFrame{
 
         JComboBox<String> movieList = new JComboBox<>(movies);
 
-// add to the parent container (e.g. a JFrame):
         gbc.gridx = 0;
         gbc.gridy = 0;
         buttonsPanel.add(movieList, gbc);
@@ -99,13 +108,6 @@ public class MyFrame extends JFrame{
             selectedMovie = (String) movieList.getSelectedItem();
             System.out.println("selectedMovie " + selectedMovie);
         });
-// get the selected item:
-//        String selectedName = (String) movieList.getSelectedItem();
-//        selectedMovie = selectedName;
-////
-////
-//        System.out.println("You seleted the movie: " + selectedName);
-
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -135,6 +137,17 @@ public class MyFrame extends JFrame{
         } catch (IOException er) {
             er.printStackTrace();
         }
+
+        BufferedImage emptyBufferImage = null;
+        try {
+            emptyBufferImage = ImageIO.read(new File("resources/empty.jpg"));
+        } catch (IOException er) {
+            er.printStackTrace();
+        }
+
+        ImageIcon emptyImage = new ImageIcon(emptyBufferImage);
+
+
         ImageIcon image = new ImageIcon(scalaImage);
         scalaLabel.setIcon(image);
 
@@ -148,7 +161,7 @@ public class MyFrame extends JFrame{
 //        JLabel videoLabelFourthScreen = new JLabel();
 
         GridBagConstraints gbcScreens = new GridBagConstraints();
-        gbcScreens.insets = new Insets(25, 25, 0, 0);
+        gbcScreens.insets = new Insets(10, 10, 10, 10);
 
         if (videoLabelFourthScreen == null){
             videoLabelFourthScreen = new JLabel();
@@ -158,48 +171,26 @@ public class MyFrame extends JFrame{
         }
         gbcScreens.gridx = 0;
         gbcScreens.gridy = 0;
+        videoLabelFirstScreen.setIcon(emptyImage);
         videoPanel.add(videoLabelFirstScreen, gbcScreens);
 
         gbcScreens.gridx = 1;
         gbcScreens.gridy = 0;
 
-//        ImageIcon image = new ImageIcon(paintImage);
-        // update panel with new paint image
+//        resultLabel.setSize(800, 600);
+//        resultLabel.setBackground(new Color(0,0,255));
 
-        resultLabel.setSize(800, 600);
-        resultLabel.setBackground(new Color(0,0,255));
-//        resultLabel.repaint();
-//        resultLabel.setIcon(image);
-//        JPanel panel = new JPanel(new BorderLayout());
-
-
-        // you can use a pre-defined gradient:
-        boolean useGraphicsYAxis = true;
-
-
-        panel = new HeatMap(data, useGraphicsYAxis, Gradient.GRADIENT_BLUE_TO_RED);
-
-        Color[] gradientColors = new Color[]{Color.blue,Color.green,Color.yellow, Color.red};
-        Color[] customGradient = Gradient.createMultiGradient(gradientColors, 500);
-        panel.updateGradient(customGradient);
-
-
-
-
-
-
-        videoPanel.add(panel, gbcScreens);
-//        videoPanel.add(resultLabel, gbcScreens);
-//        repaint();
-
-//        videoPanel.add(videoLabelSecondScreen, gbcScreens);
+        resultLabel.setIcon(emptyImage);
+        videoPanel.add(resultLabel, gbcScreens);
 
         gbcScreens.gridx = 0;
         gbcScreens.gridy = 1;
+        videoLabelThirdScreen.setIcon(emptyImage);
         videoPanel.add(videoLabelThirdScreen, gbcScreens);
 
         gbcScreens.gridx = 1;
         gbcScreens.gridy = 1;
+        videoLabelFourthScreen.setIcon(emptyImage);
         videoPanel.add(videoLabelFourthScreen, gbcScreens);
 
         gbcScreens.gridx = 2;
@@ -213,7 +204,7 @@ public class MyFrame extends JFrame{
 
         GridBagConstraints gbcGeneral = new GridBagConstraints();
         gbcGeneral.anchor = GridBagConstraints.WEST;
-        gbcGeneral.insets = new Insets(10, 25, 0, 0);
+        gbcGeneral.insets = new Insets(10, 10, 10, 10);
 
         gbcGeneral.gridx = 0;
         gbcGeneral.gridy = 0;
@@ -222,11 +213,6 @@ public class MyFrame extends JFrame{
         gbcGeneral.gridx = 1;
         gbcGeneral.gridy = 0;
         generalPanel.add(videoPanel, gbcGeneral);
-
-//        gbcGeneral.gridx = 0;
-//        gbcGeneral.gridy = 1;
-//        generalPanel.add(slidersPanel, gbcGeneral);
-
 
         this.setContentPane(generalPanel);
 
@@ -252,13 +238,13 @@ public class MyFrame extends JFrame{
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 25, 0, 0);
 
-        JTextField jTextField = new JTextField("Dylacja :");
+        JLabel jTextField = new JLabel("Dylacja :");
         gbc.ipadx = 40;
         gbc.gridx = 0;
         gbc.gridy = 0;
         slidersPanel.add(jTextField, gbc);
 
-        JTextField jTextField2 = new JTextField("Erozja :");
+        JLabel jTextField2 = new JLabel("Erozja :");
         gbc.gridx = 0;
         gbc.gridy = 2;
         slidersPanel.add(jTextField2, gbc);
