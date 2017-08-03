@@ -156,13 +156,13 @@ public class MyRunPrint extends Thread {
 
         pointToDraws.stream().forEach(objects -> {
             objects.setCount(objects.getCount() + 25);
-            int alfa = 30;
+            int alfa = 15;
             if(objects.getCount() < 255){
                 cg.setColor(new Color(0, objects.getCount(), 255 - objects.getCount()));
                 cgBase.setColor(new Color(0, objects.getCount(), 255 - objects.getCount(), alfa));
             }else if (objects.getCount() >= 255 && objects.getCount() < 510){
                 cg.setColor(new Color(objects.getCount() - 255 , 255 - (objects.getCount() - 255), 0));
-                cgBase.setColor(new Color(objects.getCount() - 255 , 255 - (objects.getCount() - 255), 0 , alfa + 10));
+                cgBase.setColor(new Color(objects.getCount() - 255 , 255 - (objects.getCount() - 255), 0 , alfa -5));
             }else{
                 cg.setColor(new Color(255, 0, 0));
                 cgBase.setColor(new Color(255, 0, 0 , alfa + 20));

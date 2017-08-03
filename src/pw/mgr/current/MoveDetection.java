@@ -43,8 +43,8 @@ public class MoveDetection {
     private static Mat frame;
     private static  Mat flow ;
 
-    private static int slider = 1;
-    private static int slider2 = 9;
+    private static int slider = 25;
+    private static int slider2 = 4;
     private static int slider3 = 20;
 
     private static int slider4 = 500;
@@ -126,6 +126,7 @@ public class MoveDetection {
 
         myFrame.getReloadButton().addActionListener(e -> {
             System.out.println("reload video");
+            baseFrame = null;
             System.out.println("selected " + movie.getMovieLocationBaseOnName(myFrame.getSelectedMovie()));
             detectedObjectListOld  = new ArrayList<>();
             frame = new Mat();

@@ -263,12 +263,14 @@ public class MyFrame extends JFrame{
         gbc.ipadx = 100;
         gbc.gridx = 0;
         gbc.gridy = 1;
+        jSlider1.setValue(25);
         slidersPanel.add(jSlider1, gbc);
 
 
         setSliderParams(jSlider2);
         gbc.gridx = 0;
         gbc.gridy = 3;
+        jSlider2.setValue(4);
         slidersPanel.add(jSlider2, gbc);
 //
 //        setSliderParams(jSlider3);
