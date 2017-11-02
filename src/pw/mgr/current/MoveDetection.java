@@ -41,37 +41,23 @@ public class MoveDetection {
     private static Mat diffFrame = null;
 
     private static Mat frame;
-    private static  Mat flow ;
 
     private static int slider = 25;
     private static int slider2 = 4;
     private static int slider3 = 20;
-
     private static int slider4 = 500;
     private static  Integer i = 1 ;
     private static  Integer k = 0;
-
     private static  Integer seq = 1;
     private static  Integer group = 1;
-
     private static  Integer y = 0;
-
     private static  Mat baseFrame = null;
+    private static double totalFrames;
 
-//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\VIDEO0376.mp4";
-//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new.mp4";
-//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new9.mp4";
-//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\test_film1.mp4";
-//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new2.mp4";
-//      private static String videoAddress = "E:\\magi\\film\\YDXJ0571.MP4";
-//    private static String videoAddress = "C:\\Users\\piotrek\\Desktop\\test\\magi_new3.mp4";
-
-//    private static String videoAddress = "D:\\moje\\magi\\magi_new6.mp4";
 
     private static String oldMovieLocation;
     private static Movie movie = new Movie() ;
 
-    private static String videoAddress;
     private static VideoCapture video;
     private static List<DetectedObject> detectedObjectList;
 
@@ -79,13 +65,14 @@ public class MoveDetection {
 
     public static void main(String[] args) {
         StartClass startClass = new StartClass();
+        StartClass backgroundProcessing = new StartClass();
 
-        addActionListenerToButtons(startClass);
+        addActionListenerToButtons(startClass, backgroundProcessing);
 
         addChangeListenerForSlider();
     }
 
-    private static void addActionListenerToButtons(final StartClass startClass) {
+    private static void addActionListenerToButtons(final StartClass startClass, final StartClass backgroundProcessing ) {
         class MyRun extends Thread {
 
             @Override
@@ -94,7 +81,7 @@ public class MoveDetection {
                     startClass.setStart(true);
                     System.out.println("show");
                     while (startClass.isStart()){
-                        showframe(frame, video);
+                        showframe(frame, video, startClass);
                     }
                     System.out.println("after while");
                 }
@@ -134,6 +121,12 @@ public class MoveDetection {
             detectedObjectList = new ArrayList<>();
             group = 1;
             seq = 1 ;
+
+        });
+
+        myFrame.getBackgroundProcessButton().addActionListener(e -> {
+            System.out.println("Przetwarzanie w tle");
+            backgroundProcessing.setStart(false);
 
         });
 
@@ -186,92 +179,52 @@ public class MoveDetection {
         });
     }
 
-    private static void showframe(Mat frame, VideoCapture video) {
+    private static void showframe(Mat frame, VideoCapture video, StartClass startClass) {
 
         /**pierwszy ekran*/
 
 //        frame = new Mat();
         k++ ;
         Mat secondFrame;
-        video.read(frame);
 
-//        video.get( PROP_FPS)
-//        System.out.println("klatki per second" + video.get(Videoio.CAP_PROP_FPS));
-//        video.set(Videoio.CAP_PROP_FPS, 5);
-//        System.out.println("klatki per second 2 " + video.get(Videoio.CAP_PROP_FPS));
-////        System.out.println(">>> " +  video.get(5));
+        if(k == 1) {
+            double fps = video.get(5);
+            totalFrames = video.get(7);
+            double time = (int)totalFrames/(int)fps;
 
-        if(k % 4 == 0) {
+            System.out.println("Fps = " + fps + " liczba klatek = " + totalFrames + " długość filmu = " + time/60);
 
-//        Imgproc.resize(frame, frame,new Size(640, 480));
-//        Imgproc.resize(frame, frame,new Size(1024, 768));
-//        Imgproc.resize(frame, frame,new Size(890, 500));
-            Imgproc.resize(frame, frame, new Size(800, 600));
-//        Imgproc.resize(frame, frame,new Size(1260, 800));
-//        Imgproc.resize(frame, frame,new Size(1600, 1200));
-//        Imgproc.resize(frame, frame,new Size(1860, 1400));
-            firstScreen = frame;
+        }
 
-            if(baseFrame == null){
-                baseFrame = frame.clone() ;
-            }
+        if(frame.dataAddr() != 0 || k == 1) {
 
-            /**drugi ekran*/
+            video.read(frame);
 
-            secondFrame = new Mat(frame.size(), CvType.CV_8UC1);
-            //Konwertuje obraz do skali szarości
-            Imgproc.cvtColor(frame, secondFrame, Imgproc.COLOR_BGR2GRAY);
-            //Rozmycie filtrem Gaussa, usuwa on detale i eliminuje zakłócenia
-            // src, dst, wielkośc jądra gausa, odchylenie standardowe jądra w kierunku X
-            Imgproc.GaussianBlur(secondFrame, secondFrame, new Size(3, 3), 1.0, 1.0, 0);
-            secondScreen = secondFrame;
+            if (k % 4 == 0) {
+                Imgproc.resize(frame, frame, new Size(800, 600));
+                firstScreen = frame;
 
+                if (baseFrame == null) {
+                    baseFrame = frame.clone();
+                }
 
-//            Mat fgmask =  new Mat(secondFrame.size(), CvType.CV_8UC1);
-//            BackgroundSubtractorMOG2 mog2 = Video.createBackgroundSubtractorMOG2();
-//            mog2.apply(secondFrame, fgmask);
-//
-//
-//            thirdScreen = fgmask;
+                /**drugi ekran*/
 
-//            HOGDescriptor hogDescriptor = new HOGDescriptor();
-//
-//            hogDescriptor.setSVMDetector(HOGDescriptor.getDefaultPeopleDetector());
+                secondFrame = new Mat(frame.size(), CvType.CV_8UC1);
+                //Konwertuje obraz do skali szarości
+                Imgproc.cvtColor(frame, secondFrame, Imgproc.COLOR_BGR2GRAY);
+                //Rozmycie filtrem Gaussa, usuwa on detale i eliminuje zakłócenia
+                // src, dst, wielkośc jądra gausa, odchylenie standardowe jądra w kierunku X
+                Imgproc.GaussianBlur(secondFrame, secondFrame, new Size(3, 3), 1.0, 1.0, 0);
+                secondScreen = secondFrame;
 
+                if (previousFrame == null) {
+                    previousFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
+                }
 
-//            double ratio = 0.5;
-            int width = 800;
-            int height = 600 ;
-//            int w = (int) (width * ratio);
-//            int h = (int) (height * ratio);
-
-            Mat m3 = new Mat(height, width, CvType.CV_8UC1);
-
-//            MatOfRect found = new MatOfRect();
-//            MatOfDouble weight = new MatOfDouble();
-//
-//            hogDescriptor.detectMultiScale(m3, found, weight, 0, new Size(1, 1), new Size(1, 1), 1.05, 2, false);
-//
-//            List<Rect> rects = found.toList();
-//            if (rects.size()> 0) {
-//                for (int i=0; i<rects.size(); i++) {
-////                    rect(rects[i].x/ratio, rects[i].y/ratio, rects[i].width/ratio, rects[i].height/ratio);
-//                    Imgproc.rectangle(secondScreen, new Point(rects.get(i).x, rects.get(i).y),
-//                            new Point(rects.get(i).width, rects.get(i).height), new Scalar(0, 255, 0), 1);
-//                }
-//            }
-//            text("Frame Rate: " + round(frameRate), 500, 50);
-
-            /**trzeci ekran*/
-
-            if (previousFrame == null) {
-                previousFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
-            }
-
-            if (diffFrame == null) {
-                diffFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
-            }
-
+                if (diffFrame == null) {
+                    diffFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
+                }
 
 //            if (k % 4 == 0) {
                 Core.absdiff(previousFrame, secondFrame, diffFrame);
@@ -279,86 +232,76 @@ public class MoveDetection {
                 previousFrame = secondFrame.clone();
 //            }
 
+                thirdScreen = diffFrame;
 
+                /**czwarty ekran*/
 
-//            if (flow == null) {
-//                flow = new Mat(secondFrame.size(), CvType.CV_8UC1);
-//            }
+                Mat finalFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
 
-//            Imgproc.applyColorMap(secondFrame, flow, Imgproc.COLORMAP_JET);
-//            Imgproc.GaussianBlur(flow, flow, new Size(5, 5), 0, 0);
+                //new
+                Imgproc.threshold(diffFrame, finalFrame, slider3, slider4, Imgproc.THRESH_BINARY);
 
+                Mat erodeClose = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(slider, slider));
+                Imgproc.morphologyEx(finalFrame, finalFrame, Imgproc.MORPH_CLOSE, erodeClose);
 
-            thirdScreen = diffFrame;
+                Mat dilateOpen = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(slider2, slider2));
 
-            /**czwarty ekran*/
+                Imgproc.morphologyEx(finalFrame, finalFrame, Imgproc.MORPH_OPEN, dilateOpen);
 
-            Mat finalFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
-
-            //new
-            Imgproc.threshold(diffFrame, finalFrame, slider3, slider4, Imgproc.THRESH_BINARY);
-
-            Mat erodeClose = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(slider, slider));
-            Imgproc.morphologyEx(finalFrame, finalFrame, Imgproc.MORPH_CLOSE, erodeClose);
-
-            Mat dilateOpen = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(slider2, slider2));
-
-            Imgproc.morphologyEx(finalFrame, finalFrame, Imgproc.MORPH_OPEN, dilateOpen);
-
-            fourthScreen = finalFrame.clone();
+                fourthScreen = finalFrame.clone();
 //        if(k % 4 == 0) {
-            detection_contours(fourthScreen);
+                detection_contours(fourthScreen);
 //        }
 
-            if(k % 3 == 0 ) {
-                ImageIcon baseImage = new ImageIcon(Mat2bufferedImage(baseFrame));
+                if (k % 3 == 0) {
+                    ImageIcon baseImage = new ImageIcon(Mat2bufferedImage(baseFrame));
 
-                MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, y, baseImage);
-
-
-                BufferedImage paintImage = null;
-                try {
-                    paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
-                } catch (Exception er) {
-                    er.printStackTrace();
-                    paintImage = null;
-                }
-                if (paintImage != null) {
-                    ImageIcon image = new ImageIcon(paintImage);
+                    MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, y, baseImage);
+                    myRunPrint.setTotalFrames(totalFrames);
 
 
-                    myFrame.getVideoLabelFourthScreen().repaint();
-                    myFrame.getVideoLabelFourthScreen().setIcon(image);
+                    BufferedImage paintImage = null;
+                    try {
+                        paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
+                    } catch (Exception er) {
+                        er.printStackTrace();
+                        paintImage = null;
+                    }
+                    if (paintImage != null) {
+                        ImageIcon image = new ImageIcon(paintImage);
 
-                }
 
-                BufferedImage baseBuffImage = null;
-                try {
-                    baseBuffImage = ImageIO.read(new File("result/wykryty_ruchBase.jpg"));
-                } catch (Exception er) {
-                    er.printStackTrace();
-                    baseBuffImage = null;
-                }
-                if (baseBuffImage != null) {
-                    ImageIcon image = new ImageIcon(baseBuffImage);
+                        myFrame.getVideoLabelFourthScreen().repaint();
+                        myFrame.getVideoLabelFourthScreen().setIcon(image);
+
+                    }
+
+                    BufferedImage baseBuffImage = null;
+                    try {
+                        baseBuffImage = ImageIO.read(new File("result/wykryty_ruchBase.jpg"));
+                    } catch (Exception er) {
+                        er.printStackTrace();
+                        baseBuffImage = null;
+                    }
+                    if (baseBuffImage != null) {
+                        ImageIcon image = new ImageIcon(baseBuffImage);
 
 
 //                myFrame.getVideoLabelThirdScreen())
-                    myFrame.getVideoLabelThirdScreen().setIcon(image);
+                        myFrame.getVideoLabelThirdScreen().setIcon(image);
 
-                }
+                    }
 
+                    y++;
 
-                y++;
-
-//        myFrame.repaint();
-                myRunPrint.start();
-//            myFrame.setData(myRunPrint.getData());
-//            myFrame.getPanel().repaint();
-                //            }
+                    myRunPrint.start();
 
                 putScreenInVideoLabel();
+                }
             }
+        }else{
+            JOptionPane.showMessageDialog(null, "Przetwarzanie zakończone.","Informacja", JOptionPane.INFORMATION_MESSAGE);
+            startClass.setStart(false);
         }
     }
 
@@ -380,23 +323,23 @@ public class MoveDetection {
 
     }
 
-    private static void printRectangle(ArrayList<Rect> array, Mat img) {
-        if (array.size() > 0) {
-            Iterator<Rect> it2 = array.iterator();
-//            while (it2.hasNext()) {
-//                Rect obj = it2.next();
-////                obj.height += 20;
-////                obj.width +=10;
-////                Imgproc.rectangle(firstScreen, obj.br(), new Point(obj.br().x - 30, obj.br().y - 50), new Scalar(0, 255, 0), 1);
-////                System.out.println(" .br() " + obj.br() + " .tl() " + obj.tl());
-////                Imgproc.putText(firstScreen, "obiekt " , new Point(700, 10), 2, 1, new Scalar(0, 255, 0), 1);
-//                if(array.indexOf(obj) -1 > 1){
-////                    Imgproc.line(firstScreen,obj.br(), array.get(array.indexOf(obj) -1).br(),  new Scalar(0, 0, 255), 2);
-//                }
-//            }
-        }
-
-    }
+//    private static void printRectangle(ArrayList<Rect> array, Mat img) {
+//        if (array.size() > 0) {
+//            Iterator<Rect> it2 = array.iterator();
+////            while (it2.hasNext()) {
+////                Rect obj = it2.next();
+//////                obj.height += 20;
+//////                obj.width +=10;
+//////                Imgproc.rectangle(firstScreen, obj.br(), new Point(obj.br().x - 30, obj.br().y - 50), new Scalar(0, 255, 0), 1);
+//////                System.out.println(" .br() " + obj.br() + " .tl() " + obj.tl());
+//////                Imgproc.putText(firstScreen, "obiekt " , new Point(700, 10), 2, 1, new Scalar(0, 255, 0), 1);
+////                if(array.indexOf(obj) -1 > 1){
+//////                    Imgproc.line(firstScreen,obj.br(), array.get(array.indexOf(obj) -1).br(),  new Scalar(0, 0, 255), 2);
+////                }
+////            }
+//        }
+//
+//    }
 
     public static BufferedImage Mat2bufferedImage(Mat frame) {
 
@@ -502,8 +445,8 @@ public class MoveDetection {
 
                         }
 
-                        System.out.println(maxAreaIdx + " rect " + detectedObject.getRect() + " r.tl() " + detectedObject.getRect().tl() + " r.br() "
-                                + detectedObject.getRect().br() + " seq " + detectedObject.getSeq() + " group " + detectedObject.getGroup());
+//                        System.out.println(maxAreaIdx + " rect " + detectedObject.getRect() + " r.tl() " + detectedObject.getRect().tl() + " r.br() "
+//                                + detectedObject.getRect().br() + " seq " + detectedObject.getSeq() + " group " + detectedObject.getGroup());
                         seq++;
                     }
 
@@ -594,11 +537,11 @@ public class MoveDetection {
 
         i++ ;
 
-            System.out.println("---------------------------");
+//            System.out.println("---------------------------");
 
             v.release();
 
-            printRectangle(rect_array, outmat);
+//            printRectangle(rect_array, outmat);
 //                }
 
         Point pt1 = new Point(80, 40);

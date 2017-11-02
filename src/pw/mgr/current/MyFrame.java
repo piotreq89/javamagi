@@ -19,6 +19,8 @@ import java.util.List;
  */
 public class MyFrame extends JFrame{
 
+    public static final int IPADX = 30;
+
     public MyFrame() {
 
         generateMyFrame();
@@ -46,6 +48,7 @@ public class MyFrame extends JFrame{
     private JButton stopButton = new JButton("Stop");
     private JButton reloadButton = new JButton("Przeładuj");
     private JButton drawMoveButton = new JButton("Narysuj ruch");
+    private JButton backgroundProcessButton = new JButton("Przetwarzaj w tle");
     private JSlider jSlider1 = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
     private JSlider jSlider2 = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
     private JSlider jSlider3 = new JSlider(JSlider.HORIZONTAL, 0, 100, 1);
@@ -123,20 +126,17 @@ public class MyFrame extends JFrame{
 
         gbc.gridx = 0;
         gbc.gridy = 4;
+        buttonsPanel.add(backgroundProcessButton, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 5;
         buttonsPanel.add(drawMoveButton, gbc);
 
         JPanel slidersPanel = getSliderPanel();
 
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         buttonsPanel.add(slidersPanel, gbc);
-
-        BufferedImage scalaImage = null;
-        try {
-            scalaImage = ImageIO.read(new File("resources/skala3.jpg"));
-        } catch (IOException er) {
-            er.printStackTrace();
-        }
 
         BufferedImage emptyBufferImage = null;
         try {
@@ -148,12 +148,55 @@ public class MyFrame extends JFrame{
         ImageIcon emptyImage = new ImageIcon(emptyBufferImage);
 
 
+        JPanel scalaPanel = new JPanel();
+        scalaPanel.setLayout(gBLayout);
+
+        BufferedImage scalaImage = null;
+        try {
+            scalaImage = ImageIO.read(new File("resources/skala3.jpg"));
+        } catch (IOException er) {
+            er.printStackTrace();
+        }
+
         ImageIcon image = new ImageIcon(scalaImage);
         scalaLabel.setIcon(image);
 
         gbc.gridx = 0;
-        gbc.gridy = 6;
-        buttonsPanel.add(scalaLabel, gbc);
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        scalaPanel.add(scalaLabel, gbc);
+
+//        JPanel scalaTextPanel = new JPanel();
+//        scalaTextPanel.setLayout(gBLayout);
+        GridBagConstraints gbc3 = new GridBagConstraints();
+        gbc3.anchor = GridBagConstraints.PAGE_START;
+        JLabel jTextField = new JLabel(" AAAA :");
+        gbc3.gridx = 1;
+        gbc3.gridy = 0;
+        scalaPanel.add(jTextField, gbc3);
+
+        GridBagConstraints gbc2 = new GridBagConstraints();
+        gbc2.anchor = GridBagConstraints.CENTER;
+        JLabel jTextField1 = new JLabel(" AAAB :");
+        gbc2.gridx = 1;
+        gbc2.gridy = 0;
+        scalaPanel.add(jTextField1, gbc2);
+
+        GridBagConstraints gbc4 = new GridBagConstraints();
+        gbc4.anchor = GridBagConstraints.PAGE_END;
+        JLabel jTextField3 = new JLabel(" CCCB :");
+        gbc4.gridx = 1;
+        gbc4.gridy = 0;
+        scalaPanel.add(jTextField3, gbc4);
+
+//
+//        gbc.gridx = 1;
+//        gbc.gridy = 0;
+//        scalaPanel.add(scalaTextPanel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        buttonsPanel.add(scalaPanel, gbc);
 
         JPanel videoPanel = new JPanel();
 //        BorderLayout borderLayout = new BorderLayout();
@@ -203,11 +246,13 @@ public class MyFrame extends JFrame{
         generalPanel.setLayout(gBGeneralLayout);
 
         GridBagConstraints gbcGeneral = new GridBagConstraints();
-        gbcGeneral.anchor = GridBagConstraints.WEST;
+        gbcGeneral.anchor = GridBagConstraints.NORTHWEST;
         gbcGeneral.insets = new Insets(10, 10, 10, 10);
 
         gbcGeneral.gridx = 0;
         gbcGeneral.gridy = 0;
+//        gbcGeneral.ipadx = IPADX ;
+        gbcGeneral.anchor = GridBagConstraints.FIRST_LINE_START;
         generalPanel.add(buttonsPanel,gbcGeneral);
 
         gbcGeneral.gridx = 1;
@@ -239,7 +284,7 @@ public class MyFrame extends JFrame{
         gbc.insets = new Insets(10, 25, 0, 0);
 
         JLabel jTextField = new JLabel("Dylacja :");
-        gbc.ipadx = 40;
+        gbc.ipadx = IPADX;
         gbc.gridx = 0;
         gbc.gridy = 0;
         slidersPanel.add(jTextField, gbc);
@@ -260,7 +305,7 @@ public class MyFrame extends JFrame{
 //        slidersPanel.add(jTextField4, gbc);
 
         setSliderParams(jSlider1);
-        gbc.ipadx = 100;
+        gbc.ipadx = IPADX;
         gbc.gridx = 0;
         gbc.gridy = 1;
         jSlider1.setValue(25);
@@ -342,8 +387,11 @@ public class MyFrame extends JFrame{
     }
 
     public JButton getDrawMoveButton() {
-
         return drawMoveButton;
+    }
+
+    public JButton getBackgroundProcessButton() {
+        return backgroundProcessButton;
     }
 
     public JSlider getjSlider1() {
