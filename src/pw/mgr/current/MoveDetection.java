@@ -53,6 +53,7 @@ public class MoveDetection {
     private static  Integer y = 0;
     private static  Mat baseFrame = null;
     private static double totalFrames;
+    private static int progress;
 
 
     private static String oldMovieLocation;
@@ -167,16 +168,6 @@ public class MoveDetection {
             System.out.println("Change jSlider 2 " + myFrame.getjSlider2().getValue());
                 slider2 = myFrame.getjSlider2().getValue();
         });
-
-        myFrame.getjSlider3().addChangeListener(e -> {
-            System.out.println("Change jSlider 3 " + myFrame.getjSlider3().getValue());
-                slider3 = myFrame.getjSlider3().getValue();
-        });
-
-        myFrame.getjSlider4().addChangeListener(e -> {
-            System.out.println("Change jSlider 4 " + myFrame.getjSlider4().getValue());
-                slider4 = myFrame.getjSlider4().getValue();
-        });
     }
 
     private static void showframe(Mat frame, VideoCapture video, StartClass startClass) {
@@ -191,10 +182,20 @@ public class MoveDetection {
             double fps = video.get(5);
             totalFrames = video.get(7);
             double time = (int)totalFrames/(int)fps;
+            myFrame.setjLabelScaleTopText(" " + time/4 + " sec");
+            myFrame.setjLabelScaleCenterText(" " + time/8 + " sec");
+            myFrame.setjLabelScaleDownText(" 00.0 sec");
 
             System.out.println("Fps = " + fps + " liczba klatek = " + totalFrames + " długość filmu = " + time/60);
 
         }
+
+        if(progress < (int) (k / totalFrames * 100)){
+            progress = (int) (k / totalFrames * 100);
+            myFrame.setProgressLabel(" Postęp przetwarzania : " + progress + " %");
+//            myFrame.setProgressLabel("postęp : " + progress + " %");
+        }
+
 
         if(frame.dataAddr() != 0 || k == 1) {
 
@@ -300,6 +301,51 @@ public class MoveDetection {
                 }
             }
         }else{
+//            if (k % 3 == 0) {
+//                ImageIcon baseImage = new ImageIcon(Mat2bufferedImage(baseFrame));
+//
+//                MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, y, baseImage);
+//                myRunPrint.setTotalFrames(totalFrames);
+//
+//
+//                BufferedImage paintImage = null;
+//                try {
+//                    paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
+//                } catch (Exception er) {
+//                    er.printStackTrace();
+//                    paintImage = null;
+//                }
+//                if (paintImage != null) {
+//                    ImageIcon image = new ImageIcon(paintImage);
+//
+//
+//                    myFrame.getVideoLabelFourthScreen().repaint();
+//                    myFrame.getVideoLabelFourthScreen().setIcon(image);
+//
+//                }
+//
+//                BufferedImage baseBuffImage = null;
+//                try {
+//                    baseBuffImage = ImageIO.read(new File("result/wykryty_ruchBase.jpg"));
+//                } catch (Exception er) {
+//                    er.printStackTrace();
+//                    baseBuffImage = null;
+//                }
+//                if (baseBuffImage != null) {
+//                    ImageIcon image = new ImageIcon(baseBuffImage);
+//
+//
+////                myFrame.getVideoLabelThirdScreen())
+//                    myFrame.getVideoLabelThirdScreen().setIcon(image);
+//
+//                }
+//
+//                y++;
+//
+//                myRunPrint.start();
+//
+//                putScreenInVideoLabel();
+//            }
             JOptionPane.showMessageDialog(null, "Przetwarzanie zakończone.","Informacja", JOptionPane.INFORMATION_MESSAGE);
             startClass.setStart(false);
         }

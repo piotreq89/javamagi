@@ -1,6 +1,5 @@
 package pw.mgr.current;
 
-import com.github.matthewbeckler.heatmap.Gradient;
 import com.github.matthewbeckler.heatmap.HeatMap;
 
 import javax.imageio.ImageIO;
@@ -11,8 +10,6 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
-import java.util.List;
 
 /**
  * Created by piotrek on 2017-01-28.
@@ -20,21 +17,11 @@ import java.util.List;
 public class MyFrame extends JFrame{
 
     public static final int IPADX = 30;
+    public static final int FONT_SIZE = 18;
 
     public MyFrame() {
 
         generateMyFrame();
-//        this.setTitle("Detektor ruchu");
-//        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-//
-//        this.setSize(1920, 1060);
-//
-//        this.setVisible(true);
-//        this.setLocationRelativeTo(null);
-//
-//        this.setContentPane(new App().getMainPanel());
-
-
     }
 
     private JLabel videoLabelFirstScreen = new JLabel();
@@ -49,10 +36,15 @@ public class MyFrame extends JFrame{
     private JButton reloadButton = new JButton("Przeładuj");
     private JButton drawMoveButton = new JButton("Narysuj ruch");
     private JButton backgroundProcessButton = new JButton("Przetwarzaj w tle");
-    private JSlider jSlider1 = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
-    private JSlider jSlider2 = new JSlider(JSlider.HORIZONTAL, 0, 30, 1);
-    private JSlider jSlider3 = new JSlider(JSlider.HORIZONTAL, 0, 100, 1);
-    private JSlider jSlider4 = new JSlider(JSlider.HORIZONTAL, 0, 1000, 1);
+    private JSlider jSlider1 = new JSlider(JSlider.CENTER, 0, 30, 1);
+    private JSlider jSlider2 = new JSlider(JSlider.CENTER, 0, 30, 1);
+
+    private JPanel scalaPanel = new JPanel();
+    private JLabel jLabelScaleTop;
+    private JLabel jLabelScaleCenter;
+    private JLabel jLabelScaleDown;
+    private JLabel progressLabel;
+    private Font font = new Font("Serif", Font.PLAIN, FONT_SIZE);
 
     private String selectedMovie;
 
@@ -87,7 +79,7 @@ public class MyFrame extends JFrame{
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 25, 0, 0);
+        gbc.insets = new Insets(15, 35, 0, 0);
         gbc.gridwidth= 1;
 
         String [] movies = new String[] {
@@ -102,6 +94,7 @@ public class MyFrame extends JFrame{
                 ,"Film numer 8"};
 
         JComboBox<String> movieList = new JComboBox<>(movies);
+        movieList.setFont(font);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -114,22 +107,27 @@ public class MyFrame extends JFrame{
 
         gbc.gridx = 0;
         gbc.gridy = 1;
+        startButton.setFont(font);
         buttonsPanel.add(startButton, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
+        stopButton.setFont(font);
         buttonsPanel.add(stopButton, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 3;
+        reloadButton.setFont(font);
         buttonsPanel.add(reloadButton, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 4;
+        backgroundProcessButton.setFont(font);
         buttonsPanel.add(backgroundProcessButton, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 5;
+        drawMoveButton.setFont(font);
         buttonsPanel.add(drawMoveButton, gbc);
 
         JPanel slidersPanel = getSliderPanel();
@@ -147,56 +145,19 @@ public class MyFrame extends JFrame{
 
         ImageIcon emptyImage = new ImageIcon(emptyBufferImage);
 
-
-        JPanel scalaPanel = new JPanel();
-        scalaPanel.setLayout(gBLayout);
-
-        BufferedImage scalaImage = null;
-        try {
-            scalaImage = ImageIO.read(new File("resources/skala3.jpg"));
-        } catch (IOException er) {
-            er.printStackTrace();
-        }
-
-        ImageIcon image = new ImageIcon(scalaImage);
-        scalaLabel.setIcon(image);
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.LINE_START;
-        scalaPanel.add(scalaLabel, gbc);
-
-//        JPanel scalaTextPanel = new JPanel();
-//        scalaTextPanel.setLayout(gBLayout);
-        GridBagConstraints gbc3 = new GridBagConstraints();
-        gbc3.anchor = GridBagConstraints.PAGE_START;
-        JLabel jTextField = new JLabel(" AAAA :");
-        gbc3.gridx = 1;
-        gbc3.gridy = 0;
-        scalaPanel.add(jTextField, gbc3);
-
-        GridBagConstraints gbc2 = new GridBagConstraints();
-        gbc2.anchor = GridBagConstraints.CENTER;
-        JLabel jTextField1 = new JLabel(" AAAB :");
-        gbc2.gridx = 1;
-        gbc2.gridy = 0;
-        scalaPanel.add(jTextField1, gbc2);
-
-        GridBagConstraints gbc4 = new GridBagConstraints();
-        gbc4.anchor = GridBagConstraints.PAGE_END;
-        JLabel jTextField3 = new JLabel(" CCCB :");
-        gbc4.gridx = 1;
-        gbc4.gridy = 0;
-        scalaPanel.add(jTextField3, gbc4);
-
-//
-//        gbc.gridx = 1;
-//        gbc.gridy = 0;
-//        scalaPanel.add(scalaTextPanel, gbc);
-
         gbc.gridx = 0;
         gbc.gridy = 7;
+//        progressLabel = new JLabel("postęp przetwarzania : 0 %");
+        progressLabel = new JLabel("Postęp przetwarzania : 0 %");
+        progressLabel.setFont(new Font("Serif", Font.PLAIN, 18));
+        buttonsPanel.add(progressLabel, gbc);
+
+        prepareScalaPanel();
+
+        gbc.gridx = 0;
+        gbc.gridy = 8;
         buttonsPanel.add(scalaPanel, gbc);
+
 
         JPanel videoPanel = new JPanel();
 //        BorderLayout borderLayout = new BorderLayout();
@@ -273,68 +234,100 @@ public class MyFrame extends JFrame{
         return this;
     }
 
+    private void prepareScalaPanel() {
+        GridBagLayout gBLayoutScale = new GridBagLayout();
+        GridBagConstraints gbcScale = new GridBagConstraints();
+        gbcScale.anchor = GridBagConstraints.LINE_START;
+//        gbcScale.fill = GridBagConstraints.VERTICAL;
+//        gbcScale.insets = new Insets(10, 25, 0, 0);
+//        gbcScale.gridwidth= 1;
+        scalaPanel.setLayout(gBLayoutScale);
+
+        BufferedImage scalaImage = null;
+        try {
+            scalaImage = ImageIO.read(new File("resources/skala3.jpg"));
+        } catch (IOException er) {
+            er.printStackTrace();
+        }
+        ImageIcon image = new ImageIcon(scalaImage);
+        scalaLabel.setIcon(image);
+        gbcScale.gridx = 0;
+        gbcScale.gridy = 0;
+//        gbcScale.anchor = GridBagConstraints.FIRST_LINE_START;
+        scalaPanel.add(scalaLabel, gbcScale);
+
+        GridBagConstraints gbcTop = new GridBagConstraints();
+        gbcTop.anchor = GridBagConstraints.PAGE_START;
+        jLabelScaleTop = new JLabel(" 00.0 sec ");
+        jLabelScaleTop.setFont(font);
+        gbcTop.gridx = 1;
+        gbcTop.gridy = 0;
+        scalaPanel.add(jLabelScaleTop, gbcTop);
+
+        GridBagConstraints gbcCenter = new GridBagConstraints();
+        gbcCenter.anchor = GridBagConstraints.CENTER;
+        jLabelScaleCenter = new JLabel(" 00.0 sec ");
+        jLabelScaleCenter.setFont(font);
+        gbcCenter.gridx = 1;
+        gbcCenter.gridy = 0;
+        scalaPanel.add(jLabelScaleCenter, gbcCenter);
+
+        GridBagConstraints gbcDown = new GridBagConstraints();
+        gbcDown.anchor = GridBagConstraints.PAGE_END;
+        jLabelScaleDown = new JLabel(" 00.0 sec ");
+        jLabelScaleDown.setFont(font);
+        gbcDown.gridx = 1;
+        gbcDown.gridy = 0;
+        scalaPanel.add(jLabelScaleDown, gbcDown);
+
+    }
+
     private JPanel getSliderPanel() {
         GridBagLayout gBLayout = new GridBagLayout();
 
         JPanel slidersPanel = new JPanel();
         slidersPanel.setLayout(gBLayout);
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 25, 0, 0);
+        GridBagConstraints gbcSlider = new GridBagConstraints();
+        gbcSlider.fill = GridBagConstraints.VERTICAL;
+//        gbcSlider.insets = new Insets(10, 25, 0, 0);
 
         JLabel jTextField = new JLabel("Dylacja :");
-        gbc.ipadx = IPADX;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        slidersPanel.add(jTextField, gbc);
+//        gbcSlider.ipadx = IPADX;
+        gbcSlider.gridx = 0;
+        gbcSlider.gridy = 0;
+        jTextField.setFont(font);
+        slidersPanel.add(jTextField, gbcSlider);
 
         JLabel jTextField2 = new JLabel("Erozja :");
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        slidersPanel.add(jTextField2, gbc);
-
-//        JTextField jTextField3 = new JTextField("slider3");
-//        gbc.gridx = 0;
-//        gbc.gridy = 4;
-//        slidersPanel.add(jTextField3, gbc);
-//
-//        JTextField jTextField4 = new JTextField("slider4");
-//        gbc.gridx = 0;
-//        gbc.gridy = 6;
-//        slidersPanel.add(jTextField4, gbc);
+        gbcSlider.gridx = 0;
+        gbcSlider.gridy = 2;
+        jTextField2.setFont(font);
+        slidersPanel.add(jTextField2, gbcSlider);
 
         setSliderParams(jSlider1);
-        gbc.ipadx = IPADX;
-        gbc.gridx = 0;
-        gbc.gridy = 1;
+//        gbcSlider.ipadx = IPADX;
+        gbcSlider.gridx = 0;
+        gbcSlider.gridy = 1;
         jSlider1.setValue(25);
-        slidersPanel.add(jSlider1, gbc);
+        slidersPanel.add(jSlider1, gbcSlider);
 
 
         setSliderParams(jSlider2);
-        gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbcSlider.gridx = 0;
+        gbcSlider.gridy = 3;
         jSlider2.setValue(4);
-        slidersPanel.add(jSlider2, gbc);
-//
-//        setSliderParams(jSlider3);
-//        gbc.gridx = 0;
-//        gbc.gridy = 5;
-//        slidersPanel.add(jSlider3, gbc);
-//
-//        setSliderParams(jSlider4);
-//        gbc.gridx = 0;
-//        gbc.gridy = 7;
-//        slidersPanel.add(jSlider4, gbc);
+        slidersPanel.add(jSlider2, gbcSlider);
+
         return slidersPanel;
     }
 
     private void setSliderParams(JSlider jSlider) {
-        jSlider.setMinorTickSpacing(5);
+        jSlider.setMinorTickSpacing(10);
         jSlider.setPaintTicks(true);
-        jSlider.setLabelTable(jSlider.createStandardLabels(5));
+        jSlider.setLabelTable(jSlider.createStandardLabels(10));
         jSlider.setPaintLabels(true);
+        jSlider.setFont(font);
     }
 
     public JLabel getVideoLabelFirstScreen() {
@@ -402,14 +395,6 @@ public class MyFrame extends JFrame{
         return jSlider2;
     }
 
-    public JSlider getjSlider3() {
-        return jSlider3;
-    }
-
-    public JSlider getjSlider4() {
-        return jSlider4;
-    }
-
     public String getSelectedMovie() {
         return selectedMovie;
     }
@@ -432,5 +417,36 @@ public class MyFrame extends JFrame{
 
     public void setPanel(HeatMap panel) {
         this.panel = panel;
+    }
+
+    public JPanel getScalaPanel() {
+        return scalaPanel;
+    }
+
+    public void setScalaPanel(JPanel scalaPanel) {
+        this.scalaPanel = scalaPanel;
+    }
+
+    public JLabel getjLabelScaleTop() {
+        return jLabelScaleTop;
+    }
+
+    public void setjLabelScaleTopText(String jLabelScaleTopText) {
+        this.jLabelScaleTop.setText(jLabelScaleTopText);
+    }
+
+    public void setjLabelScaleCenterText(String jLabelScaleCenterText) {
+        this.jLabelScaleCenter.setText(jLabelScaleCenterText);
+    }
+
+    public void setjLabelScaleDownText(String jLabelScaleDownText) {
+        this.jLabelScaleDown.setText(jLabelScaleDownText);
+    }
+    public JLabel getProgressLabel() {
+        return progressLabel;
+    }
+
+    public void setProgressLabel(String progress) {
+        this.progressLabel.setText(progress);
     }
 }

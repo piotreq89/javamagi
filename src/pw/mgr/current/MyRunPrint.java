@@ -77,71 +77,74 @@ public class MyRunPrint extends Thread {
 
     @Override
     public void run() {
-        System.out.println("print");
-        BufferedImage imageBase = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
-        BufferedImage image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
+        synchronized (this){
 
-        Graphics2D cg = image.createGraphics();
-        Graphics2D cgBase = imageBase.createGraphics();
+            System.out.println("print");
+            BufferedImage imageBase = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
+            BufferedImage image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
 
-        int width = 30;
-        int height = 50;
+            Graphics2D cg = image.createGraphics();
+            Graphics2D cgBase = imageBase.createGraphics();
 
-        List<PointToDraw> pointToDraws = detectedObjects.stream()
-                .map(DetectedObject::getRect)
-                .distinct()
-                .map(d -> new PointToDraw(d, (int) detectedObjects.stream()
-                        .filter(r -> {
-                            int area = 20;
-                            return (r.getRect().x <= d.x + area && r.getRect().x >= d.x - area
-                                    && r.getRect().y <= d.y + area && r.getRect().y >= d.y - area);
-                        }).count()))
-                .sorted((o1, o2) -> o1.getCount().compareTo(o2.getCount()))
-                .collect(Collectors.toList());
+            int width = 30;
+            int height = 50;
 
-        cg.setColor(new Color(0, 0, 255));
-        cg.fillRect(0,0, 800, 600);
+            List<PointToDraw> pointToDraws = detectedObjects.stream()
+                    .map(DetectedObject::getRect)
+                    .distinct()
+                    .map(d -> new PointToDraw(d, (int) detectedObjects.stream()
+                            .filter(r -> {
+                                int area = 20;
+                                return (r.getRect().x <= d.x + area && r.getRect().x >= d.x - area
+                                        && r.getRect().y <= d.y + area && r.getRect().y >= d.y - area);
+                            }).count()))
+                    .sorted((o1, o2) -> o1.getCount().compareTo(o2.getCount()))
+                    .collect(Collectors.toList());
 
-        cgBase.drawImage(baseImage.getImage(), 10, 10, null );
+            cg.setColor(new Color(0, 0, 255));
+            cg.fillRect(0,0, 800, 600);
+
+            cgBase.drawImage(baseImage.getImage(), 10, 10, null );
 
 
-        pointToDraws.stream().forEach(objects -> {
+            pointToDraws.stream().forEach(objects -> {
 //            objects.setCount(objects.getCount() + 25);
-            objects.setCount((int)((objects.getCount() + 25) / (totalFrames/(12 * 4)) * 100));
-            int alfa = 15;
-            if(objects.getCount() < 255){
-                cg.setColor(new Color(0, objects.getCount(), 255 - objects.getCount()));
-                cgBase.setColor(new Color(0, objects.getCount(), 255 - objects.getCount(), alfa));
-            }else if (objects.getCount() >= 255 && objects.getCount() < 510){
-                cg.setColor(new Color(objects.getCount() - 255 , 255 - (objects.getCount() - 255), 0));
-                cgBase.setColor(new Color(objects.getCount() - 255 , 255 - (objects.getCount() - 255), 0 , alfa -5));
-            }else{
-                cg.setColor(new Color(255, 0, 0));
-                cgBase.setColor(new Color(255, 0, 0 , alfa + 20));
-            }
-            System.out.println("object " + objects);
+                objects.setCount((int)((objects.getCount() + 25) / (totalFrames/(12 * 4)) * 100));
+                int alfa = 15;
+                if(objects.getCount() < 255){
+                    cg.setColor(new Color(0, objects.getCount(), 255 - objects.getCount()));
+                    cgBase.setColor(new Color(0, objects.getCount(), 255 - objects.getCount(), alfa));
+                }else if (objects.getCount() >= 255 && objects.getCount() < 510){
+                    cg.setColor(new Color(objects.getCount() - 255 , 255 - (objects.getCount() - 255), 0));
+                    cgBase.setColor(new Color(objects.getCount() - 255 , 255 - (objects.getCount() - 255), 0 , alfa -5));
+                }else{
+                    cg.setColor(new Color(255, 0, 0));
+                    cgBase.setColor(new Color(255, 0, 0 , alfa + 20));
+                }
+                System.out.println("object " + objects);
 
-            cg.setStroke(new BasicStroke(1));
-            cg.fillOval(objects.getRect().x, objects.getRect().y , width, height);
-            cgBase.setStroke(new BasicStroke(1));
-            cgBase.fillOval(objects.getRect().x, objects.getRect().y , width, height);
-        });
+                cg.setStroke(new BasicStroke(1));
+                cg.fillOval(objects.getRect().x, objects.getRect().y , width, height);
+                cgBase.setStroke(new BasicStroke(1));
+                cgBase.fillOval(objects.getRect().x, objects.getRect().y , width, height);
+            });
 
 
-        if(i % 10 == 0){
-            File output = new File("result/wykryty_ruch6.jpg");
-            File outputBase = new File("result/wykryty_ruchBase.jpg");
+            if(i % 10 == 0){
+                File output = new File("result/wykryty_ruch6.jpg");
+                File outputBase = new File("result/wykryty_ruchBase.jpg");
 
-            try {
-                ImageIO.write( image, "jpg", output);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+                try {
+                    ImageIO.write( image, "jpg", output);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
 
-            try {
-                ImageIO.write( imageBase, "jpg", outputBase);
-            } catch (IOException e1) {
-                e1.printStackTrace();
+                try {
+                    ImageIO.write( imageBase, "jpg", outputBase);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
     }
