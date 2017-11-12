@@ -41,7 +41,7 @@ public class MoveDetection {
     private static Mat diffFrame = null;
 
     private static Mat frame;
-
+private static Mat finalFrame;
     private static int slider = 25;
     private static int slider2 = 4;
     private static int slider3 = 20;
@@ -54,6 +54,7 @@ public class MoveDetection {
     private static  Mat baseFrame = null;
     private static double totalFrames;
     private static int progress;
+    static long summary = 0;
 
 
     private static String oldMovieLocation;
@@ -82,6 +83,10 @@ public class MoveDetection {
                     startClass.setStart(true);
                     System.out.println("show");
                     while (startClass.isStart()){
+                        boolean set = video.set(5, 10.0);
+                        boolean set1 = video.set(Videoio.CAP_PROP_FRAME_WIDTH, 800);
+                        boolean set2 = video.set(Videoio.CAP_PROP_FRAME_HEIGHT, 600);
+
                         showframe(frame, video, startClass);
                     }
                     System.out.println("after while");
@@ -172,11 +177,13 @@ public class MoveDetection {
 
     private static void showframe(Mat frame, VideoCapture video, StartClass startClass) {
 
+        Date startAll = new Date();
         /**pierwszy ekran*/
 
 //        frame = new Mat();
         k++ ;
         Mat secondFrame;
+        video.isOpened();
 
         if(k == 1) {
             double fps = video.get(5);
@@ -197,9 +204,11 @@ public class MoveDetection {
         }
 
 
-        if(frame.dataAddr() != 0 || k == 1) {
+        if((frame.dataAddr() != 0 || k == 1) && (k % 2 == 0 || k == 1)){ //k == 1) {
+            Date start = new Date();
 
             video.read(frame);
+            boolean set = video.set(Videoio.CAP_PROP_FPS, 60);
 
             if (k % 4 == 0) {
                 Imgproc.resize(frame, frame, new Size(800, 600));
@@ -237,7 +246,7 @@ public class MoveDetection {
 
                 /**czwarty ekran*/
 
-                Mat finalFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
+                finalFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
 
                 //new
                 Imgproc.threshold(diffFrame, finalFrame, slider3, slider4, Imgproc.THRESH_BINARY);
@@ -250,8 +259,14 @@ public class MoveDetection {
                 Imgproc.morphologyEx(finalFrame, finalFrame, Imgproc.MORPH_OPEN, dilateOpen);
 
                 fourthScreen = finalFrame.clone();
+//                System.out.println("time processing przetwarzanie tee" + (new Date().getTime() - start.getTime()) + " ramka " + k);
 //        if(k % 4 == 0) {
+                Date startDetectionContour = new Date();
                 detection_contours(fourthScreen);
+                long l = new Date().getTime() - startAll.getTime();
+                System.out.println("time processing detekcja konturów " + l + " ramka " + k);
+                 summary += l;
+                System.out.println("w sumie czas "  + summary);
 //        }
 
                 if (k % 3 == 0) {
@@ -300,7 +315,7 @@ public class MoveDetection {
                 putScreenInVideoLabel();
                 }
             }
-        }else{
+        }else if(k == totalFrames){
 //            if (k % 3 == 0) {
 //                ImageIcon baseImage = new ImageIcon(Mat2bufferedImage(baseFrame));
 //
@@ -358,7 +373,7 @@ public class MoveDetection {
 //        Imgproc.resize(secondScreen, secondScreen,new Size(800, 768));
 //        ImageIcon secondImage = new ImageIcon(Mat2bufferedImage(secondScreen));
 //        ImageIcon thirdImage = new ImageIcon(Mat2bufferedImage(thirdScreen));
-        ImageIcon fourthImage = new ImageIcon(Mat2bufferedImage(fourthScreen));
+        ImageIcon fourthImage = new ImageIcon(Mat2bufferedImage(finalFrame));
 
         myFrame.getVideoLabelFirstScreen().setIcon(firstImage);
         myFrame.getResultLabel().setIcon(fourthImage);
@@ -436,7 +451,8 @@ public class MoveDetection {
 //                double[] ints = {20, 40};
 //                r.set(ints);
 //                r.tl();
-                 r = new Rect((int)r.tl().x, (int)r.tl().y, 30 , 60);
+//                System.out.println("r " + r + " area " + r.area());
+                    r = new Rect((int)r.tl().x, (int)r.tl().y, 30 , 60);
 
 
                 myPoints.add(r);
@@ -564,10 +580,10 @@ public class MoveDetection {
 
 //                    Imgproc.rectangle(firstScreen, d.getRect().tl(), d.getRect().br() , new Scalar(0, 255, 0, 255), 50);
                     Imgproc.putText(firstScreen, "tl " + d.getRect().tl() ,
-                            new Point( d.getRect().tl().x - 25 , d.getRect().tl().y - 5), 1, 1, new Scalar(255, 255, 0), 1);
+                            new Point( d.getRect().tl().x - 20 , d.getRect().tl().y - 5), 1, 1, new Scalar(255, 255, 0), 1);
 
                     Imgproc.putText(firstScreen, "br " + d.getRect().br() ,
-                            new Point(d.getRect().br().x - 25 ,d.getRect().br().y + 10) , 1, 1, new Scalar(255, 255, 0), 1);
+                            new Point(d.getRect().br().x - 20 ,d.getRect().br().y + 15) , 1, 1, new Scalar(255, 255, 0), 1);
 
 //                    Imgproc.putText(firstScreen, "br",
 //                            d.getRect().br(), 1, 1, new Scalar(255, 255, 0), 2);
@@ -594,10 +610,10 @@ public class MoveDetection {
         Point pt2 = new Point(750, 450);
         Imgproc.rectangle(firstScreen, pt1, pt2, new Scalar(0, 255, 255), 1);
 
-        Imgproc.putText(firstScreen, "pt1 x " + pt1.x + " pt1 y " + pt1.y , pt1 , 1, 1, new Scalar(255, 255, 255), 1);
-        Imgproc.putText(firstScreen, "pt2 x " + pt2.x + " pt2 y " + pt2.y , new Point(pt2.x - 200, pt2.y) , 1, 1, new Scalar(255, 255, 255), 1);
-        Imgproc.putText(firstScreen, "pt3 x " + pt1.x + " pt3 y " + (pt2.y - pt1.y) , new Point(pt1.x, pt2.y) , 1, 1, new Scalar(255, 255, 255), 1);
-        Imgproc.putText(firstScreen, "pt4 x " + (pt2.x - pt1.x) + " pt4 y " + pt1.y , new Point(pt2.x - 200, pt1.y) , 1, 1, new Scalar(255, 255, 255), 1);
+        Imgproc.putText(firstScreen, "pt1 x " + pt1.x + " pt1 y " + pt1.y , new Point(75, 35) , 1, 1, new Scalar(255, 255, 255), 1);
+        Imgproc.putText(firstScreen, "pt2 x " + pt2.x + " pt2 y " + pt2.y , new Point(pt2.x - 200, pt2.y + 15) , 1, 1, new Scalar(255, 255, 255), 1);
+        Imgproc.putText(firstScreen, "pt3 x " + pt1.x + " pt3 y " + (pt2.y - pt1.y) , new Point(pt1.x - 5, pt2.y + 15) , 1, 1, new Scalar(255, 255, 255), 1);
+        Imgproc.putText(firstScreen, "pt4 x " + (pt2.x - pt1.x) + " pt4 y " + pt1.y , new Point(pt2.x - 190, pt1.y - 5) , 1, 1, new Scalar(255, 255, 255), 1);
 
 
     }

@@ -121,7 +121,7 @@ public class MyRunPrint extends Thread {
                     cg.setColor(new Color(255, 0, 0));
                     cgBase.setColor(new Color(255, 0, 0 , alfa + 20));
                 }
-                System.out.println("object " + objects);
+//                System.out.println("object " + objects);
 
                 cg.setStroke(new BasicStroke(1));
                 cg.fillOval(objects.getRect().x, objects.getRect().y , width, height);

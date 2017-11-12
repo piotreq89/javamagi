@@ -83,7 +83,7 @@ public class MyFrame extends JFrame{
         gbc.gridwidth= 1;
 
         String [] movies = new String[] {
-                ""
+                "Wybierz film"
                 ,"Film numer 1"
                 ,"Film numer 2"
                 ,"Film numer 3"
@@ -128,7 +128,7 @@ public class MyFrame extends JFrame{
         gbc.gridx = 0;
         gbc.gridy = 5;
         drawMoveButton.setFont(font);
-        buttonsPanel.add(drawMoveButton, gbc);
+//        buttonsPanel.add(drawMoveButton, gbc);
 
         JPanel slidersPanel = getSliderPanel();
 
@@ -292,14 +292,14 @@ public class MyFrame extends JFrame{
         gbcSlider.fill = GridBagConstraints.VERTICAL;
 //        gbcSlider.insets = new Insets(10, 25, 0, 0);
 
-        JLabel jTextField = new JLabel("Dylacja :");
+        JLabel jTextField = new JLabel("Zamknięcie :");
 //        gbcSlider.ipadx = IPADX;
         gbcSlider.gridx = 0;
         gbcSlider.gridy = 0;
         jTextField.setFont(font);
         slidersPanel.add(jTextField, gbcSlider);
 
-        JLabel jTextField2 = new JLabel("Erozja :");
+        JLabel jTextField2 = new JLabel("Otwarcie :");
         gbcSlider.gridx = 0;
         gbcSlider.gridy = 2;
         jTextField2.setFont(font);
