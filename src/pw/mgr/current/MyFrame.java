@@ -1,6 +1,6 @@
 package pw.mgr.current;
 
-import com.github.matthewbeckler.heatmap.HeatMap;
+//import com.github.matthewbeckler.heatmap.HeatMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -52,7 +52,7 @@ public class MyFrame extends JFrame{
     private BufferedImage scalaImage = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
 
 
-    HeatMap panel;
+//    HeatMap panel;
     double[][] data = new double[800][600];
 
     public BufferedImage getPaintImage() {
@@ -411,13 +411,13 @@ public class MyFrame extends JFrame{
         this.data = data;
     }
 
-    public HeatMap getPanel() {
-        return panel;
-    }
-
-    public void setPanel(HeatMap panel) {
-        this.panel = panel;
-    }
+//    public HeatMap getPanel() {
+//        return panel;
+//    }
+//
+//    public void setPanel(HeatMap panel) {
+//        this.panel = panel;
+//    }
 
     public JPanel getScalaPanel() {
         return scalaPanel;

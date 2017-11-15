@@ -1,7 +1,7 @@
 package pw.mgr.current;
 
-import com.github.matthewbeckler.heatmap.Gradient;
-import com.github.matthewbeckler.heatmap.HeatMap;
+//import com.github.matthewbeckler.heatmap.Gradient;
+//import com.github.matthewbeckler.heatmap.HeatMap;
 import org.opencv.core.*;
 
 import javax.imageio.ImageIO;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class MyRunPrint extends Thread {
 
-    private static HeatMap panel;
+//    private static HeatMap panel;
     private List<Rect> myPoints = new ArrayList<>();
     private List<DetectedObject> detectedObjects = new ArrayList<>();
     double[][] data = new double[740][540];
