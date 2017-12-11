@@ -269,95 +269,95 @@ private static Mat finalFrame;
 //                System.out.println("w sumie czas "  + summary);
 //        }
 
-//                if (k % 3 == 0) {
-//                    ImageIcon baseImage = new ImageIcon(Mat2bufferedImage(baseFrame));
-//
-//                    MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, y, baseImage);
-//                    myRunPrint.setTotalFrames(totalFrames);
-//
-//
-//                    BufferedImage paintImage = null;
-//                    try {
-//                        paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
-//                    } catch (Exception er) {
-//                        er.printStackTrace();
-//                        paintImage = null;
-//                    }
-//                    if (paintImage != null) {
-//                        ImageIcon image = new ImageIcon(paintImage);
-//
-//
-//                        myFrame.getVideoLabelFourthScreen().repaint();
-//                        myFrame.getVideoLabelFourthScreen().setIcon(image);
-//
-//                    }
-//
-//                    BufferedImage baseBuffImage = null;
-//                    try {
-//                        baseBuffImage = ImageIO.read(new File("result/wykryty_ruchBase.jpg"));
-//                    } catch (Exception er) {
-//                        er.printStackTrace();
-//                        baseBuffImage = null;
-//                    }
-//                    if (baseBuffImage != null) {
-//                        ImageIcon image = new ImageIcon(baseBuffImage);
-//
-//
-////                myFrame.getVideoLabelThirdScreen())
-//                        myFrame.getVideoLabelThirdScreen().setIcon(image);
-//
-//                    }
-//
-//                    y++;
-//
-//                    myRunPrint.start();
-//
-//                putScreenInVideoLabel();
-//                }
-            }
-        }else if(k > totalFrames){
-//            if (k % 3 == 0) {
-                ImageIcon baseImage = new ImageIcon(Mat2bufferedImage(baseFrame));
+                if (k % 3 == 0) {
+                    ImageIcon baseImage = new ImageIcon(Mat2bufferedImage(baseFrame));
 
-                MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, y, baseImage);
-                myRunPrint.setTotalFrames(totalFrames);
+                    MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, y, baseImage);
+                    myRunPrint.setTotalFrames(totalFrames);
 
 
-                BufferedImage paintImage = null;
-                try {
-                    paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
-                } catch (Exception er) {
-                    er.printStackTrace();
-                    paintImage = null;
-                }
-                if (paintImage != null) {
-                    ImageIcon image = new ImageIcon(paintImage);
+                    BufferedImage paintImage = null;
+                    try {
+                        paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
+                    } catch (Exception er) {
+                        er.printStackTrace();
+                        paintImage = null;
+                    }
+                    if (paintImage != null) {
+                        ImageIcon image = new ImageIcon(paintImage);
 
 
-                    myFrame.getVideoLabelFourthScreen().repaint();
-                    myFrame.getVideoLabelFourthScreen().setIcon(image);
+                        myFrame.getVideoLabelFourthScreen().repaint();
+                        myFrame.getVideoLabelFourthScreen().setIcon(image);
 
-                }
+                    }
 
-                BufferedImage baseBuffImage = null;
-                try {
-                    baseBuffImage = ImageIO.read(new File("result/wykryty_ruchBase.jpg"));
-                } catch (Exception er) {
-                    er.printStackTrace();
-                    baseBuffImage = null;
-                }
-                if (baseBuffImage != null) {
-                    ImageIcon image = new ImageIcon(baseBuffImage);
+                    BufferedImage baseBuffImage = null;
+                    try {
+                        baseBuffImage = ImageIO.read(new File("result/wykryty_ruchBase.jpg"));
+                    } catch (Exception er) {
+                        er.printStackTrace();
+                        baseBuffImage = null;
+                    }
+                    if (baseBuffImage != null) {
+                        ImageIcon image = new ImageIcon(baseBuffImage);
 
 
 //                myFrame.getVideoLabelThirdScreen())
-                    myFrame.getVideoLabelThirdScreen().setIcon(image);
+                        myFrame.getVideoLabelThirdScreen().setIcon(image);
 
+                    }
+
+                    y++;
+
+                    myRunPrint.start();
+
+                putScreenInVideoLabel();
                 }
-
-                y++;
-
-                myRunPrint.start();
+            }
+        }else if(k > totalFrames){
+//            if (k % 3 == 0) {
+//                ImageIcon baseImage = new ImageIcon(Mat2bufferedImage(baseFrame));
+//
+//                MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, y, baseImage);
+//                myRunPrint.setTotalFrames(totalFrames);
+//
+//
+//                BufferedImage paintImage = null;
+//                try {
+//                    paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
+//                } catch (Exception er) {
+//                    er.printStackTrace();
+//                    paintImage = null;
+//                }
+//                if (paintImage != null) {
+//                    ImageIcon image = new ImageIcon(paintImage);
+//
+//
+//                    myFrame.getVideoLabelFourthScreen().repaint();
+//                    myFrame.getVideoLabelFourthScreen().setIcon(image);
+//
+//                }
+//
+//                BufferedImage baseBuffImage = null;
+//                try {
+//                    baseBuffImage = ImageIO.read(new File("result/wykryty_ruchBase.jpg"));
+//                } catch (Exception er) {
+//                    er.printStackTrace();
+//                    baseBuffImage = null;
+//                }
+//                if (baseBuffImage != null) {
+//                    ImageIcon image = new ImageIcon(baseBuffImage);
+//
+//
+////                myFrame.getVideoLabelThirdScreen())
+//                    myFrame.getVideoLabelThirdScreen().setIcon(image);
+//
+//                }
+//
+//                y++;
+//
+//                myRunPrint.start();
 //
 //                putScreenInVideoLabel();
 //            }
