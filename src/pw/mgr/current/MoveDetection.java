@@ -369,38 +369,11 @@ private static Mat finalFrame;
     private static void putScreenInVideoLabel() {
 
         ImageIcon firstImage = new ImageIcon(Mat2bufferedImage(firstScreen));
-//        System.out.println(" secondScreen.size() " + secondScreen.size());
-//        Imgproc.resize(secondScreen, secondScreen,new Size(800, 768));
-//        ImageIcon secondImage = new ImageIcon(Mat2bufferedImage(secondScreen));
-//        ImageIcon thirdImage = new ImageIcon(Mat2bufferedImage(thirdScreen));
         ImageIcon fourthImage = new ImageIcon(Mat2bufferedImage(finalFrame));
 
         myFrame.getVideoLabelFirstScreen().setIcon(firstImage);
         myFrame.getResultLabel().setIcon(fourthImage);
-//        myFrame.getVideoLabelThirdScreen().setIcon(thirdImage);
-//        myFrame.getVideoLabelFourthScreen().setIcon(fourthImage);
-
-
-
     }
-
-//    private static void printRectangle(ArrayList<Rect> array, Mat img) {
-//        if (array.size() > 0) {
-//            Iterator<Rect> it2 = array.iterator();
-////            while (it2.hasNext()) {
-////                Rect obj = it2.next();
-//////                obj.height += 20;
-//////                obj.width +=10;
-//////                Imgproc.rectangle(firstScreen, obj.br(), new Point(obj.br().x - 30, obj.br().y - 50), new Scalar(0, 255, 0), 1);
-//////                System.out.println(" .br() " + obj.br() + " .tl() " + obj.tl());
-//////                Imgproc.putText(firstScreen, "obiekt " , new Point(700, 10), 2, 1, new Scalar(0, 255, 0), 1);
-////                if(array.indexOf(obj) -1 > 1){
-//////                    Imgproc.line(firstScreen,obj.br(), array.get(array.indexOf(obj) -1).br(),  new Scalar(0, 0, 255), 2);
-////                }
-////            }
-//        }
-//
-//    }
 
     public static BufferedImage Mat2bufferedImage(Mat frame) {
 
@@ -442,60 +415,40 @@ private static Mat finalFrame;
             if (contourarea > maxArea && contourarea < 3500) {
                 maxAreaIdx = idx;
                 r = Imgproc.boundingRect(contours.get(maxAreaIdx));
-//                System.out.println(maxAreaIdx + " " + r + " r.tl() " +r.tl() + " r.br() " + r.br());
-//                if(r.br().x)
-
-//                r.width= 40 ;
-//                r.height= 60 ;
-
-//                double[] ints = {20, 40};
-//                r.set(ints);
-//                r.tl();
-//                System.out.println("r " + r + " area " + r.area());
-                    r = new Rect((int)r.tl().x, (int)r.tl().y, 30 , 60);
+                r = new Rect((int)r.tl().x, (int)r.tl().y, 30 , 60);
 
 
                 myPoints.add(r);
                 rect_array.add(r);
 
-//                if (r.br().y > 20) {
-                    if((r.br().y > 20 && r.br().y < 490)
-                            && (r.br().x > 90 && r.br().x < 760)
-                            && (r.tl().y > 20 && r.tl().y < 480)
-                            && (r.tl().x > 30 && r.tl().x < 740)&& r.area() < 3000){
+                if((r.br().y > 20 && r.br().y < 490) && (r.br().x > 90 && r.br().x < 760) && (r.tl().y > 20 && r.tl().y < 480) && (r.tl().x > 30 && r.tl().x < 740)&& r.area() < 3000){
+                    DetectedObject detectedObject = new DetectedObject(i, maxAreaIdx, r, seq);
 
-//                            && r.br().x > 80 && r.tl().y <= 790 && r.tl().y >= 10 && r.area() < 3000){
-//                        if(r.br().y < 480 && r.br().x > 80 && r.tl().y <= 790 && r.tl().y >= 10 && r.area() < 3000){
+                    List<DetectedObject> collect = detectedObjectList.stream()
+                            .filter(doa -> doa.getIterationId().equals(i - 1))
+                            .collect(Collectors.toList());
 
-                        DetectedObject detectedObject = new DetectedObject(i, maxAreaIdx, r, seq);
-
-                        List<DetectedObject> collect = detectedObjectList.stream()
-                                .filter(doa -> doa.getIterationId().equals(i - 1))
-                                .collect(Collectors.toList());
-
-                        int numer = 35;
-                        Optional<DetectedObject> first = collect.stream()
-                                .filter(doa ->
-                                        (doa.getRect().tl().x <= (detectedObject.getRect().tl().x + numer)
-                                        && doa.getRect().tl().x >= (detectedObject.getRect().tl().x - numer)
-                                        && doa.getRect().tl().y <= (detectedObject.getRect().tl().y + numer)
-                                        && doa.getRect().tl().y >= (detectedObject.getRect().tl().y - numer)
-                                        &&(doa.getRect().br().x <= (detectedObject.getRect().br().x + numer)
-                                        && doa.getRect().br().x >= (detectedObject.getRect().br().x - numer)
-                                        && doa.getRect().br().y <= (detectedObject.getRect().br().y + numer)
-                                        && doa.getRect().br().y >= (detectedObject.getRect().br().y - numer))
-                                )
-                                 &&          (detectedObject.getRect().tl().x + detectedObject.getRect().width <= (doa.getRect().tl().x + doa.getRect().width + numer)
-                                                && detectedObject.getRect().tl().x + detectedObject.getRect().width >= (doa.getRect().tl().x + doa.getRect().width  - numer)
-                                                && detectedObject.getRect().tl().y <= (doa.getRect().tl().y + numer)
-                                                && detectedObject.getRect().tl().y >= (doa.getRect().tl().y - numer)
-                                                &&(detectedObject.getRect().br().x - detectedObject.getRect().width <= (doa.getRect().br().x - doa.getRect().width + numer)
-                                                && detectedObject.getRect().br().x - detectedObject.getRect().width >= (doa.getRect().br().x - doa.getRect().width - numer)
-                                                && detectedObject.getRect().br().y <= (doa.getRect().br().y + numer)
-                                                && detectedObject.getRect().br().y >= (doa.getRect().br().y - numer)))
-
-                                )
-                                .findFirst();
+                    int numer = 35;
+                    Optional<DetectedObject> first = collect.stream()
+                            .filter(doa ->
+                                    (doa.getRect().tl().x <= (detectedObject.getRect().tl().x + numer)
+                                    && doa.getRect().tl().x >= (detectedObject.getRect().tl().x - numer)
+                                    && doa.getRect().tl().y <= (detectedObject.getRect().tl().y + numer)
+                                    && doa.getRect().tl().y >= (detectedObject.getRect().tl().y - numer)
+                                    &&(doa.getRect().br().x <= (detectedObject.getRect().br().x + numer)
+                                    && doa.getRect().br().x >= (detectedObject.getRect().br().x - numer)
+                                    && doa.getRect().br().y <= (detectedObject.getRect().br().y + numer)
+                                    && doa.getRect().br().y >= (detectedObject.getRect().br().y - numer))
+                                    )
+                                            &&(detectedObject.getRect().tl().x + detectedObject.getRect().width <= (doa.getRect().tl().x + doa.getRect().width + numer)
+                                            && detectedObject.getRect().tl().x + detectedObject.getRect().width >= (doa.getRect().tl().x + doa.getRect().width  - numer)
+                                            && detectedObject.getRect().tl().y <= (doa.getRect().tl().y + numer)
+                                            && detectedObject.getRect().tl().y >= (doa.getRect().tl().y - numer)
+                                            &&(detectedObject.getRect().br().x - detectedObject.getRect().width <= (doa.getRect().br().x - doa.getRect().width + numer)
+                                            && detectedObject.getRect().br().x - detectedObject.getRect().width >= (doa.getRect().br().x - doa.getRect().width - numer)
+                                            && detectedObject.getRect().br().y <= (doa.getRect().br().y + numer)
+                                            && detectedObject.getRect().br().y >= (doa.getRect().br().y - numer)))
+                                ).findFirst();
 
                         if (first.isPresent()) {
                             detectedObject.setGroup(first.get().getGroup());
@@ -506,13 +459,8 @@ private static Mat finalFrame;
                             group++;
 
                         }
-
-//                        System.out.println(maxAreaIdx + " rect " + detectedObject.getRect() + " r.tl() " + detectedObject.getRect().tl() + " r.br() "
-//                                + detectedObject.getRect().br() + " seq " + detectedObject.getSeq() + " group " + detectedObject.getGroup());
                         seq++;
-                    }
-
-//                }
+                }
             }
         }
 
@@ -523,7 +471,6 @@ private static Mat finalFrame;
                         && (co.getRect().br().x > 110 && co.getRect().br().x < 730)
                         && (co.getRect().tl().y > 50 && co.getRect().tl().y < 460)
                         && (co.getRect().tl().x > 50 && co.getRect().tl().x < 680))
-//                .filter(co -> co.getRect().br().y < 440 && co.getRect().br().x > 105 && co.getRect().tl().y <= 440 && co.getRect().tl().y >= 0)
                 .filter(co -> co.getRect().area() < 2500)
                 .forEach( co -> {
 
@@ -549,15 +496,8 @@ private static Mat finalFrame;
                                                     && co.getRect().br().x - co.getRect().width >= (doa.getRect().br().x - doa.getRect().width - numer)
                                                     && co.getRect().br().y <= (doa.getRect().br().y + numer)
                                                     && co.getRect().br().y >= (doa.getRect().br().y - numer)))
-                            )
+                            ).findFirst();
 
-
-
-//                                    co.getRect().x <= (doa.getRect().x + numer)
-//                                    && co.getRect().x >= (doa.getRect().x - numer)
-//                                    && co.getRect().y <= (doa.getRect().y + numer)
-//                                    && co.getRect().y >= (doa.getRect().y - numer))
-                            .findFirst();
                     if(!first1.isPresent()){
                         co.setIterationId(i);
                         co.setSeq(seq);
@@ -575,36 +515,16 @@ private static Mat finalFrame;
         detectedObjectList.stream()
                 .filter(d -> d.getIterationId().equals(i))
                 .forEach(d -> {
-
                     Imgproc.rectangle(firstScreen, d.getRect().br(), d.getRect().tl(), new Scalar(0, 255, 0), 1);
-
-//                    Imgproc.rectangle(firstScreen, d.getRect().tl(), d.getRect().br() , new Scalar(0, 255, 0, 255), 50);
                     Imgproc.putText(firstScreen, "tl " + d.getRect().tl() ,
                             new Point( d.getRect().tl().x - 20 , d.getRect().tl().y - 5), 1, 1, new Scalar(255, 255, 0), 1);
 
                     Imgproc.putText(firstScreen, "br " + d.getRect().br() ,
                             new Point(d.getRect().br().x - 20 ,d.getRect().br().y + 15) , 1, 1, new Scalar(255, 255, 0), 1);
-
-//                    Imgproc.putText(firstScreen, "br",
-//                            d.getRect().br(), 1, 1, new Scalar(255, 255, 0), 2);
-
-
-//                    Imgproc.putText(firstScreen, "1" ,
-//                            new Point(d.getRect().tl().x + d.getRect().width, d.getRect().tl().y) , 1, 1, new Scalar(255, 255, 0), 2);
-//
-//                    Imgproc.putText(firstScreen, "2" ,
-//                            new Point(d.getRect().br().x - d.getRect().width, d.getRect().br().y), 1, 1, new Scalar(255, 255, 0), 2);
                 });
-
-
         i++ ;
 
-//            System.out.println("---------------------------");
-
-            v.release();
-
-//            printRectangle(rect_array, outmat);
-//                }
+        v.release();
 
         Point pt1 = new Point(80, 40);
         Point pt2 = new Point(750, 450);
