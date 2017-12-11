@@ -34,10 +34,9 @@ public class MyFrame extends JFrame{
     private JButton startButton = new JButton("Start");
     private JButton stopButton = new JButton("Stop");
     private JButton reloadButton = new JButton("Przeładuj");
-    private JButton drawMoveButton = new JButton("Narysuj ruch");
     private JButton backgroundProcessButton = new JButton("Przetwarzaj w tle");
-    private JSlider jSlider1 = new JSlider(JSlider.CENTER, 0, 30, 1);
-    private JSlider jSlider2 = new JSlider(JSlider.CENTER, 0, 30, 1);
+    private JSlider morphOpenJSlider = new JSlider(JSlider.CENTER, 0, 30, 1);
+    private JSlider morphCloseJSlider = new JSlider(JSlider.CENTER, 0, 30, 1);
 
     private JPanel scalaPanel = new JPanel();
     private JLabel jLabelScaleTop;
@@ -124,11 +123,6 @@ public class MyFrame extends JFrame{
         gbc.gridy = 4;
         backgroundProcessButton.setFont(font);
         buttonsPanel.add(backgroundProcessButton, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        drawMoveButton.setFont(font);
-//        buttonsPanel.add(drawMoveButton, gbc);
 
         JPanel slidersPanel = getSliderPanel();
 
@@ -305,19 +299,19 @@ public class MyFrame extends JFrame{
         jTextField2.setFont(font);
         slidersPanel.add(jTextField2, gbcSlider);
 
-        setSliderParams(jSlider1);
+        setSliderParams(morphOpenJSlider);
 //        gbcSlider.ipadx = IPADX;
         gbcSlider.gridx = 0;
         gbcSlider.gridy = 1;
-        jSlider1.setValue(25);
-        slidersPanel.add(jSlider1, gbcSlider);
+        morphOpenJSlider.setValue(25);
+        slidersPanel.add(morphOpenJSlider, gbcSlider);
 
 
-        setSliderParams(jSlider2);
+        setSliderParams(morphCloseJSlider);
         gbcSlider.gridx = 0;
         gbcSlider.gridy = 3;
-        jSlider2.setValue(4);
-        slidersPanel.add(jSlider2, gbcSlider);
+        morphCloseJSlider.setValue(4);
+        slidersPanel.add(morphCloseJSlider, gbcSlider);
 
         return slidersPanel;
     }
@@ -379,20 +373,16 @@ public class MyFrame extends JFrame{
         return reloadButton;
     }
 
-    public JButton getDrawMoveButton() {
-        return drawMoveButton;
-    }
-
     public JButton getBackgroundProcessButton() {
         return backgroundProcessButton;
     }
 
-    public JSlider getjSlider1() {
-        return jSlider1;
+    public JSlider getMorphOpenJSlider() {
+        return morphOpenJSlider;
     }
 
-    public JSlider getjSlider2() {
-        return jSlider2;
+    public JSlider getMorphCloseJSlider() {
+        return morphCloseJSlider;
     }
 
     public String getSelectedMovie() {

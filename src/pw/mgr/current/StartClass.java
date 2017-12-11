@@ -5,7 +5,8 @@ package pw.mgr.current;
  */
 public class StartClass {
 
-    private  boolean start ;
+    private boolean start ;
+    private StartMode startMode;
 
     public boolean isStart() {
         return start;
@@ -15,4 +16,11 @@ public class StartClass {
         this.start = start;
     }
 
+    public StartMode getStartMode() {
+        return startMode;
+    }
+
+    public void setStartMode(StartMode startMode) {
+        this.startMode = startMode;
+    }
 }

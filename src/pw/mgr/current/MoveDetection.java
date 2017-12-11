@@ -1,14 +1,9 @@
 package pw.mgr.current;
 
-import javafx.scene.effect.GaussianBlur;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.objdetect.HOGDescriptor;
-import org.opencv.objdetect.Objdetect;
-import org.opencv.video.BackgroundSubtractorMOG2;
-import org.opencv.video.Video;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
 
@@ -19,8 +14,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 public class MoveDetection {
@@ -28,53 +21,44 @@ public class MoveDetection {
     static {
         System.loadLibrary("opencv_java310");
     }
-
-    private static List<Rect> myPoints = new ArrayList<>();
     private static MyFrame myFrame = new MyFrame();
-    private static Mat firstScreen = null;
+    private static List<Rect> myPoints = new ArrayList<>();
 
+    private static Mat firstScreen = null;
     private static Mat secondScreen = null;
     private static Mat thirdScreen = null;
     private static Mat fourthScreen = null;
-
     private static Mat previousFrame = null;
     private static Mat diffFrame = null;
-
+    private static Mat baseFrame = null;
     private static Mat frame;
-private static Mat finalFrame;
-    private static int slider = 25;
-    private static int slider2 = 4;
-    private static int slider3 = 20;
-    private static int slider4 = 500;
+    private static Mat finalFrame;
+
     private static  Integer i = 1 ;
     private static  Integer k = 0;
     private static  Integer seq = 1;
     private static  Integer group = 1;
     private static  Integer y = 0;
-    private static  Mat baseFrame = null;
+    private static int morphOpenSlider = 25;
+    private static int morphCloseSlider = 4;
     private static double totalFrames;
     private static int progress;
-    static long summary = 0;
-
 
     private static String oldMovieLocation;
     private static Movie movie = new Movie() ;
 
     private static VideoCapture video;
     private static List<DetectedObject> detectedObjectList;
+    private static StartClass startClass = new StartClass();
 
     private static List<DetectedObject> detectedObjectListOld;
 
     public static void main(String[] args) {
-        StartClass startClass = new StartClass();
-        StartClass backgroundProcessing = new StartClass();
-
-        addActionListenerToButtons(startClass, backgroundProcessing);
-
+        addActionListenerToButtons(startClass);
         addChangeListenerForSlider();
     }
 
-    private static void addActionListenerToButtons(final StartClass startClass, final StartClass backgroundProcessing ) {
+    private static void addActionListenerToButtons(final StartClass startClass) {
         class MyRun extends Thread {
 
             @Override
@@ -82,11 +66,8 @@ private static Mat finalFrame;
                 if(!startClass.isStart()){
                     startClass.setStart(true);
                     System.out.println("show");
+                    k = 0;
                     while (startClass.isStart()){
-                        boolean set = video.set(5, 10.0);
-                        boolean set1 = video.set(Videoio.CAP_PROP_FRAME_WIDTH, 800);
-                        boolean set2 = video.set(Videoio.CAP_PROP_FRAME_HEIGHT, 600);
-
                         showframe(frame, video, startClass);
                     }
                     System.out.println("after while");
@@ -94,20 +75,15 @@ private static Mat finalFrame;
             }
         }
 
-
         myFrame.getStartButton().addActionListener(e -> {
             String movieLocationBaseOnName = movie.getMovieLocationBaseOnName(myFrame.getSelectedMovie());
             System.out.println("Start");
             if(!movieLocationBaseOnName.equals(oldMovieLocation)){
-                frame = new Mat();
                 video = new VideoCapture(movieLocationBaseOnName);
-                detectedObjectListOld  = new ArrayList<>();
-                detectedObjectList = new ArrayList<>();
-                group = 1;
-                seq = 1 ;
+                clearApplicationData();
             }
             oldMovieLocation = movieLocationBaseOnName;
-
+            startClass.setStartMode(StartMode.NORMAL);
             MyRun myRun = new MyRun();
             myRun.start();
         });
@@ -119,71 +95,53 @@ private static Mat finalFrame;
 
         myFrame.getReloadButton().addActionListener(e -> {
             System.out.println("reload video");
-            baseFrame = null;
             System.out.println("selected " + movie.getMovieLocationBaseOnName(myFrame.getSelectedMovie()));
-            detectedObjectListOld  = new ArrayList<>();
-            frame = new Mat();
+            k = 0;
             video = new VideoCapture(movie.getMovieLocationBaseOnName(myFrame.getSelectedMovie()));
-            detectedObjectList = new ArrayList<>();
-            group = 1;
-            seq = 1 ;
-
+            clearApplicationData();
         });
 
         myFrame.getBackgroundProcessButton().addActionListener(e -> {
-            System.out.println("Przetwarzanie w tle");
-            backgroundProcessing.setStart(false);
-
+            System.out.println("Processing in background");
+            startClass.setStartMode(StartMode.BACKGROUND);
+            video = new VideoCapture(movie.getMovieLocationBaseOnName(myFrame.getSelectedMovie()));
+            clearApplicationData();
+            k = 0;
+            MyRun myRun = new MyRun();
+            myRun.start();
         });
+    }
 
-        myFrame.getDrawMoveButton().addActionListener(e -> {
-            System.out.println("print points");
-//            MyRunPrint myRunPrint = new MyRunPrint(myPoints);
-
-            MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, 1, null);
-            myRunPrint.start();
-
-
-
-            BufferedImage paintImage = null;
-            try {
-                paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
-            } catch (IOException er) {
-                er.printStackTrace();
-            }
-            ImageIcon image = new ImageIcon(paintImage);
-
-            myFrame.getResultLabel().repaint();
-            myFrame.getResultLabel().setIcon(image);
-//            myFrame.setData(myRunPrint.getData());
-//            myFrame.getPanel().repaint();
-            myFrame.repaint();
-
-            startClass.setStart(true);
-        });
+    private static void clearApplicationData() {
+        baseFrame = null;
+        diffFrame = null;
+        previousFrame = null;
+        myPoints = new ArrayList<>();
+        detectedObjectListOld = new ArrayList<>();
+        detectedObjectList = new ArrayList<>();
+        progress = 0;
+        frame = new Mat();
+        group = 1;
+        seq = 1 ;
     }
 
     private static void addChangeListenerForSlider() {
-        myFrame.getjSlider1().addChangeListener(e -> {
-            System.out.println("Change jSlider " + myFrame.getjSlider1().getValue());
-                slider = myFrame.getjSlider1().getValue();
+        myFrame.getMorphOpenJSlider().addChangeListener(e -> {
+            System.out.println("Zmiana wartośc dla otwarcia : " + myFrame.getMorphOpenJSlider().getValue());
+                morphOpenSlider = myFrame.getMorphOpenJSlider().getValue();
         });
 
-        myFrame.getjSlider2().addChangeListener(e -> {
-            System.out.println("Change jSlider 2 " + myFrame.getjSlider2().getValue());
-                slider2 = myFrame.getjSlider2().getValue();
+        myFrame.getMorphCloseJSlider().addChangeListener(e -> {
+            System.out.println("Zmiana wartośc dla zamknięcia : " + myFrame.getMorphCloseJSlider().getValue());
+                morphCloseSlider = myFrame.getMorphCloseJSlider().getValue();
         });
     }
 
-    private static void showframe(Mat frame, VideoCapture video, StartClass startClass) {
 
-        Date startAll = new Date();
-        /**pierwszy ekran*/
 
-//        frame = new Mat();
+
+    private static synchronized void showframe(Mat frame, VideoCapture video, StartClass startClass) {
         k++ ;
-        Mat secondFrame;
-        video.isOpened();
 
         if(k == 1) {
             double fps = video.get(5);
@@ -200,15 +158,11 @@ private static Mat finalFrame;
         if(progress < (int) (k / totalFrames * 100)){
             progress = (int) (k / totalFrames * 100);
             myFrame.setProgressLabel(" Postęp przetwarzania : " + progress + " %");
-//            myFrame.setProgressLabel("postęp : " + progress + " %");
         }
 
 
         if((frame.dataAddr() != 0 || k == 1) && k < totalFrames){ //k == 1) {
-            Date start = new Date();
-
             video.read(frame);
-            boolean set = video.set(Videoio.CAP_PROP_FPS, 60);
 
             if (k % 4 == 0) {
                 Imgproc.resize(frame, frame, new Size(800, 600));
@@ -220,7 +174,7 @@ private static Mat finalFrame;
 
                 /**drugi ekran*/
 
-                secondFrame = new Mat(frame.size(), CvType.CV_8UC1);
+                Mat secondFrame = new Mat(frame.size(), CvType.CV_8UC1);
                 //Konwertuje obraz do skali szarości
                 Imgproc.cvtColor(frame, secondFrame, Imgproc.COLOR_BGR2GRAY);
                 //Rozmycie filtrem Gaussa, usuwa on detale i eliminuje zakłócenia
@@ -236,11 +190,8 @@ private static Mat finalFrame;
                     diffFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
                 }
 
-//            if (k % 4 == 0) {
                 Core.absdiff(previousFrame, secondFrame, diffFrame);
-//                Core.subtract(previousFrame, secondFrame, diffFrame);
                 previousFrame = secondFrame.clone();
-//            }
 
                 thirdScreen = diffFrame;
 
@@ -249,33 +200,74 @@ private static Mat finalFrame;
                 finalFrame = new Mat(secondFrame.size(), CvType.CV_8UC1);
 
                 //new
-                Imgproc.threshold(diffFrame, finalFrame, slider3, slider4, Imgproc.THRESH_BINARY);
+                Imgproc.threshold(diffFrame, finalFrame, 20, 500, Imgproc.THRESH_BINARY);
 
-                Mat erodeClose = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(slider, slider));
+                Mat erodeClose = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(morphOpenSlider, morphOpenSlider));
                 Imgproc.morphologyEx(finalFrame, finalFrame, Imgproc.MORPH_CLOSE, erodeClose);
 
-                Mat dilateOpen = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(slider2, slider2));
+                Mat dilateOpen = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(morphCloseSlider, morphCloseSlider));
 
                 Imgproc.morphologyEx(finalFrame, finalFrame, Imgproc.MORPH_OPEN, dilateOpen);
 
                 fourthScreen = finalFrame.clone();
-//                System.out.println("time processing przetwarzanie tee" + (new Date().getTime() - start.getTime()) + " ramka " + k);
-//        if(k % 4 == 0) {
-                Date startDetectionContour = new Date();
+
                 detection_contours(fourthScreen);
-                long l = new Date().getTime() - startAll.getTime();
-//                System.out.println("time processing detekcja konturów " + l + " ramka " + k);
-                 summary += l;
-//                System.out.println("w sumie czas "  + summary);
-//        }
 
-                if (k % 3 == 0) {
-                    ImageIcon baseImage = new ImageIcon(Mat2bufferedImage(baseFrame));
+                if (k % 3 == 0 && StartMode.NORMAL.equals(startClass.getStartMode())) {
+                    ImageIcon baseImage;
+                    if(baseFrame != null) {
+                        baseImage = new ImageIcon(Mat2bufferedImage(baseFrame));
 
-                    MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, y, baseImage);
-                    myRunPrint.setTotalFrames(totalFrames);
+                        MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, y, baseImage);
+                        myRunPrint.setTotalFrames(totalFrames);
+
+                        BufferedImage paintImage = null;
+                        try {
+                            paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
+                        } catch (Exception er) {
+                            er.printStackTrace();
+                            paintImage = null;
+                        }
+                        if (paintImage != null) {
+                            ImageIcon image = new ImageIcon(paintImage);
 
 
+                            myFrame.getVideoLabelFourthScreen().repaint();
+                            myFrame.getVideoLabelFourthScreen().setIcon(image);
+
+                        }
+
+                        BufferedImage baseBuffImage = null;
+                        try {
+                            baseBuffImage = ImageIO.read(new File("result/wykryty_ruchBase.jpg"));
+                        } catch (Exception er) {
+                            er.printStackTrace();
+                            baseBuffImage = null;
+                        }
+                        if (baseBuffImage != null) {
+                            ImageIcon image = new ImageIcon(baseBuffImage);
+                            myFrame.getVideoLabelThirdScreen().setIcon(image);
+
+                        }
+
+                        y++;
+
+                        myRunPrint.start();
+                    }
+
+                putScreenInVideoLabel();
+                }
+            }
+        }else if(k > totalFrames){
+            if (StartMode.BACKGROUND.equals(startClass.getStartMode())) {
+                ImageIcon baseImage = new ImageIcon(Mat2bufferedImage(baseFrame));
+                MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, 10, baseImage);
+                myRunPrint.setTotalFrames(totalFrames);
+                myRunPrint.start();
+
+                while(!myRunPrint.currentThread().isInterrupted()){
+                    System.out.println("koniec ?");
+                    // do stuff
                     BufferedImage paintImage = null;
                     try {
                         paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
@@ -285,7 +277,6 @@ private static Mat finalFrame;
                     }
                     if (paintImage != null) {
                         ImageIcon image = new ImageIcon(paintImage);
-
 
                         myFrame.getVideoLabelFourthScreen().repaint();
                         myFrame.getVideoLabelFourthScreen().setIcon(image);
@@ -301,66 +292,13 @@ private static Mat finalFrame;
                     }
                     if (baseBuffImage != null) {
                         ImageIcon image = new ImageIcon(baseBuffImage);
-
-
-//                myFrame.getVideoLabelThirdScreen())
                         myFrame.getVideoLabelThirdScreen().setIcon(image);
 
                     }
-
-                    y++;
-
-                    myRunPrint.start();
-
-                putScreenInVideoLabel();
+                    break;
                 }
+
             }
-        }else if(k > totalFrames){
-//            if (k % 3 == 0) {
-//                ImageIcon baseImage = new ImageIcon(Mat2bufferedImage(baseFrame));
-//
-//                MyRunPrint myRunPrint = new MyRunPrint(detectedObjectList, y, baseImage);
-//                myRunPrint.setTotalFrames(totalFrames);
-//
-//
-//                BufferedImage paintImage = null;
-//                try {
-//                    paintImage = ImageIO.read(new File("result/wykryty_ruch6.jpg"));
-//                } catch (Exception er) {
-//                    er.printStackTrace();
-//                    paintImage = null;
-//                }
-//                if (paintImage != null) {
-//                    ImageIcon image = new ImageIcon(paintImage);
-//
-//
-//                    myFrame.getVideoLabelFourthScreen().repaint();
-//                    myFrame.getVideoLabelFourthScreen().setIcon(image);
-//
-//                }
-//
-//                BufferedImage baseBuffImage = null;
-//                try {
-//                    baseBuffImage = ImageIO.read(new File("result/wykryty_ruchBase.jpg"));
-//                } catch (Exception er) {
-//                    er.printStackTrace();
-//                    baseBuffImage = null;
-//                }
-//                if (baseBuffImage != null) {
-//                    ImageIcon image = new ImageIcon(baseBuffImage);
-//
-//
-////                myFrame.getVideoLabelThirdScreen())
-//                    myFrame.getVideoLabelThirdScreen().setIcon(image);
-//
-//                }
-//
-//                y++;
-//
-//                myRunPrint.start();
-//
-//                putScreenInVideoLabel();
-//            }
             JOptionPane.showMessageDialog(null, "Przetwarzanie zakończone.","Informacja", JOptionPane.INFORMATION_MESSAGE);
             startClass.setStart(false);
         }
@@ -377,18 +315,20 @@ private static Mat finalFrame;
 
     public static BufferedImage Mat2bufferedImage(Mat frame) {
 
+        BufferedImage img = null;
         // create a temporary buffer
         MatOfByte buffer = new MatOfByte();
         // encode the frame in the buffer, according to the PNG format
-        Imgcodecs.imencode(".png", frame, buffer);
-        // build and return an Image created from the image encoded in the
+        if(frame != null) {
+            Imgcodecs.imencode(".png", frame, buffer);
 
-        BufferedImage img = null;
+            // build and return an Image created from the image encoded in the
 
-        try {
-            return ImageIO.read(new ByteArrayInputStream(buffer.toArray()));
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                return ImageIO.read(new ByteArrayInputStream(buffer.toArray()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return img;
     }

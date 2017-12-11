@@ -1,7 +1,5 @@
 package pw.mgr.current;
 
-//import com.github.matthewbeckler.heatmap.Gradient;
-//import com.github.matthewbeckler.heatmap.HeatMap;
 import org.opencv.core.*;
 
 import javax.imageio.ImageIO;
@@ -19,18 +17,10 @@ import java.util.stream.Collectors;
  */
 public class MyRunPrint extends Thread {
 
-//    private static HeatMap panel;
-    private List<Rect> myPoints = new ArrayList<>();
     private List<DetectedObject> detectedObjects = new ArrayList<>();
-    double[][] data = new double[740][540];
-    ImageIcon baseImage;
+    private ImageIcon baseImage;
     private double totalFrames;
-
     private int i ;
-
-    public MyRunPrint(List<Rect> myPoints ) {
-        this.myPoints = myPoints ;
-    }
 
     public MyRunPrint(List<DetectedObject> detectedObjects, int i ,  ImageIcon baseImage ) {
         this.detectedObjects = detectedObjects ;
@@ -73,13 +63,10 @@ public class MyRunPrint extends Thread {
         }
     }
 
-    List<PointToDraw> pointToDrawList = new ArrayList<>();
-
     @Override
     public void run() {
         synchronized (this){
 
-            System.out.println("print");
             BufferedImage imageBase = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
             BufferedImage image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
 
@@ -148,14 +135,6 @@ public class MyRunPrint extends Thread {
             }
         }
     }
-    public double[][] getData() {
-        return data;
-    }
-
-    public void setData(double[][] data) {
-        this.data = data;
-    }
-
     public double getTotalFrames() {
         return totalFrames;
     }
